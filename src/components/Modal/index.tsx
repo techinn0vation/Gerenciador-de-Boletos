@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Headline, DisplayTypography } from '@/components/GeralComponents'
-
 import {
   WrapperModal,
   ContentModal,
@@ -13,16 +11,12 @@ import {
   TypeFieldCheck,
   ButtonSaveDate
 } from './styles'
-
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { api } from '@/services/api'
 
 interface PropType {
   onClose: any;
 }
-
-const token = localStorage.getItem('token')
-const Auth = `Bearer ${token}`
 
 export default function Modal({ onClose }: PropType) {
   const [nome, setNome] = useState('')
@@ -33,6 +27,14 @@ export default function Modal({ onClose }: PropType) {
   const [bloqueado, setBloqueado] = useState('')
   const [final, setFinal] = useState('')
   const [checked, setChecked] = useState(false)
+  const [Auth, setAuth] = useState('')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = window.localStorage.getItem('token')
+      setAuth(token != null ? `Bearer ${token}` : '')
+    }
+  }, [])
 
   async function handleUsuario() {
     api
