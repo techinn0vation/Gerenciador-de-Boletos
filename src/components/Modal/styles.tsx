@@ -203,15 +203,16 @@ export const ButtonSaveDate = styled.button`
   align-items: center;
   gap: 2rem;
   box-shadow: 0 0 0.4rem 0 ${props => props.theme.colors.colorH};
-
-  color: ${props => props.theme.colors.colorC};
-  font-style: normal;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.4rem;
-  line-height: 2.1rem;
-  &::first-letter {
-    text-transform: capitalize;
+  p {
+    color: ${props => props.theme.colors.colorC};
+    font-style: normal;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    &::first-letter {
+      text-transform: capitalize;
+    }
   }
 
   transition: ease-in 0.03s;
