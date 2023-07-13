@@ -10,6 +10,7 @@ import AgPagamento from '../Ag_Pagamento'
 import GerarBoleto from '../Gerar_Boleto'
 import GerarPix from '../Gerar_Pix'
 import GerarPixDois from '../Gerar_Pix_Dois'
+import ConsultaDocument from '../Gerar_Consulta'
 import Whatsapp from '../WhatSapp'
 
 export {
@@ -24,6 +25,7 @@ export {
   GerarBoleto,
   GerarPix,
   GerarPixDois,
+  ConsultaDocument,
   Whatsapp,
   ScrollProgress
 }
