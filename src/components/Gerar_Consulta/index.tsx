@@ -10,6 +10,7 @@ import {
   View
 } from '@react-pdf/renderer'
 import { useEffect, useState } from 'react'
+import moment from 'moment'
 
 const styles = StyleSheet.create({
   page: {
@@ -174,10 +175,9 @@ const styles = StyleSheet.create({
 })
 
 export interface ISerasa {
-  data: string
-  tipo: string
-  valor: string
-  origem: string
+  dataP: string
+  dataU: string
+  qteOcorrencias: string
 }
 
 export interface ISCPC {
@@ -354,29 +354,26 @@ export default function ConsultaDocument({
               SERASA
             </Text>
           </View>
-          {serasa[0].data !== '' && (
+          {serasa[0].qteOcorrencias !== '' && (
             <View
               style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }}
             >
-              <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold' }}>
-                Data
+              <Text style={{ width: '30%', fontFamily: 'Helvetica-Bold' }}>
+                Data Primeira Ocorrência
               </Text>
-              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
-                Tipo
+              <Text style={{ width: '30%', fontFamily: 'Helvetica-Bold' }}>
+                Data Última Ocorrência
               </Text>
-              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
-                Valor
-              </Text>
-              <Text style={{ width: '40%', fontFamily: 'Helvetica-Bold' }}>
-                Origem
+              <Text style={{ width: '30%', fontFamily: 'Helvetica-Bold' }}>
+                Quantidade Ocorrências
               </Text>
             </View>
           )}
 
           <View
-            style={{ display: 'flex', flexDirection: 'row', width: '100%' }}
+            style={{ display: 'flex', width: '100%' }}
           >
-            {serasa[0].data === '' ? (
+            {serasa[0].qteOcorrencias === '' ? (
               <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
                 Nada Consta
               </Text>
@@ -389,12 +386,15 @@ export default function ConsultaDocument({
                     flexDirection: 'row',
                     width: '100%'
                   }}
-                  key={item.data}
+                  key={item.dataP}
                 >
-                  <Text style={{ width: '25%' }}>{item.data}</Text>
-                  <Text style={{ width: '15%' }}>{item.tipo}</Text>
-                  <Text style={{ width: '15%' }}>{item.valor}</Text>
-                  <Text style={{ width: '40%' }}>{item.origem}</Text>
+                  <Text style={{ width: '30%' }}>{moment(item.dataP, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
+                    'DD/MM/YYYY'
+                  )}</Text>
+                  <Text style={{ width: '30%' }}>{moment(item.dataU, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
+                    'DD/MM/YYYY'
+                  )}</Text>
+                  <Text style={{ width: '30%' }}>{item.qteOcorrencias}</Text>
                 </View>
               ))
             )}
@@ -422,7 +422,7 @@ export default function ConsultaDocument({
               <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold' }}>
                 Nome
               </Text>
-              <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold' }}>
+              <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold', marginHorizontal: 15 }}>
                 Data
               </Text>
               <Text
@@ -442,6 +442,7 @@ export default function ConsultaDocument({
               </Text>
             </View>
           )}
+
           <View style={{ display: 'flex', width: '100%' }}>
             {scpc[0].data === '' ? (
               <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
@@ -459,12 +460,16 @@ export default function ConsultaDocument({
                   key={item.data}
                 >
                   <Text style={{ width: '25%' }}>{item.nome}</Text>
-                  <Text style={{ width: '25%' }}>{item.data}</Text>
+                  <Text style={{ width: '25%', marginHorizontal: 15 }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
+                    'DD/MM/YYYY'
+                  )}</Text>
                   <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.tipo}
                   </Text>
                   <Text style={{ width: '15%' }}>{item.valor}</Text>
-                  <Text style={{ width: '40%' }}>{item.disponibilidade}</Text>
+                  <Text style={{ width: '40%' }}>{moment(item.disponibilidade, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
+                    'DD/MM/YYYY'
+                  )}</Text>
                 </View>
               ))
             )}
@@ -525,7 +530,9 @@ export default function ConsultaDocument({
                   }}
                   key={item.data}
                 >
-                  <Text style={{ width: '35%' }}>{item.data}</Text>
+                  <Text style={{ width: '35%' }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
+                    'DD/MM/YYYY'
+                  )}</Text>
                   <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.cartorio}
                   </Text>
@@ -603,7 +610,9 @@ export default function ConsultaDocument({
                   }}
                   key={item.data}
                 >
-                  <Text style={{ width: '10%' }}>{item.data}</Text>
+                  <Text style={{ width: '10%' }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
+                    'DD/MM/YYYY'
+                  )}</Text>
                   <Text style={{ width: '10%', marginHorizontal: 15 }}>
                     {item.cheque}
                   </Text>
@@ -729,7 +738,11 @@ export default function ConsultaDocument({
                   }}
                   key={item.data}
                 >
-                  <Text style={{ width: '25%' }}>{item.data}</Text>
+                  <Text style={{ width: '25%' }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
+                    'DD/MM/YYYY'
+                  ) === "Invalid date" ? moment().format("L") : moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
+                    'DD/MM/YYYY'
+                  )}</Text>
                   <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.tipoConta}
                   </Text>
@@ -803,7 +816,9 @@ export default function ConsultaDocument({
                   }}
                   key={item.data}
                 >
-                  <Text style={{ width: '20%' }}>{item.data}</Text>
+                  <Text style={{ width: '20%' }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
+                    'DD/MM/YYYY'
+                  )}</Text>
                   <Text style={{ width: '25%', marginHorizontal: 15 }}>
                     {item.tipoFinanciamento}
                   </Text>

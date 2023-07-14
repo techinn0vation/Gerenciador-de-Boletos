@@ -20,6 +20,7 @@ import {
   ConsultaDocument,
   DisplayTypography
 } from '..//..//components/GeralComponents'
+import moment from 'moment'
 
 import { api } from '@/services/api'
 import { useRef, useState } from 'react'
@@ -69,10 +70,24 @@ export default function Consulta() {
         setNome(result.data.msg.dadosPessoais['Nome do Cliente'])
         setCpfCnpj(result.data.msg.dadosPessoais['CPF/CNPJ'])
 
-        setSerasa(prevList => [
-          ...prevList,
-          { data: '', origem: '', tipo: '', valor: '' }
-        ])
+        if (result.data.msg.serasa.length === 0) {
+          setSerasa(prevList => [
+            ...prevList,
+            { dataP: '', dataU: '', qteOcorrencias: '' }
+          ])
+        } else if (result.data.msg.serasa.length > 0) {
+          for (let i = 0; i < result.data.msg.serasa.length; i++) {
+            setSerasa(prevList => [
+              ...prevList,
+              {
+                dataP: result.data.msg.serasa[i]['Data Primeira Ocorrência'],
+                dataU: result.data.msg.serasa[i]['Data Última Ocorrência'],
+                qteOcorrencias:
+                  result.data.msg.serasa[i]['Quantidade Ocorrências']
+              }
+            ])
+          }
+        }
 
         if (result.data.msg.cheques.length === 0) {
           setChequeSF(prevList => [
@@ -83,7 +98,7 @@ export default function Consulta() {
               banco: '',
               cheque: '',
               cidadeUF: '',
-              data: 'Nada consta',
+              data: '',
               qteCheque: '',
               valor: ''
             }
@@ -111,7 +126,7 @@ export default function Consulta() {
             ...prevList,
             {
               nomeCredor: '',
-              siglaCredor: 'Nada consta'
+              siglaCredor: ''
             }
           ])
         } else if (result.data.msg.cadin.length > 0) {
@@ -132,7 +147,7 @@ export default function Consulta() {
               bancoContrato: '',
               tipoFinanciamento: '',
               cidadeUF: '',
-              data: 'Nada consta',
+              data: '',
               valor: ''
             }
           ])
@@ -159,7 +174,7 @@ export default function Consulta() {
             {
               cartorio: '',
               cidadeUF: '',
-              data: 'Nada consta',
+              data: '',
               valor: ''
             }
           ])
@@ -184,7 +199,7 @@ export default function Consulta() {
               nome: '',
               disponibilidade: '',
               cidadeUF: '',
-              data: 'Nada consta',
+              data: '',
               valor: '',
               tipo: ''
             }
@@ -211,7 +226,7 @@ export default function Consulta() {
               agencia: '',
               alinea: '',
               banco: '',
-              data: 'Nada consta',
+              data: '',
               qteOcorrencia: '',
               tipoConta: ''
             }
@@ -284,7 +299,7 @@ export default function Consulta() {
                   document={
                     <ConsultaDocument
                       nomeCliente={nome}
-                      data={new Date().toString()}
+                      data={Date().toString()}
                       cpf={cpfCnpj}
                       cadin={cadin}
                       chequesSF={chequeSF}
