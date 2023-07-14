@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import {
   BlockRegistration,
@@ -83,7 +84,7 @@ export default function GerarPix() {
     }
   }
 
-  function formatData(event) {
+  function formatData(event: any) {
     const input = event.target
     const value = input.value
 

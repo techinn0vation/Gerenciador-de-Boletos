@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
 
 import {
@@ -61,7 +62,7 @@ export default function GerarBoleto() {
     }
   }
 
-  function formatData(event) {
+  function formatData(event: any) {
     const input = event.target
     const value = input.value
 

@@ -240,7 +240,7 @@ export default function Consulta() {
       })
   }
 
-  function formatCPF(event) {
+  function formatCPF(event: any) {
     const input = event.target
     const value = input.value
 

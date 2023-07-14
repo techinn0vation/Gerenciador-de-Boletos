@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import {
@@ -121,7 +122,7 @@ export default function GerarPixDois() {
     setSaldoDevedor('')
   }
 
-  function formatData(event) {
+  function formatData(event: any) {
     const input = event.target
     const value = input.value
 
