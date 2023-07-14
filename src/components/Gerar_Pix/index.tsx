@@ -83,6 +83,23 @@ export default function GerarPix() {
     }
   }
 
+  function formatData(event) {
+    const input = event.target
+    const value = input.value
+
+    // Remove qualquer caractere que não seja um dígito
+    const digitsOnly = value.replace(/\D/g, '')
+
+    // Aplica a máscara de CPF (000.000.000-00)
+    const formattedValue = digitsOnly.replace(
+      /(\d{2})(\d{2})(\d{4})/,
+      '$1/$2/$3'
+    )
+
+    // Atualiza o valor do input com a versão formatada
+    input.value = formattedValue
+  }
+
   return (
     <WrapperGerarPix>
       <Headline title="gerar pix" text="insira os dados abaixo." />
@@ -113,12 +130,17 @@ export default function GerarPix() {
             }}
           />
           <DisplayInputMask
-            mask="99/99/9999"
+            type="text"
             value={dataVencimento}
-            onChange={(e: any) => {
+            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+            placeholder="Data de Vencimento"
+            onKeyUp={event => {
+              formatData(event)
+            }}
+            maxLength={14}
+            onChange={e => {
               setDataVencimento(e.target.value)
             }}
-            placeholder="data de vencimento"
           />
           <FieldRegistration
             type="text"
@@ -164,10 +186,10 @@ export default function GerarPix() {
             }
           >
             {nomeCliente === '' ||
-            cpfCnpj === '' ||
-            valor === '' ||
-            dataVencimento === '' ||
-            cidade === ''
+              cpfCnpj === '' ||
+              valor === '' ||
+              dataVencimento === '' ||
+              cidade === ''
               ? 'Preencha os campos!'
               : 'salvar'}
 

@@ -121,6 +121,23 @@ export default function GerarPixDois() {
     setSaldoDevedor('')
   }
 
+  function formatData(event) {
+    const input = event.target
+    const value = input.value
+
+    // Remove qualquer caractere que não seja um dígito
+    const digitsOnly = value.replace(/\D/g, '')
+
+    // Aplica a máscara de CPF (000.000.000-00)
+    const formattedValue = digitsOnly.replace(
+      /(\d{2})(\d{2})(\d{4})/,
+      '$1/$2/$3'
+    )
+
+    // Atualiza o valor do input com a versão formatada
+    input.value = formattedValue
+  }
+
   return (
     <WrapperGerarPixDois>
       <Headline title="gerar pix dois" text="insira os dados abaixo." />
@@ -191,9 +208,15 @@ export default function GerarPixDois() {
             placeholder="saldo devedor"
           />
           <DisplayInputMask
-            mask="99/99/9999"
+            type="text"
             value={dataVencimento}
-            onChange={(e: any) => {
+            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+            placeholder="Data de Vencimento"
+            onKeyUp={event => {
+              formatData(event)
+            }}
+            maxLength={14}
+            onChange={e => {
               setDataVencimento(e.target.value)
             }}
           />
@@ -248,12 +271,12 @@ export default function GerarPixDois() {
             }
           >
             {nomeCliente === '' ||
-            cpfCnpj === '' ||
-            valorDesconto === '' ||
-            dataVencimento === '' ||
-            cidade === '' ||
-            nomeAtendente === '' ||
-            cpfAtendente === ''
+              cpfCnpj === '' ||
+              valorDesconto === '' ||
+              dataVencimento === '' ||
+              cidade === '' ||
+              nomeAtendente === '' ||
+              cpfAtendente === ''
               ? 'Preencha os campos'
               : 'salvar'}
           </ButtonSaveDate>
