@@ -1,6 +1,7 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/jsx-no-undef */
 import React, { useEffect, useState } from 'react'
-import { Page, Text, View, Document ,StyleSheet, Image, Svg, Rect } from '@react-pdf/renderer'
+import { Page, Text, View, Document, StyleSheet, Image, Svg, Rect } from '@react-pdf/renderer'
 
 const styles = StyleSheet.create({
   page: {
@@ -298,9 +299,9 @@ export function Boleto({
         <View style={styles.header}>
           <Image style={styles.img} src={imgB002Url} />
           <View style={styles.header2}>
-            <Image style={styles.img3} src={imgB003Url}  />
+            <Image style={styles.img3} src={imgB003Url} />
             <Text>Um Produto</Text>
-            <Image style={styles.img2} src={imgB002Url}  />
+            <Image style={styles.img2} src={imgB002Url} />
           </View>
         </View>
         <View style={styles.containerText}>
@@ -416,11 +417,11 @@ export function Boleto({
       {descricao !== '' && (
         <Page style={styles.page}>
           <View style={styles.header}>
-            <Image style={styles.img} src={imgB002Url}  />
+            <Image style={styles.img} src={imgB002Url} />
             <View style={styles.header2}>
-              <Image style={styles.img3} src={imgB003Url}  />
+              <Image style={styles.img3} src={imgB003Url} />
               <Text>Um Produto</Text>
-              <Image style={styles.img2} src={imgB002Url}  />
+              <Image style={styles.img2} src={imgB002Url} />
             </View>
           </View>
           <View style={styles.containerText}>

@@ -108,42 +108,44 @@ export default function Usuarios() {
           />
           <ButtonAdd onClick={handleOpenModal} />
           {openModal && <Modal onClose={handleCloseModal} />}
-          <WrapperTable>
-            <TableRow>
-              <TableHeader>id</TableHeader>
-              <TableHeader>nome</TableHeader>
-              <TableHeader>e-mail</TableHeader>
-              <TableHeader>usuario</TableHeader>
-              <TableHeader>tipo</TableHeader>
-              <TableHeader>bloqueado</TableHeader>
-              <TableHeader>nível</TableHeader>
-              <TableHeader>ação</TableHeader>
-            </TableRow>
-            {rows.map(row => (
-              <TableRow key={row.id}>
-                <TableData>{row.id}</TableData>
-                <TableData>{row.nome}</TableData>
-                <TableData>{row.email}</TableData>
-                <TableData>{row.usuario}</TableData>
-                {row.tipo === 'A' ? (
-                  <TableData>administrador</TableData>
-                ) : row.tipo === 'U' ? (
-                  <TableData>usuário</TableData>
-                ) : (
-                  <TableData>operador</TableData>
-                )}
-                <TableData>{row.bloqueado}</TableData>
-                <TableData>{row.nivel}</TableData>
-                <TableData>
-                  <ButtonDelete
-                    onClick={async () => {
-                      await handleDelete(Number(row.id))
-                    }}
-                  />
-                </TableData>
+          {rows.length > 0 && (
+            <WrapperTable>
+              <TableRow>
+                <TableHeader>id</TableHeader>
+                <TableHeader>nome</TableHeader>
+                <TableHeader>e-mail</TableHeader>
+                <TableHeader>usuario</TableHeader>
+                <TableHeader>tipo</TableHeader>
+                <TableHeader>bloqueado</TableHeader>
+                <TableHeader>nível</TableHeader>
+                <TableHeader>ação</TableHeader>
               </TableRow>
-            ))}
-          </WrapperTable>
+              {rows.map(row => (
+                <TableRow key={row.id}>
+                  <TableData>{row.id}</TableData>
+                  <TableData>{row.nome}</TableData>
+                  <TableData>{row.email}</TableData>
+                  <TableData>{row.usuario}</TableData>
+                  {row.tipo === 'A' ? (
+                    <TableData>administrador</TableData>
+                  ) : row.tipo === 'U' ? (
+                    <TableData>usuário</TableData>
+                  ) : (
+                    <TableData>operador</TableData>
+                  )}
+                  <TableData>{row.bloqueado}</TableData>
+                  <TableData>{row.nivel}</TableData>
+                  <TableData>
+                    <ButtonDelete
+                      onClick={async () => {
+                        await handleDelete(Number(row.id))
+                      }}
+                    />
+                  </TableData>
+                </TableRow>
+              ))}
+            </WrapperTable>
+          )}
         </ContentUsuarios>
       </WrapperUsuarios>
     </Layout>

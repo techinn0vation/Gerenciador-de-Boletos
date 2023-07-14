@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable prettier/prettier */
+
 import {
   Page,
   Text,
@@ -6,6 +9,7 @@ import {
   StyleSheet,
   View
 } from '@react-pdf/renderer'
+import { useEffect, useState } from 'react'
 
 const styles = StyleSheet.create({
   page: {
@@ -250,33 +254,85 @@ export default function ConsultaDocument({
   siccf,
   convenioDevedores
 }: IConsultaProps) {
+  const [logo, setImgB002Url] = useState('')
+  const [logo3, setImgB003Url] = useState('')
+
+  // Função para converter a imagem em URL de dados (data URL)
+  const convertImageToDataUrl = async (imagePath: RequestInfo | URL) => {
+    const response = await fetch(imagePath)
+    const blob = await response.blob()
+    return URL.createObjectURL(blob)
+  }
+
+  useEffect(() => {
+    // Carregar as imagens ao montar o componente
+    convertImageToDataUrl('/img/serasa.png')
+      .then(url => {
+        setImgB002Url(url)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    convertImageToDataUrl('/img/logo-boa-vista-scpc.png')
+      .then(url => {
+        setImgB003Url(url)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }, [])
+
   return (
     <Document>
       <Page style={styles.page}>
         <View style={styles.header}>
-          <Image style={styles.img} src={Logo} />
+          <Image style={styles.img} src={logo} />
           <View style={styles.header2}>
-            <Image style={styles.img3} src={Logo3} />
+            <Image style={styles.img3} src={logo3} />
           </View>
         </View>
         <View style={styles.containerText}>
           <View style={styles.contentBlock}>
             <View style={styles.contentText}>
               <View style={styles.rowView}>
-                <Text>
+                <Text
+                  style={{
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                    fontSize: 12
+                  }}
+                >
                   Informações gerais
                 </Text>
               </View>
 
               <Text
+                style={{
+                  textTransform: 'uppercase',
+                  marginLeft: 20,
+                  marginTop: 5,
+                  fontWeight: 'bold'
+                }}
               >
                 NOME DO CLIENTE: {nomeCliente}
               </Text>
               <Text
+                style={{
+                  textTransform: 'uppercase',
+                  fontWeight: 'bold',
+                  marginLeft: 20,
+                  marginTop: 5
+                }}
               >
                 CPF: {cpf}
               </Text>
               <Text
+                style={{
+                  textTransform: 'uppercase',
+                  fontWeight: 'bold',
+                  marginLeft: 20,
+                  marginTop: 5
+                }}
               >
                 data: {data}
               </Text>
@@ -284,340 +340,516 @@ export default function ConsultaDocument({
           </View>
         </View>
 
-        <View>
+        <View style={{ width: '100%', marginTop: 10 }}>
           <View
+            style={{
+              backgroundColor: 'rgb(52, 108, 176)',
+              width: '100%',
+              borderRadius: 3,
+              padding: 5,
+              marginTop: 5
+            }}
           >
-            <Text>
+            <Text style={{ textTransform: 'uppercase', color: 'white' }}>
               SERASA
             </Text>
           </View>
           {serasa[0].data !== '' && (
             <View
+              style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }}
             >
-              <Text>
+              <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold' }}>
                 Data
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Tipo
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Valor
               </Text>
-              <Text>
+              <Text style={{ width: '40%', fontFamily: 'Helvetica-Bold' }}>
                 Origem
               </Text>
             </View>
           )}
 
           <View
-            
+            style={{ display: 'flex', flexDirection: 'row', width: '100%' }}
           >
             {serasa[0].data === '' ? (
-              <Text>
+              <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
                 Nada Consta
               </Text>
             ) : (
               serasa.map(item => (
                 <View
+                  style={{
+                    marginVertical: 5,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%'
+                  }}
                   key={item.data}
                 >
-                  <Text>{item.data}</Text>
-                  <Text>{item.tipo}</Text>
-                  <Text>{item.valor}</Text>
-                  <Text>{item.origem}</Text>
+                  <Text style={{ width: '25%' }}>{item.data}</Text>
+                  <Text style={{ width: '15%' }}>{item.tipo}</Text>
+                  <Text style={{ width: '15%' }}>{item.valor}</Text>
+                  <Text style={{ width: '40%' }}>{item.origem}</Text>
                 </View>
               ))
             )}
           </View>
         </View>
 
-        <View>
+        <View style={{ width: '100%' }}>
           <View
+            style={{
+              backgroundColor: 'rgb(52, 108, 176)',
+              width: '100%',
+              borderRadius: 3,
+              padding: 5,
+              marginTop: 5
+            }}
           >
-            <Text>
+            <Text style={{ textTransform: 'uppercase', color: 'white' }}>
               SCPC
             </Text>
           </View>
           {scpc[0].data !== '' && (
             <View
-            
+              style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }}
             >
-              <Text>
+              <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold' }}>
                 Nome
               </Text>
-              <Text>
+              <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold' }}>
                 Data
               </Text>
               <Text
+                style={{
+                  width: '15%',
+                  marginHorizontal: 15,
+                  fontFamily: 'Helvetica-Bold'
+                }}
               >
                 Tipo
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Valor
               </Text>
-              <Text>
+              <Text style={{ width: '40%', fontFamily: 'Helvetica-Bold' }}>
                 Disponibilidade
               </Text>
             </View>
           )}
-          <View>
+          <View style={{ display: 'flex', width: '100%' }}>
             {scpc[0].data === '' ? (
-              <Text>
+              <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
                 Nada Consta
               </Text>
             ) : (
               scpc.map(item => (
                 <View
-                  key={item.data}>
-                  <Text>{item.nome}</Text>
-                  <Text>{item.data}</Text>
-                  <Text>
+                  style={{
+                    marginVertical: 5,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%'
+                  }}
+                  key={item.data}
+                >
+                  <Text style={{ width: '25%' }}>{item.nome}</Text>
+                  <Text style={{ width: '25%' }}>{item.data}</Text>
+                  <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.tipo}
                   </Text>
-                  <Text>{item.valor}</Text>
-                  <Text>{item.disponibilidade}</Text>
+                  <Text style={{ width: '15%' }}>{item.valor}</Text>
+                  <Text style={{ width: '40%' }}>{item.disponibilidade}</Text>
                 </View>
               ))
             )}
           </View>
         </View>
 
-        <View>
-          <View>
-            <Text>
+        <View style={{ width: '100%' }}>
+          <View
+            style={{
+              backgroundColor: 'rgb(52, 108, 176)',
+              width: '100%',
+              borderRadius: 3,
+              padding: 5,
+              marginTop: 5
+            }}
+          >
+            <Text style={{ textTransform: 'uppercase', color: 'white' }}>
               Protestos
             </Text>
           </View>
           {protestos[0].data !== '' && (
-            <View>
-              <Text>
+            <View
+              style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }}
+            >
+              <Text style={{ width: '35%', fontFamily: 'Helvetica-Bold' }}>
                 Data
               </Text>
-              <Text>
+              <Text
+                style={{
+                  width: '15%',
+                  marginHorizontal: 15,
+                  fontFamily: 'Helvetica-Bold'
+                }}
+              >
                 Cartório
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Valor
               </Text>
-              <Text>
+              <Text style={{ width: '35%', fontFamily: 'Helvetica-Bold' }}>
                 Cidade/Estado
               </Text>
             </View>
           )}
-          <View>
+          <View style={{ display: 'flex', width: '100%' }}>
             {protestos[0].data === '' ? (
-              <Text>
+              <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
                 Nada Consta
               </Text>
             ) : (
               protestos.map(item => (
-                <View key={item.data}>
-                  <Text>{item.data}</Text>
-                  <Text>
+                <View
+                  style={{
+                    marginVertical: 5,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%'
+                  }}
+                  key={item.data}
+                >
+                  <Text style={{ width: '35%' }}>{item.data}</Text>
+                  <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.cartorio}
                   </Text>
-                  <Text>{item.valor}</Text>
-                  <Text>{item.cidadeUF}</Text>
+                  <Text style={{ width: '15%' }}>{item.valor}</Text>
+                  <Text style={{ width: '35%' }}>{item.cidadeUF}</Text>
                 </View>
               ))
             )}
           </View>
         </View>
 
-        <View>
-          <View>
-            <Text>
+        <View style={{ width: '100%' }}>
+          <View
+            style={{
+              backgroundColor: 'rgb(52, 108, 176)',
+              width: '100%',
+              borderRadius: 3,
+              padding: 5,
+              marginTop: 5
+            }}
+          >
+            <Text style={{ textTransform: 'uppercase', color: 'white' }}>
               Cheques sem fundo
             </Text>
           </View>
           {chequesSF[0].data !== '' && (
-            <View>
-              <Text>
+            <View
+              style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }}
+            >
+              <Text style={{ width: '10%', fontFamily: 'Helvetica-Bold' }}>
                 Data
               </Text>
-              <Text>
+              <Text
+                style={{
+                  width: '10%',
+                  marginHorizontal: 15,
+                  fontFamily: 'Helvetica-Bold'
+                }}
+              >
                 Cheque
               </Text>
-              <Text>
+              <Text style={{ width: '10%', fontFamily: 'Helvetica-Bold' }}>
                 Alinea
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Qte Cheque
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Valor
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Banco
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Agência
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Cidade/Estado
               </Text>
             </View>
           )}
           <View style={{ display: 'flex', width: '100%' }}>
             {chequesSF[0].data === '' ? (
-              <Text>
+              <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
                 Nada Consta
               </Text>
             ) : (
               chequesSF.map(item => (
                 <View
+                  style={{
+                    marginVertical: 5,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%'
+                  }}
                   key={item.data}
                 >
-                  <Text>{item.data}</Text>
-                  <Text>
+                  <Text style={{ width: '10%' }}>{item.data}</Text>
+                  <Text style={{ width: '10%', marginHorizontal: 15 }}>
                     {item.cheque}
                   </Text>
-                  <Text>{item.alinea}</Text>
-                  <Text>{item.qteCheque}</Text>
-                  <Text>{item.valor}</Text>
-                  <Text>{item.banco}</Text>
-                  <Text>{item.agencia}</Text>
-                  <Text>{item.cidadeUF}</Text>
+                  <Text style={{ width: '10%' }}>{item.alinea}</Text>
+                  <Text style={{ width: '15%' }}>{item.qteCheque}</Text>
+                  <Text style={{ width: '15%' }}>{item.valor}</Text>
+                  <Text style={{ width: '15%' }}>{item.banco}</Text>
+                  <Text style={{ width: '15%' }}>{item.agencia}</Text>
+                  <Text style={{ width: '15%' }}>{item.cidadeUF}</Text>
                 </View>
               ))
             )}
           </View>
         </View>
 
-        <View>
-          <View>
-            <Text>
+        <View style={{ width: '100%' }}>
+          <View
+            style={{
+              backgroundColor: 'rgb(52, 108, 176)',
+              width: '100%',
+              borderRadius: 3,
+              padding: 5,
+              marginTop: 5
+            }}
+          >
+            <Text style={{ textTransform: 'uppercase', color: 'white' }}>
               CADIN
             </Text>
           </View>
           {cadin[0].nomeCredor !== '' && (
-            <View>
-              <Text>
+            <View
+              style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }}
+            >
+              <Text style={{ width: '50%', fontFamily: 'Helvetica-Bold' }}>
                 Sigla Credor
               </Text>
-              <Text>
+              <Text style={{ width: '50%', fontFamily: 'Helvetica-Bold' }}>
                 Nome Credor
               </Text>
             </View>
           )}
-          <View>
+          <View style={{ display: 'flex', width: '100%' }}>
             {cadin[0].nomeCredor === '' ? (
-              <Text>
+              <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
                 Nada Consta
               </Text>
             ) : (
               cadin.map(item => (
-                <View key={item.siglaCredor}>
-                  <Text>{item.siglaCredor}</Text>
-                  <Text>{item.nomeCredor}</Text>
+                <View
+                  style={{
+                    marginVertical: 5,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%'
+                  }}
+                  key={item.siglaCredor}
+                >
+                  <Text style={{ width: '50%%' }}>{item.siglaCredor}</Text>
+                  <Text style={{ width: '50%' }}>{item.nomeCredor}</Text>
                 </View>
               ))
             )}
           </View>
         </View>
 
-        <View>
-          <View>
-            <Text>
+        <View style={{ width: '100%' }}>
+          <View
+            style={{
+              backgroundColor: 'rgb(52, 108, 176)',
+              width: '100%',
+              borderRadius: 3,
+              padding: 5,
+              marginTop: 5
+            }}
+          >
+            <Text style={{ textTransform: 'uppercase', color: 'white' }}>
               SICCF
             </Text>
           </View>
           {siccf[0].data !== '' && (
-            <View>
-              <Text>
+            <View
+              style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }}
+            >
+              <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold' }}>
                 Data
               </Text>
-              <Text>
+              <Text
+                style={{
+                  width: '15%',
+                  marginHorizontal: 15,
+                  fontFamily: 'Helvetica-Bold'
+                }}
+              >
                 Tipo Conta
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Banco
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Agência
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Alinea
               </Text>
-              <Text>
+              <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold' }}>
                 Qte Ocorrência
               </Text>
             </View>
           )}
-          <View>
+          <View style={{ display: 'flex', width: '100%' }}>
             {siccf[0].data === '' ? (
-              <Text>
+              <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
                 Nada Consta
               </Text>
             ) : (
               siccf.map(item => (
-                <View key={item.data}>
-                  <Text>{item.data}</Text>
-                  <Text>
+                <View
+                  style={{
+                    marginVertical: 5,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%'
+                  }}
+                  key={item.data}
+                >
+                  <Text style={{ width: '25%' }}>{item.data}</Text>
+                  <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.tipoConta}
                   </Text>
-                  <Text>{item.banco}</Text>
-                  <Text>{item.agencia}</Text>
-                  <Text>{item.alinea}</Text>
-                  <Text>{item.qteOcorrencia}</Text>
+                  <Text style={{ width: '15%' }}>{item.banco}</Text>
+                  <Text style={{ width: '15%' }}>{item.agencia}</Text>
+                  <Text style={{ width: '15%' }}>{item.alinea}</Text>
+                  <Text style={{ width: '25%' }}>{item.qteOcorrencia}</Text>
                 </View>
               ))
             )}
           </View>
         </View>
 
-        <View>
-          <View>
-            <Text>
+        <View style={{ width: '100%' }}>
+          <View
+            style={{
+              backgroundColor: 'rgb(52, 108, 176)',
+              width: '100%',
+              borderRadius: 3,
+              padding: 5,
+              marginTop: 5
+            }}
+          >
+            <Text style={{ textTransform: 'uppercase', color: 'white' }}>
               Convenio devedores
             </Text>
           </View>
           {convenioDevedores[0].data !== '' && (
-            <View>
-              <Text>
+            <View
+              style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }}
+            >
+              <Text style={{ width: '20%', fontFamily: 'Helvetica-Bold' }}>
                 Data
               </Text>
-              <Text>
+              <Text
+                style={{
+                  width: '25%',
+                  marginHorizontal: 15,
+                  fontFamily: 'Helvetica-Bold'
+                }}
+              >
                 Tipo Financiamento
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Valor
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 CNPJ
               </Text>
-              <Text>
+              <Text style={{ width: '20%', fontFamily: 'Helvetica-Bold' }}>
                 Banco Contrato
               </Text>
-              <Text>
+              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
                 Cidade/Estado
               </Text>
             </View>
           )}
           <View style={{ display: 'flex', width: '100%' }}>
             {convenioDevedores[0].data === '' ? (
-              <Text>
+              <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
                 Nada Consta
               </Text>
             ) : (
               convenioDevedores.map(item => (
                 <View
+                  style={{
+                    marginVertical: 5,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%'
+                  }}
                   key={item.data}
                 >
-                  <Text>{item.data}</Text>
-                  <Text>
+                  <Text style={{ width: '20%' }}>{item.data}</Text>
+                  <Text style={{ width: '25%', marginHorizontal: 15 }}>
                     {item.tipoFinanciamento}
                   </Text>
-                  <Text>{item.valor}</Text>
-                  <Text>{item.cnpj}</Text>
-                  <Text>{item.bancoContrato}</Text>
-                  <Text>{item.cidadeUF}</Text>
+                  <Text style={{ width: '15%' }}>{item.valor}</Text>
+                  <Text style={{ width: '15%' }}>{item.cnpj}</Text>
+                  <Text style={{ width: '20%' }}>{item.bancoContrato}</Text>
+                  <Text style={{ width: '15%' }}>{item.cidadeUF}</Text>
                 </View>
               ))
             )}
           </View>
         </View>
+
+        {/* <Image src={Logo} /> */}
+
+        {/* <View style={styles.body}>
+          <Text>
+            Restrições no SPC SERASA serão regularizadas em até 3 dias úteis -
+            Devolução de documentos (cheques, carta de anuência e aplicável):
+            somente após a quitação deste Acordo.
+          </Text>
+        </View> */}
+        {/* <Text
+          render={({ pageNumber, totalPages }) =>
+            `${pageNumber} / ${totalPages}`
+          }
+        /> */}
       </Page>
+      {/* {cpf !== '' && (
+        <Page style={styles.page}>
+          <View style={styles.header}>
+            <Image style={styles.img} src={Logo} />
+            <View style={styles.header2}>
+              <Image style={styles.img3} src={Logo3} />
+              <Text>Um Produto</Text>
+              <Image style={styles.img2} src={Logo2} />
+            </View>
+          </View>
+          <View style={styles.containerText}>
+            <Text style={styles.fontBold}>
+              DEMOSTRATIVO DOS VALORES DO CONTRATO ORIGINAL EM ABERTO
+            </Text>
+            <Text>{cpf}</Text>
+          </View>
+        </Page>
+      )} */}
     </Document>
   )
 }

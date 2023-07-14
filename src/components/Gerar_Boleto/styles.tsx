@@ -29,7 +29,7 @@ export const ContentGerarBoleto = styled.div`
     }
   }
 `
-export const DisplayInputMask = styled(InputMask)`
+export const DisplayInputMask = styled.input`
   width: 100%;
   background: ${props => props.theme.colors.colorC};
 

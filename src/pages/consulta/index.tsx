@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
@@ -51,8 +53,8 @@ export default function Consulta() {
 
   const [cpf, setCpf] = useState('')
 
-  const token = localStorage.getItem('token')
-  const Auth = `Bearer ${token}`
+  // const token = localStorage.getItem('token')
+  // const Auth = `Bearer ${token}`
 
   async function onConsulta() {
     setLoading(true)
@@ -238,6 +240,23 @@ export default function Consulta() {
       })
   }
 
+  function formatCPF(event) {
+    const input = event.target
+    const value = input.value
+
+    // Remove qualquer caractere que não seja um dígito
+    const digitsOnly = value.replace(/\D/g, '')
+
+    // Aplica a máscara de CPF (000.000.000-00)
+    const formattedValue = digitsOnly.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{2})/,
+      '$1.$2.$3-$4'
+    )
+
+    // Atualiza o valor do input com a versão formatada
+    input.value = formattedValue
+  }
+
   return (
     <Layout>
       <WrapperConsult>
@@ -246,13 +265,13 @@ export default function Consulta() {
           <Headline title="consultar cpf" text="insira os dados abaixo." />
           <BlockConsult>
             <DisplayInputMask
-              mask="000.000.000-00"
+              type="text"
               value={cpf}
-              // unmask={true}
-              onAccept={(value: string) => {
-                setCpf(value)
-              }}
-              placeholder="digite o cpf"
+              pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+              placeholder="Digite um CPF válido"
+              onKeyUp={event => formatCPF(event)}
+              maxLength={14}
+              onChange={e => setCpf(e.target.value)}
             />
             <ButtonConsult disabled={loading} onClick={onConsulta}>
               {loading ? 'Carregando informações' : 'Consultar'}
