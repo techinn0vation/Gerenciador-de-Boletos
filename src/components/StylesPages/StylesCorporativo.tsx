@@ -85,3 +85,31 @@ export const TextBlock = styled.div`
     }
   }
 `
+export const ButtonCopyText = styled.button`
+  width: auto;
+  margin: 0 auto;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  background: ${props => props.theme.colors.colorH};
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 0 0.4rem 0 ${props => props.theme.colors.colorH};
+
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 2.1rem;
+  color: ${props => props.theme.colors.colorA};
+  &::first-letter {
+    text-transform: capitalize;
+  }
+
+  transition: ease-in 0.02s;
+  &:focus:active {
+    transform: translateY(0.2rem);
+  }
+`

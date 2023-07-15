@@ -1,135 +1,37 @@
-Nome: ANDRE LUIZ DE SOUZA
-Data: 2023-07-15T05:27:04-03:00
-CPF: 31135171840
-Cadin: 
-  
-    nomeCredor: MF-PROC.GERAL FAZENDA NACIONAL,
-    siglaCredor: EMFPG
-  
+SEGURANÇA
 
-Cheques SF: 
-  
-    cheque: ,
-    agencia: 0214,
-    alinea: ,
-    banco: 237,
-    cidadeUF: VALINHOS/SP,
-    data: ,
-    qteCheque: 0,
-    valor: 0.00
-  ,
-  
-    cheque: ,
-    agencia: 0214,
-    alinea: ,
-    banco: 237,
-    cidadeUF: VALINHOS/SP,
-    data: ,
-    qteCheque: 0,
-    valor: 0.00
-  ,
-  
-    cheque: ,
-    agencia: 0214,
-    alinea: ,
-    banco: 237,
-    cidadeUF: VALINHOS/SP,
-    data: ,
-    qteCheque: 0,
-    valor: 0.00
-  ,
-  
-    cheque: ,
-    agencia: 0214,
-    alinea: ,
-    banco: 237,
-    cidadeUF: VALINHOS/SP,
-    data: ,
-    qteCheque: 0,
-    valor: 0.00
-  ,
-  
-    cheque: ,
-    agencia: 0214,
-    alinea: ,
-    banco: 237,
-    cidadeUF: VALINHOS/SP,
-    data: ,
-    qteCheque: 0,
-    valor: 0.00
-  
+Nossa empresa tem como objetivo proporcionar maior comodidade aos nossos clientes na hora de liquidar suas dívidas, oferecendo excelentes descontos. Devido à situação do COVID-19, todo o processo é realizado aqui no WhatsApp, sem a necessidade de ir a um estabelecimento ou fazer uma ligação, garantindo total conforto e segurança para você. Acreditamos que você já tenha conhecimento dos débitos pendentes. Estamos aqui para ajudá-lo a obter seu crédito novamente. No entanto, se você não se sentir seguro, recomendamos que faça o pagamento diretamente com a empresa responsável pelos débitos.
 
-Convênio de Devedores: 
-  
-    cnpj: 285000149,
-    bancoContrato: 1796,
-    tipoFinanciamento: DUP VDA MERC,
-    cidadeUF: VOS/SP,
-    data: Thu Feb 10 00:00:00 BRT 2022,
-    valor: 1000.00
-  
+O interesse em efetuar o pagamento do seu acordo é exclusivamente seu. Caso deseje, podemos cancelar o seu acordo imediatamente.
 
-Protestos: 
-  
-    cartorio: 99,
-    cidadeUF: VALINHOS/SP,
-    data: Tue Jun 14 00:00:00 BRT 2022,
-    valor: 215.80
-  ,
-  
-    cartorio: 99,
-    cidadeUF: VALINHOS/SP,
-    data: Mon Nov 25 00:00:00 BRT 2019,
-    valor: 3113.04
-  ,
-  
-    cartorio: 99,
-    cidadeUF: VALINHOS/SP,
-    data: Tue Oct 22 00:00:00 BRT 2019,
-    valor: 171.24
-  
+Todos os dados contidos no boleto referem-se ao acordo fechado. Até o momento, nunca tivemos problemas como o mencionado. No entanto, entendemos que é seu direito se resguardar diante de qualquer suspeita. Estamos à disposição caso decida concretizar o acordo. Seu nome permanecerá como devedor até que as dívidas mencionadas sejam quitadas.
 
-SCPC: 
-  
-    nome: SP-VOS/1 CARTORIO,
-    disponibilidade: Sat Jun 11 00:00:00 BRT 2022,
-    cidadeUF: VALINHOS/SP,
-    data: Mon Nov 25 00:00:00 BRT 2019,
-    valor: 3113.04,
-    tipo: T
-  ,
-  
-    nome: SP-VOS/1 CARTORIO,
-    disponibilidade: Sat Jun 11 00:00:00 BRT 2022,
-    cidadeUF: VALINHOS/SP,
-    data: Tue Oct 22 00:00:00 BRT 2019,
-    valor: 171.24,
-    tipo: T
-  
+Copiar
+COBRANÇA
 
-Serasa: 
-  
-    dataP: Thu Feb 10 00:00:00 BRT 2022,
-    dataU: Thu Feb 10 00:00:00 BRT 2022,
-    qteOcorrencias: 1
-  ,
-  
-    dataP: Fri Sep 06 00:00:00 BRT 2019,
-    dataU: Fri Sep 06 00:00:00 BRT 2019,
-    qteOcorrencias: 1
-  ,
-  
-    dataP: Tue Oct 22 00:00:00 BRT 2019,
-    dataU: Tue Jun 14 00:00:00 BRT 2022,
-    qteOcorrencias: 3
-  
+Estamos aguardando seu comprovante de pagamento para que possamos agilizar a sua baixa com mais rapidez! Não foi identificado o pagamento do boleto de quitação enviado, caso tenha ocorrido algum problema nos comunique, para que o mesmo possa ser resolvido. Viemos aqui apenas para lembrar que assim que efetuar o pagamento do seu boleto, para nos enviar o comprovante! Pois já poderemos solicitar a baixa dos débitos pendentes em seu CPF!
 
-SICCF: 
-  
-    agencia: 214,
-    alinea: 99,
-    banco: 237,
-    data: Sat Jan 01 00:00:00 BRT 1,
-    qteOcorrencia: 9,
-    tipoConta: 1
-  
+Copiar
+FRASES
+
+Os boletos são gerados com data para pagamento no dia, pois podem sofrer alterações de valores de acordo com a data em que são solicitados, incluindo possíveis variações de juros.
+
+Certo! Por favor, me chame novamente na melhor data para o pagamento, e assim finalizaremos o seu acordo.
+
+Sim, o boleto já foi enviado. No entanto, devido à grande demanda de acordos fechados no dia, nosso sistema de envio de e-mails está um pouco lento. Em breve, você receberá o seu boleto!
+
+O interesse em efetuar o pagamento do seu acordo é exclusivamente seu, pois o mesmo pode ser pago por meio do internet banking ou caixa eletrônico! Caso deseje, podemos cancelar o seu acordo imediatamente!
+
+Ao realizar o pagamento no valor de R$ [VALOR], todos os débitos mencionados serão quitados e o seu nome estará limpo novamente! Pedimos que aguarde o envio do seu boleto amanhã, no primeiro horário. Desde já, agradecemos pelo seu contato. O boleto está em processo de emissão, assim que for gerado, será enviado. Pedimos que aguarde, por gentileza. Estamos enfrentando uma instabilidade no sistema, e pedimos desculpas pelo transtorno. Por favor, aguarde o envio do boleto.
+
+Sim, em relação aos protestos, contamos com advogados especializados para lidar com a parte burocrática. Eles poderão ajudar nessa negociação com o cartório! Seus débitos já estão em processo de protesto. Nesse caso, apenas o cartório poderá informar o credor. Recomendamos que procure o cartório mais próximo para obter mais informações. Em nosso sistema, constam apenas os débitos mencionados anteriormente, registrados no seu CPF. Infelizmente, não temos acesso a áudios. Por favor, envie a sua solicitação por escrito.
+
+Pedimos que aguarde o prazo informado anteriormente. Dentro desse prazo, a baixa do seu acordo será realizada. Caso tenha alguma dúvida, pode nos contatar, estamos à disposição para esclarecimentos. Fique tranquilo.
+
+Enviamos o seu boleto pelo WhatsApp para garantir a agilidade no recebimento. Em breve, você também receberá por e-mail!
+
+Posso ajudar em mais alguma coisa?
+
+Parabenizamos pelo acordo bem-sucedido e agradecemos desde já pelo seu contato.
+
+Copiar

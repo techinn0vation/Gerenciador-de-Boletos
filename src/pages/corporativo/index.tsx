@@ -2,7 +2,8 @@ import {
   WrapperCorporativo,
   ContentCorporativo,
   AreaTextCorporativo,
-  TextBlock
+  TextBlock,
+  ButtonCopyText
 } from '..//..//components/StylesPages/StylesCorporativo'
 
 import {
@@ -13,7 +14,25 @@ import {
   DisplayTypography
 } from '..//..//components/GeralComponents'
 
+import React, { useState } from 'react'
+
 export default function Corporativo() {
+  const [buttonText, setButtonText] = useState('Copiar')
+
+  const handleCopyText = (text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        console.log('Texto copiado com sucesso!')
+        setButtonText('Copiado!')
+        setTimeout(() => {
+          setButtonText('Copiar')
+        }, 2000)
+      })
+      .catch(error => {
+        console.error('Erro ao copiar o texto:', error)
+      })
+  }
   return (
     <Layout>
       <WrapperCorporativo>
@@ -21,7 +40,7 @@ export default function Corporativo() {
         <ContentCorporativo>
           <Headline title="frases e acordos" text="frases e acordos" />
           <AreaTextCorporativo>
-            <TextBlock>
+            <TextBlock id="textBlock1">
               <DisplayTitle DisplayTitle="atendimento" />
               <DisplayTypography
                 DisplayTypography="
@@ -69,8 +88,18 @@ export default function Corporativo() {
               Bom dia! Posso prosseguir com o acordo com base na proposta que fizemos ontem?
             "
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock1')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock2">
               <DisplayTitle DisplayTitle="avalista após anexar boleto" />
 
               <DisplayTypography
@@ -93,8 +122,18 @@ export default function Corporativo() {
                 DisplayTypography="
                 infelizmente, existem muitos golpes envolvendo nossa empresa. Orientamos que denuncie aos órgãos responsáveis sempre que suspeitar de uma negociação fraudulenta. Por esse motivo, nos resguardamos com nossa experiência de anos no mercado e permitimos que nossos clientes confirmem seus acordos apenas se estiverem seguros da negociação. Confirme o seu acordo somente se estiver totalmente convicto sobre ele."
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock2')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock3">
               <DisplayTitle DisplayTitle="dúvidas sobre formas de pagamento" />
               <DisplayTypography
                 DisplayTypography="
@@ -146,16 +185,36 @@ export default function Corporativo() {
                 É por meio do avalista sócio que conseguimos obter os descontos oferecidos, pois ele é o responsável
               "
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock3')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock4">
               <DisplayTitle DisplayTitle="parcelamento no cartão" />
               <DisplayTypography
                 DisplayTypography="
               para parcelamento trabalhamos com o PicPay,te enviamos o boleto e por la você consegue
                 efetuar o pagamento pelo cartão de crédito, podendo parcelar em até 12x"
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock4')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock5">
               <DisplayTitle DisplayTitle="frases" />
               <DisplayTypography
                 DisplayTypography="
@@ -202,16 +261,36 @@ export default function Corporativo() {
               />
               <DisplayTypography DisplayTypography="posso ajudar em mais alguma coisa?" />
               <DisplayTypography DisplayTypography="parabenizamos pelo acordo bem-sucedido e agradecemos desde já pelo seu contato." />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock5')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock6">
               <DisplayTitle DisplayTitle="site" />
               <DisplayTypography
                 DisplayTypography="
                 em nosso site [www.serasa.com.br] estão disponíveis todos os dados da nossa empresa, Incluindo CNPJ, telefones e endereços.
                 Em caso de dúvidas pedimos que entre e verifique!"
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock6')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock7">
               <DisplayTitle DisplayTitle="segurança" />
               <DisplayTypography
                 DisplayTypography="
@@ -232,8 +311,18 @@ export default function Corporativo() {
                 Seu nome permanecerá como devedor até que as dívidas mencionadas sejam quitadas.
               "
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock7')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock8">
               <DisplayTitle DisplayTitle="cobrança" />
               <DisplayTypography
                 DisplayTypography="
@@ -241,8 +330,18 @@ export default function Corporativo() {
                 Não foi identificado o pagamento do boleto de quitação enviado, caso tenha ocorrido algum problema nos comunique, para que o mesmo possa ser resolvido.
                 Viemos aqui apenas para lembrar que assim que efetuar o pagamento do seu boleto, para nos enviar o comprovante! Pois já poderemos solicitar a baixa dos débitos pendentes em seu CPF!"
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock8')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock9">
               <DisplayTitle DisplayTitle="pós pagamento" />
               <DisplayTypography
                 DisplayTypography="
@@ -297,8 +396,18 @@ export default function Corporativo() {
                 para parcelamentos, trabalhamos com o PicPay. Enviaremos o boleto e você poderá efetuar o pagamento pelo cartão de crédito, parcelando em até 12 vezes.
               "
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock9')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock10">
               <DisplayTitle DisplayTitle="ADS antigo que não fechou acordo" />
               <DisplayTypography DisplayTypography="olá, bom dia!" />
               <DisplayTypography
@@ -313,8 +422,18 @@ export default function Corporativo() {
                 Caso tenha realmente interesse em um acordo,por gentileza nos informe o número do seu CPF ou CNPJ!
               "
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock10')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock11">
               <DisplayTitle DisplayTitle="saudação" />
               <DisplayTypography
                 DisplayTypography="
@@ -328,14 +447,34 @@ export default function Corporativo() {
                 Caso tenha realmente interesse em um acordo,por gentileza nos informe o número do seu CPF ou CNPJ!
               "
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock11')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
-            <TextBlock>
+            <TextBlock id="textBlock12">
               <DisplayTitle DisplayTitle="quando não sabe sobre a dívida" />
               <DisplayTypography
                 DisplayTypography="
                 caso desconheça as dívidas informadas acima, pedimos para que entre em contato com o credor e saber o porque a divida esta registrada em seu CPF.
               "
               />
+              <ButtonCopyText
+                onClick={() => {
+                  const element = document.getElementById('textBlock12')
+                  if (element != null) {
+                    handleCopyText(element.innerText)
+                  }
+                }}
+              >
+                {buttonText}
+              </ButtonCopyText>
             </TextBlock>
           </AreaTextCorporativo>
         </ContentCorporativo>

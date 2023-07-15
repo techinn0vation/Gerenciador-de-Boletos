@@ -27,6 +27,7 @@ export const ContentGerarPixDois = styled.div`
       max-width: 40rem; // OBS!
     }
   }
+  color: ${props => props.theme.colors.colorC};
 `
 export const BlockDividas = styled.div`
   width: 100%;
@@ -35,8 +36,5 @@ export const BlockDividas = styled.div`
   justify-content: center;
   align-items: center;
   gap: 2rem;
-
-  color: ${props => props.theme.colors.colorC};
-  p {
-  }
+  color: ${props => props.theme.colors.colorC}; //OBS
 `
