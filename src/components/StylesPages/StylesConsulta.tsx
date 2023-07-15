@@ -28,6 +28,7 @@ export const ContentConsult = styled.div`
     border-radius: 1.6rem;
     padding: 1.6rem;
   }
+  color: ${props => props.theme.colors.colorC};
 `
 export const BlockConsult = styled.div`
   width: 100%;
@@ -101,16 +102,13 @@ export const ButtonConsult = styled.button`
   gap: 2rem;
   box-shadow: 0 0 0.4rem 0 ${props => props.theme.colors.colorH};
 
-  p {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 1.4rem;
-    line-height: 2.1rem;
-    color: ${props => props.theme.colors.colorC};
-    text-transform: uppercase;
-  }
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 2.1rem;
+  color: ${props => props.theme.colors.colorC};
+  text-transform: capitalize;
 
-  text-decoration: none;
   transition: ease-in 0.03s;
   &:active {
     transform: translateY(0.2rem);

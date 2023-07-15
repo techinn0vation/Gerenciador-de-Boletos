@@ -1,0 +1,135 @@
+Nome: ANDRE LUIZ DE SOUZA
+Data: 2023-07-14T23:52:26-03:00
+CPF: 31135171840
+Cadin: 
+  
+    "nomeCredor": "MF-PROC.GERAL FAZENDA NACIONAL",
+    "siglaCredor": "EMFPG"
+  
+
+Cheques SF: 
+  
+    "cheque": "",
+    "agencia": "0214",
+    "alinea": "",
+    "banco": "237",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "",
+    "qteCheque": "0",
+    "valor": "0.00"
+  ,
+  
+    "cheque": "",
+    "agencia": "0214",
+    "alinea": "",
+    "banco": "237",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "",
+    "qteCheque": "0",
+    "valor": "0.00"
+  ,
+  
+    "cheque": "",
+    "agencia": "0214",
+    "alinea": "",
+    "banco": "237",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "",
+    "qteCheque": "0",
+    "valor": "0.00"
+  ,
+  
+    "cheque": "",
+    "agencia": "0214",
+    "alinea": "",
+    "banco": "237",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "",
+    "qteCheque": "0",
+    "valor": "0.00"
+  ,
+  
+    "cheque": "",
+    "agencia": "0214",
+    "alinea": "",
+    "banco": "237",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "",
+    "qteCheque": "0",
+    "valor": "0.00"
+  
+
+Convênio de Devedores: 
+  
+    "cnpj": "285000149",
+    "bancoContrato": "1796",
+    "tipoFinanciamento": "DUP VDA MERC",
+    "cidadeUF": "VOS/SP",
+    "data": "Thu Feb 10 00:00:00 BRT 2022",
+    "valor": "1000.00"
+  
+
+Protestos: 
+  
+    "cartorio": "99",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "Tue Jun 14 00:00:00 BRT 2022",
+    "valor": "215.80"
+  ,
+  
+    "cartorio": "99",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "Mon Nov 25 00:00:00 BRT 2019",
+    "valor": "3113.04"
+  ,
+  
+    "cartorio": "99",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "Tue Oct 22 00:00:00 BRT 2019",
+    "valor": "171.24"
+  
+
+SCPC: 
+  
+    "nome": "SP-VOS/1 CARTORIO",
+    "disponibilidade": "Sat Jun 11 00:00:00 BRT 2022",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "Mon Nov 25 00:00:00 BRT 2019",
+    "valor": "3113.04",
+    "tipo": "T"
+  ,
+  
+    "nome": "SP-VOS/1 CARTORIO",
+    "disponibilidade": "Sat Jun 11 00:00:00 BRT 2022",
+    "cidadeUF": "VALINHOS/SP",
+    "data": "Tue Oct 22 00:00:00 BRT 2019",
+    "valor": "171.24",
+    "tipo": "T"
+  
+
+Serasa: 
+  
+    "dataP": "Thu Feb 10 00:00:00 BRT 2022",
+    "dataU": "Thu Feb 10 00:00:00 BRT 2022",
+    "qteOcorrencias": "1"
+  ,
+  
+    "dataP": "Fri Sep 06 00:00:00 BRT 2019",
+    "dataU": "Fri Sep 06 00:00:00 BRT 2019",
+    "qteOcorrencias": "1"
+  ,
+  
+    "dataP": "Tue Oct 22 00:00:00 BRT 2019",
+    "dataU": "Tue Jun 14 00:00:00 BRT 2022",
+    "qteOcorrencias": "3"
+  
+
+SICCF: 
+  
+    "agencia": "214",
+    "alinea": "99",
+    "banco": "237",
+    "data": "Sat Jan 01 00:00:00 BRT 1",
+    "qteOcorrencia": "9",
+    "tipoConta": "1"
+  

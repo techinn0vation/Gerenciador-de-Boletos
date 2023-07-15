@@ -8,7 +8,6 @@ import {
   WrapperConsult,
   ContentConsult,
   BlockConsult,
-  InputFieldConsult,
   ButtonConsult,
   ScreenResult
 } from '..//..//components/StylesPages/StylesConsulta'
@@ -20,12 +19,15 @@ import {
   ConsultaDocument,
   DisplayTypography
 } from '..//..//components/GeralComponents'
+
 import moment from 'moment'
 
 import { api } from '@/services/api'
-import { useRef, useState } from 'react'
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
+import { useState } from 'react'
+
+import { PDFDownloadLink, PDFViewer, Document } from '@react-pdf/renderer'
 import { DisplayInputMask } from '@/components/Gerar_Boleto/styles'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import {
   type ISerasa,
@@ -53,14 +55,13 @@ export default function Consulta() {
   const [loading, setLoading] = useState(false)
 
   const [cpf, setCpf] = useState('')
-
-  // const token = localStorage.getItem('token')
-  // const Auth = `Bearer ${token}`
+  const [showPreview, setShowPreview] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   async function onConsulta() {
     setLoading(true)
     if (cpf.length < 11) {
-      alert('CPF invalido')
+      alert('CPF inválido')
       setLoading(false)
     }
 
@@ -84,6 +85,58 @@ export default function Consulta() {
                 dataU: result.data.msg.serasa[i]['Data Última Ocorrência'],
                 qteOcorrencias:
                   result.data.msg.serasa[i]['Quantidade Ocorrências']
+              }
+            ])
+          }
+        }
+
+        if (result.data.msg.scpc.length === 0) {
+          setScpc(prevList => [
+            ...prevList,
+            {
+              nome: '',
+              disponibilidade: '',
+              cidadeUF: '',
+              data: '',
+              valor: '',
+              tipo: ''
+            }
+          ])
+        } else if (result.data.msg.scpc.length > 0) {
+          for (let i = 0; i < result.data.msg.scpc.length; i++) {
+            setScpc(prevList => [
+              ...prevList,
+              {
+                nome: result.data.msg.scpc[i].Nome,
+                disponibilidade: result.data.msg.scpc[i]['Dt Disp'],
+                cidadeUF: `${result.data.msg.scpc[i].Cidade}/${result.data.msg.scpc[i].UF}`,
+                data: result.data.msg.scpc[i]['Dt Ocorr'],
+                valor: result.data.msg.scpc[i]['Vr Dívida'],
+                tipo: result.data.msg.scpc[i]['Tp Devedor']
+              }
+            ])
+          }
+        }
+
+        if (result.data.msg.protestos.length === 0) {
+          setProtestos(prevList => [
+            ...prevList,
+            {
+              cartorio: '',
+              cidadeUF: '',
+              data: '',
+              valor: ''
+            }
+          ])
+        } else if (result.data.msg.protestos.length) {
+          for (let i = 0; i < result.data.msg.protestos.length; i++) {
+            setProtestos(prevList => [
+              ...prevList,
+              {
+                cartorio: result.data.msg.protestos[i]['Cartório'],
+                cidadeUF: `${result.data.msg.protestos[i].Cidade}/${result.data.msg.protestos[i].UF}`,
+                data: result.data.msg.protestos[i].Data,
+                valor: result.data.msg.protestos[i]['Valor Protesto']
               }
             ])
           }
@@ -168,57 +221,6 @@ export default function Consulta() {
           }
         }
 
-        if (result.data.msg.protestos.length === 0) {
-          setProtestos(prevList => [
-            ...prevList,
-            {
-              cartorio: '',
-              cidadeUF: '',
-              data: '',
-              valor: ''
-            }
-          ])
-        } else if (result.data.msg.protestos.length) {
-          for (let i = 0; i < result.data.msg.protestos.length; i++) {
-            setProtestos(prevList => [
-              ...prevList,
-              {
-                cartorio: result.data.msg.protestos[i]['Cartório'],
-                cidadeUF: `${result.data.msg.protestos[i].Cidade}/${result.data.msg.protestos[i].UF}`,
-                data: result.data.msg.protestos[i].Data,
-                valor: result.data.msg.protestos[i]['Valor Protesto']
-              }
-            ])
-          }
-        }
-
-        if (result.data.msg.scpc.length === 0) {
-          setScpc(prevList => [
-            ...prevList,
-            {
-              nome: '',
-              disponibilidade: '',
-              cidadeUF: '',
-              data: '',
-              valor: '',
-              tipo: ''
-            }
-          ])
-        } else if (result.data.msg.scpc.length > 0) {
-          for (let i = 0; i < result.data.msg.scpc.length; i++) {
-            setScpc(prevList => [
-              ...prevList,
-              {
-                nome: result.data.msg.scpc[i].Nome,
-                disponibilidade: result.data.msg.scpc[i]['Dt Disp'],
-                cidadeUF: `${result.data.msg.scpc[i].Cidade}/${result.data.msg.scpc[i].UF}`,
-                data: result.data.msg.scpc[i]['Dt Ocorr'],
-                valor: result.data.msg.scpc[i]['Vr Dívida'],
-                tipo: result.data.msg.scpc[i]['Tp Devedor']
-              }
-            ])
-          }
-        }
         if (result.data.msg.siccf.length === 0) {
           setSiccf(prevList => [
             ...prevList,
@@ -272,6 +274,10 @@ export default function Consulta() {
     input.value = formattedValue
   }
 
+  const handleCopy = () => {
+    setCopied(true)
+  }
+
   return (
     <Layout>
       <WrapperConsult>
@@ -289,37 +295,97 @@ export default function Consulta() {
               onChange={e => setCpf(e.target.value)}
             />
             <ButtonConsult disabled={loading} onClick={onConsulta}>
-              {loading ? 'Carregando informações' : 'Consultar'}
+              {loading ? 'Carregando informações.' : 'Consultar'}
             </ButtonConsult>
-            <ButtonConsult disabled={nome === '' || cpfCnpj === '' || loading}>
-              {nome === '' || cpfCnpj === '' || siccf.length === 0 ? (
-                'Preencha os campos'
-              ) : (
-                <PDFDownloadLink
-                  document={
-                    <ConsultaDocument
-                      nomeCliente={nome}
-                      data={Date().toString()}
-                      cpf={cpfCnpj}
-                      cadin={cadin}
-                      chequesSF={chequeSF}
-                      convenioDevedores={convenioDevedores}
-                      protestos={protestos}
-                      scpc={scpc}
-                      serasa={serasa}
-                      siccf={siccf}
-                    />
-                  }
-                  fileName={`${nome} - CPF ${cpfCnpj} .pdf`}
+            {nome === '' || cpfCnpj === '' || siccf.length === 0 ? (
+              'Preencha os campos!'
+            ) : (
+              <>
+                {showPreview ? (
+                  <ScreenResult>
+                    <PDFViewer style={{ width: '100%', height: '100vh' }}>
+                      <ConsultaDocument
+                        nomeCliente={nome}
+                        data={moment().format()}
+                        cpf={cpfCnpj}
+                        cadin={cadin}
+                        chequesSF={chequeSF}
+                        convenioDevedores={convenioDevedores}
+                        protestos={protestos}
+                        scpc={scpc}
+                        serasa={serasa}
+                        siccf={siccf}
+                      />
+                    </PDFViewer>
+                  </ScreenResult>
+                ) : (
+                  <PDFDownloadLink
+                    document={
+                      <Document>
+                        <ConsultaDocument
+                          nomeCliente={nome}
+                          data={moment().format()}
+                          cpf={cpfCnpj}
+                          cadin={cadin}
+                          chequesSF={chequeSF}
+                          convenioDevedores={convenioDevedores}
+                          protestos={protestos}
+                          scpc={scpc}
+                          serasa={serasa}
+                          siccf={siccf}
+                        />
+                      </Document>
+                    }
+                    fileName={`${nome} - CPF ${cpfCnpj}.pdf`}
+                  >
+                    {({ loading }) => (loading ? 'Carregando...' : 'Gerar PDF')}
+                  </PDFDownloadLink>
+                )}
+                <ButtonConsult onClick={() => setShowPreview(!showPreview)}>
+                  {showPreview ? 'voltar' : 'visualizar'}
+                </ButtonConsult>
+                <CopyToClipboard
+                  text={`Nome: ${nome}\nData: ${moment().format()}\nCPF: ${cpfCnpj}\nCadin: ${JSON.stringify(
+                    cadin,
+                    null,
+                    2
+                  ).replace(/[[\]{}]/g, '')}\nCheques SF: ${JSON.stringify(
+                    chequeSF,
+                    null,
+                    2
+                  ).replace(
+                    /[[\]{}]/g,
+                    ''
+                  )}\nConvênio de Devedores: ${JSON.stringify(
+                    convenioDevedores,
+                    null,
+                    2
+                  ).replace(/[[\]{}]/g, '')}\nProtestos: ${JSON.stringify(
+                    protestos,
+                    null,
+                    2
+                  ).replace(/[[\]{}]/g, '')}\nSCPC: ${JSON.stringify(
+                    scpc,
+                    null,
+                    2
+                  ).replace(/[[\]{}]/g, '')}\nSerasa: ${JSON.stringify(
+                    serasa,
+                    null,
+                    2
+                  ).replace(/[[\]{}]/g, '')}\nSICCF: ${JSON.stringify(
+                    siccf,
+                    null,
+                    2
+                  ).replace(/[[\]{}]/g, '')}`}
+                  onCopy={handleCopy}
                 >
-                  {({ blob, url, loading, error }) =>
-                    loading ? 'Carregando...' : 'Gerar PDF'
-                  }
-                </PDFDownloadLink>
-              )}
-            </ButtonConsult>
+                  <ButtonConsult>
+                    {copied ? 'copiado!' : 'copiar dados'}
+                  </ButtonConsult>
+                </CopyToClipboard>
+              </>
+            )}
           </BlockConsult>
-          <ScreenResult></ScreenResult>
         </ContentConsult>
       </WrapperConsult>
     </Layout>
