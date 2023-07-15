@@ -9,15 +9,15 @@ import {
   ContentConsult,
   BlockConsult,
   ButtonConsult,
-  ScreenResult
+  ScreenResult,
+  ContentButtons
 } from '..//..//components/StylesPages/StylesConsulta'
 
 import {
   Layout,
   SideBar,
   Headline,
-  ConsultaDocument,
-  DisplayTypography
+  ConsultaDocument
 } from '..//..//components/GeralComponents'
 
 import moment from 'moment'
@@ -341,48 +341,50 @@ export default function Consulta() {
                     {({ loading }) => (loading ? 'Carregando...' : 'Gerar PDF')}
                   </PDFDownloadLink>
                 )}
-                <ButtonConsult onClick={() => setShowPreview(!showPreview)}>
-                  {showPreview ? 'voltar' : 'visualizar'}
-                </ButtonConsult>
-                <CopyToClipboard
-                  text={`Nome: ${nome}\nData: ${moment().format()}\nCPF: ${cpfCnpj}\nCadin: ${JSON.stringify(
-                    cadin,
-                    null,
-                    2
-                  ).replace(/[[\]{}]/g, '')}\nCheques SF: ${JSON.stringify(
-                    chequeSF,
-                    null,
-                    2
-                  ).replace(
-                    /[[\]{}]/g,
-                    ''
-                  )}\nConvênio de Devedores: ${JSON.stringify(
-                    convenioDevedores,
-                    null,
-                    2
-                  ).replace(/[[\]{}]/g, '')}\nProtestos: ${JSON.stringify(
-                    protestos,
-                    null,
-                    2
-                  ).replace(/[[\]{}]/g, '')}\nSCPC: ${JSON.stringify(
-                    scpc,
-                    null,
-                    2
-                  ).replace(/[[\]{}]/g, '')}\nSerasa: ${JSON.stringify(
-                    serasa,
-                    null,
-                    2
-                  ).replace(/[[\]{}]/g, '')}\nSICCF: ${JSON.stringify(
-                    siccf,
-                    null,
-                    2
-                  ).replace(/[[\]{}]/g, '')}`}
-                  onCopy={handleCopy}
-                >
-                  <ButtonConsult>
-                    {copied ? 'copiado!' : 'copiar dados'}
+                <ContentButtons>
+                  <ButtonConsult onClick={() => setShowPreview(!showPreview)}>
+                    {showPreview ? 'voltar' : 'visualizar'}
                   </ButtonConsult>
-                </CopyToClipboard>
+                  <CopyToClipboard
+                    text={`Nome: ${nome}\nData: ${moment().format()}\nCPF: ${cpfCnpj}\nCadin: ${JSON.stringify(
+                      cadin,
+                      null,
+                      2
+                    ).replace(/[[\]{}"]/g, '')}\nCheques SF: ${JSON.stringify(
+                      chequeSF,
+                      null,
+                      2
+                    ).replace(
+                      /[[\]{}"]/g,
+                      ''
+                    )}\nConvênio de Devedores: ${JSON.stringify(
+                      convenioDevedores,
+                      null,
+                      2
+                    ).replace(/[[\]{}"]/g, '')}\nProtestos: ${JSON.stringify(
+                      protestos,
+                      null,
+                      2
+                    ).replace(/[[\]{}"]/g, '')}\nSCPC: ${JSON.stringify(
+                      scpc,
+                      null,
+                      2
+                    ).replace(/[[\]{}"]/g, '')}\nSerasa: ${JSON.stringify(
+                      serasa,
+                      null,
+                      2
+                    ).replace(/[[\]{}"]/g, '')}\nSICCF: ${JSON.stringify(
+                      siccf,
+                      null,
+                      2
+                    ).replace(/[[\]{}"]/g, '')}`}
+                    onCopy={handleCopy}
+                  >
+                    <ButtonConsult>
+                      {copied ? 'copiado!' : 'copiar dados'}
+                    </ButtonConsult>
+                  </CopyToClipboard>
+                </ContentButtons>
               </>
             )}
           </BlockConsult>

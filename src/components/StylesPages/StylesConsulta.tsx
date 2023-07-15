@@ -134,3 +134,16 @@ export const ScreenResult = styled.div`
   justify-content: center;
   align-items: center;
 `
+export const ContentButtons = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+
+  @media (min-width: ${props => props.theme.screenSize.sizeMD}) {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+`
