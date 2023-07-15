@@ -74,12 +74,6 @@ export default function SideBar() {
             </DisplayIcon>
             <DisplayTypography DisplayTypography="frases e acordos" />
           </DisplayLink>
-          <DisplayLink href="/anotacoes">
-            <DisplayIcon>
-              <GiNotebook />
-            </DisplayIcon>
-            <DisplayTypography DisplayTypography="anotações" />
-          </DisplayLink>
           <DisplayLink href="/redirecionador">
             <DisplayIcon>
               <FaLink />
