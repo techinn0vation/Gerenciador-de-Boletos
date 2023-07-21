@@ -11,7 +11,8 @@ import {
   SideBar,
   Headline,
   DisplayTitle,
-  DisplayTypography
+  DisplayTypography,
+  TabelaValores
 } from '..//..//components/GeralComponents'
 
 import React, { useState } from 'react'
@@ -479,6 +480,7 @@ export default function Corporativo() {
           </AreaTextCorporativo>
         </ContentCorporativo>
       </WrapperCorporativo>
+      <TabelaValores />
     </Layout>
   )
 }

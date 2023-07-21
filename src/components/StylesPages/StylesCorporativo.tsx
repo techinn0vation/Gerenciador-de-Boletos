@@ -16,7 +16,7 @@ export const WrapperCorporativo = styled.section`
 `
 export const ContentCorporativo = styled.div`
   width: 100%;
-  height: 50rem;
+  height: 85.5vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

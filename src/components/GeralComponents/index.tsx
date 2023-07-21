@@ -12,6 +12,7 @@ import GerarPix from '../Gerar_Pix'
 import GerarPixDois from '../Gerar_Pix_Dois'
 import ConsultaDocument from '../Gerar_Consulta'
 import Whatsapp from '../WhatSapp'
+import TabelaValores from '../Tabela-Valores'
 
 export {
   Layout,
@@ -27,5 +28,6 @@ export {
   GerarPixDois,
   ConsultaDocument,
   Whatsapp,
+  TabelaValores,
   ScrollProgress
 }
