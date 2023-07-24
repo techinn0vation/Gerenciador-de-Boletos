@@ -68,6 +68,7 @@ export default function Consulta() {
     await api
       .post('/consulta', { cpf })
       .then(result => {
+        console.log(result.data)
         setNome(result.data.msg.dadosPessoais['Nome do Cliente'])
         setCpfCnpj(result.data.msg.dadosPessoais['CPF/CNPJ'])
 
@@ -301,12 +302,12 @@ export default function Consulta() {
               'Preencha os campos!'
             ) : (
               <>
-                {showPreview ? (
+                {showPreview && (
                   <ScreenResult>
                     <PDFViewer style={{ width: '100%', height: '100vh' }}>
                       <ConsultaDocument
                         nomeCliente={nome}
-                        data={moment().format()}
+                        data={moment().format('L')}
                         cpf={cpfCnpj}
                         cadin={cadin}
                         chequesSF={chequeSF}
@@ -318,32 +319,40 @@ export default function Consulta() {
                       />
                     </PDFViewer>
                   </ScreenResult>
-                ) : (
-                  <PDFDownloadLink
-                    document={
-                      <Document>
-                        <ConsultaDocument
-                          nomeCliente={nome}
-                          data={moment().format()}
-                          cpf={cpfCnpj}
-                          cadin={cadin}
-                          chequesSF={chequeSF}
-                          convenioDevedores={convenioDevedores}
-                          protestos={protestos}
-                          scpc={scpc}
-                          serasa={serasa}
-                          siccf={siccf}
-                        />
-                      </Document>
-                    }
-                    fileName={`${nome} - CPF ${cpfCnpj}.pdf`}
-                  >
-                    {({ loading }) => (loading ? 'Carregando...' : 'Gerar PDF')}
-                  </PDFDownloadLink>
                 )}
                 <ContentButtons>
                   <ButtonConsult onClick={() => setShowPreview(!showPreview)}>
                     {showPreview ? 'voltar' : 'visualizar'}
+                  </ButtonConsult>
+                  <ButtonConsult
+                    disabled={nome === '' || cpfCnpj === '' || loading}
+                  >
+                    {nome === '' || cpfCnpj === '' || siccf.length === 0 ? (
+                      'Preencha os campos'
+                    ) : (
+                      <PDFDownloadLink
+                        style={{ textDecoration: 'none', color: 'white' }}
+                        document={
+                          <ConsultaDocument
+                            nomeCliente={nome}
+                            data={new Date().toString()}
+                            cpf={cpfCnpj}
+                            cadin={cadin}
+                            chequesSF={chequeSF}
+                            convenioDevedores={convenioDevedores}
+                            protestos={protestos}
+                            scpc={scpc}
+                            serasa={serasa}
+                            siccf={siccf}
+                          />
+                        }
+                        fileName={`${nome} - CPF ${cpfCnpj} .pdf`}
+                      >
+                        {({ blob, url, loading, error }) =>
+                          loading ? 'Carregando...' : 'Gerar PDF'
+                        }
+                      </PDFDownloadLink>
+                    )}
                   </ButtonConsult>
                   <CopyToClipboard
                     text={`Nome: ${nome}\nData: ${moment().format()}\nCPF: ${cpfCnpj}\nCadin: ${JSON.stringify(
