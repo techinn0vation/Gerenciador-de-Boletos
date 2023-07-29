@@ -1,7 +1,15 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/promise-function-async */
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/jsx-no-undef */
-import React, { useEffect, useState } from 'react'
-import { Page, Text, View, Document, StyleSheet, Image, Svg, Rect } from '@react-pdf/renderer'
+import React, { useEffect, useRef, useState } from 'react'
+import { Page, Text, View, Document, StyleSheet, Image, Svg } from '@react-pdf/renderer'
+
+import bwipjs from 'bwip-js';
 
 const styles = StyleSheet.create({
   page: {
@@ -53,7 +61,7 @@ const styles = StyleSheet.create({
   },
   contentTextWidth: {
     width: '100%',
-    marginBottom: 10,
+    marginBottom: 5,
     fontStyle: 'normal',
     textAlign: 'left'
   },
@@ -104,13 +112,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#000',
     borderStyle: 'solid',
-    marginTop: 15
+    marginTop: 10
   },
   contentTextCheckOut: {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    padding: 20
+    padding: 10
   },
   section: {
     margin: 10,
@@ -133,7 +141,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     width: '100%',
     marginRight: 10,
-    marginTop: 10
+    marginTop: 5
   },
   textFloatLeft: {
     textTransform: 'capitalize',
@@ -179,6 +187,12 @@ const styles = StyleSheet.create({
     width: '100%',
     margin: 'auto',
     textAlign: 'center'
+  },
+  imgCodigoBarras: {
+    width: '50%',
+    backgroundSize: 'contain',
+    padding: '10px 0',
+    margin: '5px auto'
   }
 })
 
@@ -198,65 +212,65 @@ export interface IBoletoProps {
   cidade?: string
 }
 
-function generateITF14Barcode(value: string) {
-  const narrowWidth = 1;
-  const wideWidth = 3;
-  const pattern = [
-    '1010', // Início
-    '0110', // Início invertido
-    '0000', // Espaço
-    '1111', // Fim
-    '1001', // Dígito 0
-    '0111', // Dígito 1
-    '1011', // Dígito 2
-    '1101', // Dígito 3
-    '0011', // Dígito 4
-    '1110', // Dígito 5
-    '0001', // Dígito 6
-    '1000', // Dígito 7
-    '0101', // Dígito 8
-    '0010', // Dígito 9
-  ];
+// function generateITF14Barcode(value: string) {
+//   const narrowWidth = 1;
+//   const wideWidth = 3;
+//   const pattern = [
+//     '1010', // Início
+//     '0110', // Início invertido
+//     '0000', // Espaço
+//     '1111', // Fim
+//     '1001', // Dígito 0
+//     '0111', // Dígito 1
+//     '1011', // Dígito 2
+//     '1101', // Dígito 3
+//     '0011', // Dígito 4
+//     '1110', // Dígito 5
+//     '0001', // Dígito 6
+//     '1000', // Dígito 7
+//     '0101', // Dígito 8
+//     '0010', // Dígito 9
+//   ];
 
-  const barcodeStyle = StyleSheet.create({
-    container: {
-      width: '80%',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 10,
-    },
-    bar: {
-      height: 50,
-      marginRight: 1,
-    },
-    narrowBar: {
-      flex: narrowWidth,
-      backgroundColor: '#000000',
-    },
-    wideBar: {
-      flex: wideWidth,
-      backgroundColor: '#000000',
-    },
-  });
+//   const barcodeStyle = StyleSheet.create({
+//     container: {
+//       width: '80%',
+//       flexDirection: 'row',
+//       justifyContent: 'center',
+//       alignItems: 'center',
+//       marginTop: 10,
+//     },
+//     bar: {
+//       height: 50,
+//       marginRight: 1,
+//     },
+//     narrowBar: {
+//       flex: narrowWidth,
+//       backgroundColor: '#000000',
+//     },
+//     wideBar: {
+//       flex: wideWidth,
+//       backgroundColor: '#000000',
+//     },
+//   });
 
-  const bars: JSX.Element[] = [];
-  for (let i = 0; i < value.length; i++) {
-    const digit = parseInt(value[i]);
+//   const bars: JSX.Element[] = [];
+//   for (let i = 0; i < value.length; i++) {
+//     const digit = parseInt(value[i]);
 
-    const patternIndex = digit < pattern.length ? digit + 4 : 2; // Padrão de espaço para dígitos não mapeados
-    const digitPattern = pattern[patternIndex];
+//     const patternIndex = digit < pattern.length ? digit + 4 : 2; // Padrão de espaço para dígitos não mapeados
+//     const digitPattern = pattern[patternIndex];
 
-    for (let j = 0; j < digitPattern.length; j++) {
-      const isWide = digitPattern[j] === '1';
-      const barStyle = isWide ? barcodeStyle.wideBar : barcodeStyle.narrowBar;
-      const bar = <View key={`${i}-${j}`} style={[barcodeStyle.bar, barStyle]} />;
-      bars.push(bar);
-    }
-  }
+//     for (let j = 0; j < digitPattern.length; j++) {
+//       const isWide = digitPattern[j] === '1';
+//       const barStyle = isWide ? barcodeStyle.wideBar : barcodeStyle.narrowBar;
+//       const bar = <View key={`${i}-${j}`} style={[barcodeStyle.bar, barStyle]} />;
+//       bars.push(bar);
+//     }
+//   }
 
-  return <View style={barcodeStyle.container}>{bars}</View>;
-}
+//   return <View style={barcodeStyle.container}>{bars}</View>;
+// }
 
 export function Boleto({
   nomeCliente,
@@ -271,6 +285,7 @@ export function Boleto({
   const [imgB002Url, setImgB002Url] = useState('');
   const [imgB003Url, setImgB003Url] = useState('');
   const [imgB004Url, setImgB004Url] = useState('');
+  const [barcodeImage, setBarcodeImage] = useState<string>('');
 
   // Função para converter a imagem em URL de dados (data URL)
   const convertImageToDataUrl = async (imagePath: RequestInfo | URL) => {
@@ -292,6 +307,39 @@ export function Boleto({
       .then((url) => { setImgB004Url(url); })
       .catch((error) => { console.log(error); });
   }, []);
+
+
+  const barcodeValue = codigoBarras!;
+
+  // const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
+  //   let binary = '';
+  //   const bytes = new Uint8Array(buffer);
+  //   const len = bytes.byteLength;
+  //   for (let i = 0; i < len; i++) {
+  //     binary += String.fromCharCode(bytes[i]);
+  //   }
+  //   return binary
+  // };
+
+  useEffect(() => {
+    async function handleImage() {
+      await fetch(`/api/barcode?value=${barcodeValue}`)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64String = reader.result as string;
+            setBarcodeImage(base64String);
+          };
+          reader.readAsDataURL(blob);
+        })
+        .catch((error) => {
+          console.error('Erro ao obter código de barras:', error);
+        });
+    }
+
+    handleImage()
+  }, [barcodeValue]);
 
   return (
     <Document>
@@ -411,7 +459,7 @@ export function Boleto({
           </Text>
         </View>
         <View style={styles.viewCodigoBarras}>
-          {(codigoBarras != null) ? generateITF14Barcode(codigoBarras) : null}
+          <Image src={barcodeImage} />
         </View>
       </Page>
       {descricao !== '' && (

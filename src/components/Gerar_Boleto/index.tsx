@@ -53,7 +53,6 @@ export default function GerarBoleto() {
       cpfCnpj === '' ||
       valor === '' ||
       dataVencimento === '' ||
-      descricao === '' ||
       codigoDeBarras === ''
     ) {
       alert('Preencha todos os campos!')
@@ -154,7 +153,6 @@ export default function GerarBoleto() {
                 cpfCnpj === '' ||
                 valor === '' ||
                 dataVencimento === '' ||
-                descricao === '' ||
                 codigoDeBarras === '' ? (
                 'Preencha os campos'
               ) : (
