@@ -256,6 +256,7 @@ export function Pix({
   const [imgB002Url, setImgB002Url] = useState('');
   const [imgB003Url, setImgB003Url] = useState('');
   const [imgB004Url, setImgB004Url] = useState('');
+  const [data, setData] = useState('')
 
   // Função para converter a imagem em URL de dados (data URL)
   const convertImageToDataUrl = async (imagePath: RequestInfo | URL) => {
@@ -275,6 +276,15 @@ export function Pix({
     convertImageToDataUrl('/img/IMG_B004.png')
       .then((url) => { setImgB004Url(url); })
       .catch((error) => { console.log(error); });
+
+    const digitsOnly = dataVencimento.replace(/\D/g, '')
+
+    // Aplica a máscara de CPF (000.000.000-00)
+    const formattedValue = digitsOnly.replace(
+      /(\d{2})(\d{2})(\d{4})/,
+      '$1/$2/$3'
+    )
+    setData(formattedValue)
   }, []);
 
   return (
@@ -298,7 +308,7 @@ export function Pix({
               <View style={styles.separador}></View>
               <Text>
                 Acordo firmado na opção de pagamento via PIX na data{' '}
-                {dataVencimento}
+                {data}
               </Text>
               <View style={styles.separador}></View>
               <Text>
@@ -353,7 +363,7 @@ export function Pix({
           </View>
           <View style={styles.contentTextCheckOut}>
             <Text style={styles.fontBold}>DATA DE VENCIMENTO</Text>
-            <Text>{dataVencimento}</Text>
+            <Text>{data}</Text>
           </View>
           {/* CONTADOR DE PAGINAS Ñ APAGAR */}
         </View>
@@ -374,7 +384,7 @@ export function Pix({
             </View>
             <View style={styles.contentTextCheckOut}>
               <Text style={styles.fontBold}>DATA DE VENCIMENTO</Text>
-              <Text>{dataVencimento}</Text>
+              <Text>{data}</Text>
             </View>
           </View>
           <Text

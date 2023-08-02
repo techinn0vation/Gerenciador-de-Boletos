@@ -364,7 +364,7 @@ export function Pix2({
   }, [])
 
   const [imgB002Url, setImgB002Url] = useState('');
-
+  const [data, setData] = useState('')
   // Função para converter a imagem em URL de dados (data URL)
   const convertImageToDataUrl = async (imagePath: RequestInfo | URL) => {
     const response = await fetch(imagePath);
@@ -377,6 +377,15 @@ export function Pix2({
     convertImageToDataUrl('/img/IMG_B004.png')
       .then((url) => { setImgB002Url(url); })
       .catch((error) => { console.log(error); });
+
+    const digitsOnly = dataVencimento.replace(/\D/g, '')
+
+    // Aplica a máscara de CPF (000.000.000-00)
+    const formattedValue = digitsOnly.replace(
+      /(\d{2})(\d{2})(\d{4})/,
+      '$1/$2/$3'
+    )
+    setData(formattedValue)
   }, []);
 
   return (
@@ -509,7 +518,7 @@ export function Pix2({
               </Text>
             </View>
             <View style={styles.bodyBorder}>
-              <Text>{dataVencimento}</Text>
+              <Text>{data}</Text>
             </View>
           </View>
           {/* CONTADOR DE PAGINAS Ñ APAGAR */}

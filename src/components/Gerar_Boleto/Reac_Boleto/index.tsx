@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/promise-function-async */
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   imgCodigoBarras: {
-    width: '50%',
+    width: '80%',
     backgroundSize: 'contain',
     padding: '10px 0',
     margin: '5px auto'
@@ -286,7 +287,7 @@ export function Boleto({
   const [imgB003Url, setImgB003Url] = useState('');
   const [imgB004Url, setImgB004Url] = useState('');
   const [barcodeImage, setBarcodeImage] = useState<string>('');
-
+  const [data, setData] = useState('')
   // Função para converter a imagem em URL de dados (data URL)
   const convertImageToDataUrl = async (imagePath: RequestInfo | URL) => {
     const response = await fetch(imagePath);
@@ -332,6 +333,14 @@ export function Boleto({
             setBarcodeImage(base64String);
           };
           reader.readAsDataURL(blob);
+          const digitsOnly = dataVencimento.replace(/\D/g, '')
+
+          // Aplica a máscara de CPF (000.000.000-00)
+          const formattedValue = digitsOnly.replace(
+            /(\d{2})(\d{2})(\d{4})/,
+            '$1/$2/$3'
+          )
+          setData(formattedValue)
         })
         .catch((error) => {
           console.error('Erro ao obter código de barras:', error);
@@ -340,6 +349,9 @@ export function Boleto({
 
     handleImage()
   }, [barcodeValue]);
+
+
+
 
   return (
     <Document>
@@ -362,7 +374,7 @@ export function Boleto({
               <View style={styles.separador}></View>
               <Text>
                 Este é o boleto com o demonstrativo do acordo firmado em{' '}
-                {dataVencimento}
+                {data}
               </Text>
               <View style={styles.separador}></View>
 
@@ -415,7 +427,7 @@ export function Boleto({
           </View>
           <View style={styles.contentTextCheckOut}>
             <Text style={styles.fontBold}>DATA DE VENCIMENTO</Text>
-            <Text>{dataVencimento}</Text>
+            <Text>{data}</Text>
           </View>
           {/* CONTADOR DE PAGINAS Ñ APAGAR */}
         </View>
@@ -436,7 +448,7 @@ export function Boleto({
             </View>
             <View style={styles.contentTextCheckOut}>
               <Text style={styles.fontBold}>DATA DE VENCIMENTO</Text>
-              <Text>{dataVencimento}</Text>
+              <Text>{data}</Text>
             </View>
           </View>
           <Text
@@ -459,7 +471,7 @@ export function Boleto({
           </Text>
         </View>
         <View style={styles.viewCodigoBarras}>
-          <Image src={barcodeImage} />
+          <Image src={barcodeImage} style={styles.imgCodigoBarras} />
         </View>
       </Page>
       {descricao !== '' && (
