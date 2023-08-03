@@ -7,8 +7,7 @@ export default async function handler(req: any, res: any) {
       bcid: 'code128', // Código de barras ITF-14 (Intercalado 2 de 5)
       text: value,
       scale: 3,
-      height: 8,
-      includetext: true
+      height: 8
     })
 
     res.writeHead(200, {

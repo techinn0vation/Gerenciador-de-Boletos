@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   viewCodigoBarras: {
     width: '100%',
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -192,8 +192,16 @@ const styles = StyleSheet.create({
   imgCodigoBarras: {
     width: '80%',
     backgroundSize: 'contain',
-    padding: '10px 0',
-    margin: '5px auto'
+    padding: '5px 0',
+    margin: '1px auto'
+  },
+  textCodigoBarras: {
+    color: '#000',
+    fontWeight: 500,
+    fontStyle: 'normal',
+    textAlign: 'center',
+    letterSpacing: 3,
+    fontSize: 9,
   }
 })
 
@@ -472,6 +480,7 @@ export function Boleto({
         </View>
         <View style={styles.viewCodigoBarras}>
           <Image src={barcodeImage} style={styles.imgCodigoBarras} />
+          <Text style={styles.textCodigoBarras}>{codigoBarras}</Text>
         </View>
       </Page>
       {descricao !== '' && (
