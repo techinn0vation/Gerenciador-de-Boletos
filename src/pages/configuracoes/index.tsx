@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-var */
 /* eslint-disable @typescript-eslint/promise-function-async */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -55,8 +57,12 @@ export default function Configurações() {
     setModalDados(!modalDados)
   }
 
-  const token = localStorage.getItem('token')
-  const Auth = `Bearer ${token}`
+  var Auth: string
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    Auth = `Bearer ${token}`
+  }, [])
 
   const navitage = useRouter()
 
