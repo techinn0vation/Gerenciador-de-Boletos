@@ -18,22 +18,23 @@ import {
 import React, { useState } from 'react'
 
 export default function Corporativo() {
-  const [buttonText, setButtonText] = useState('Copiar')
+  const [buttonText, setButtonText] = useState({ text: 'Copiar', index: 0 })
 
-  const handleCopyText = (text: string) => {
+  const handleCopyText = (text: string, index: number) => {
     navigator.clipboard
       .writeText(text)
       .then(() => {
         console.log('Texto copiado com sucesso!')
-        setButtonText('Copiado!')
+        setButtonText({ text: 'Copiado!', index })
         setTimeout(() => {
-          setButtonText('Copiar')
+          setButtonText({ text: 'Copiar', index: 0 })
         }, 2000)
       })
       .catch(error => {
         console.error('Erro ao copiar o texto:', error)
       })
   }
+
   return (
     <Layout>
       <WrapperCorporativo>
@@ -93,11 +94,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock1')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 1)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 1 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock2">
@@ -127,11 +128,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock2')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 2)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 2 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock3">
@@ -190,11 +191,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock3')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 3)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 3 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock4">
@@ -208,11 +209,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock4')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 4)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 4 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock5">
@@ -266,11 +267,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock5')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 5)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 5 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock6">
@@ -284,11 +285,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock6')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 6)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 6 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock7">
@@ -316,11 +317,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock7')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 7)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 7 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock8">
@@ -335,11 +336,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock8')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 8)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 8 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock9">
@@ -401,11 +402,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock9')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 9)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 9 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock10">
@@ -427,11 +428,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock10')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 10)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 10 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock11">
@@ -452,11 +453,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock11')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 11)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 11 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
             <TextBlock id="textBlock12">
@@ -470,11 +471,11 @@ export default function Corporativo() {
                 onClick={() => {
                   const element = document.getElementById('textBlock12')
                   if (element != null) {
-                    handleCopyText(element.innerText)
+                    handleCopyText(element.innerText, 12)
                   }
                 }}
               >
-                {buttonText}
+                {buttonText.index === 12 ? buttonText.text : 'Copiar'}
               </ButtonCopyText>
             </TextBlock>
           </AreaTextCorporativo>

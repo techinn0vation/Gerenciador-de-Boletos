@@ -85,6 +85,14 @@ export default function Modal({ onClose }: PropType) {
           />
           <FieldRegistration
             type="text"
+            value={senha}
+            onChange={e => {
+              setSenha(e.target.value)
+            }}
+            placeholder="e-mail"
+          />
+          <FieldRegistration
+            type="text"
             value={usuario}
             onChange={e => {
               setUsuario(e.target.value)
