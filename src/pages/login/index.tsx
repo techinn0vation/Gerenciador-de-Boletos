@@ -51,8 +51,8 @@ export default function Login() {
         <ContentFields>
           <BlockFields>
             <InputField
-              type="email"
-              id="email"
+              type="text"
+              id="usuario"
               value={usuario}
               onChange={e => {
                 setUsuario(e.target.value)
