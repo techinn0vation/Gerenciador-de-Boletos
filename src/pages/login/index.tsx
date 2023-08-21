@@ -30,16 +30,16 @@ export default function Login() {
   }
 
   // Configuração API
-  const [email, setEmail] = useState('')
+  const [usuario, setUsuario] = useState('')
   const [senha, setSenha] = useState('')
 
   async function handleLogin() {
     try {
-      const response = await api.post('/users/authenticate', { email, senha })
+      const response = await api.post('/users/authenticate', { usuario, senha })
       localStorage.setItem('token', response.data.token)
       location.assign('/dashboard')
     } catch (error) {
-      alert('E-mail ou senha incorretos')
+      alert('Usuário ou senha incorretos')
     }
   }
 
@@ -53,11 +53,11 @@ export default function Login() {
             <InputField
               type="email"
               id="email"
-              value={email}
+              value={usuario}
               onChange={e => {
-                setEmail(e.target.value)
+                setUsuario(e.target.value)
               }}
-              placeholder="digite seu e-mail"
+              placeholder="digite seu usuário"
             />
           </BlockFields>
           <BlockFields>
