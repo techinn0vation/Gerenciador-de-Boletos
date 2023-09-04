@@ -2,10 +2,10 @@ import styled from 'styled-components'
 
 export const WrapperLayout = styled.div`
   width: 100%;
-  max-width: 108rem;
+  max-width: 128rem;
   margin: 0 auto;
   min-height: 100vh;
-  padding: 1.6rem;
+  padding: 2rem;
   gap: 3rem;
   display: flex;
   flex-direction: column;
