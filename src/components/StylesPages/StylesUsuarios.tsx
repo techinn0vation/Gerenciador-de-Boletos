@@ -50,8 +50,8 @@ export const WrapperTable = styled.table`
   align-items: center;
   gap: 2rem;
 
-  /* border: solid ${props => props.theme.colors.colorH} 0.1rem; */
-  box-shadow: 0 0 0.7rem 0 ${props => props.theme.colors.colorH};
+  /* border: solid ${props => props.theme.colors.colorH} 0.02rem; */ //OBS
+  box-shadow: 0 0 0.5rem 0 ${props => props.theme.colors.colorH};
 
   border-radius: 1rem;
   padding: 1rem;
