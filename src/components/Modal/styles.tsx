@@ -10,6 +10,11 @@ export const WrapperModal = styled.div`
   background: rgba(0, 0, 0, 0.816);
   z-index: 1;
   padding: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `
 export const ContentModal = styled.div`
   width: 100%;
@@ -18,7 +23,7 @@ export const ContentModal = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 2rem;
+  gap: 3rem;
   position: relative;
 
   border-radius: 1.6rem;
@@ -30,15 +35,16 @@ export const ContentModal = styled.div`
   &::-webkit-scrollbar {
     width: 0;
   }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: transparent;
-  }
 
   @media (min-width: ${props => props.theme.screenSize.sizeMD}) {
-    max-width: 37rem;
+    max-width: 65%;
+    height: auto;
+    margin: auto;
+  }
+
+  @media (min-width: ${props => props.theme.screenSize.sizeLG}) {
+    max-width: 50%;
+    height: auto;
     margin: auto;
   }
 `
@@ -49,10 +55,21 @@ export const BlockRegistration = styled.div`
   justify-content: center;
   align-items: center;
   gap: 3rem;
-  /* Changed */
-  p {
-    color: ${props => props.theme.colors.colorC};
+
+  @media (min-width: ${props => props.theme.screenSize.sizeMD}) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    place-items: center;
   }
+`
+export const ViewRegistration = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3rem;
 `
 export const FieldRegistration = styled.input`
   width: 100%;
@@ -127,12 +144,13 @@ export const ContentFieldBlock = styled.div`
   }
 
   &:nth-of-type(2) {
-    display: grid;
-    place-items: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 2rem;
 
     @media (min-width: ${props => props.theme.screenSize.sizeMD}) {
-      display: flex;
-      flex-direction: column; // Or Row
     }
   }
 `
@@ -204,14 +222,16 @@ export const ButtonSaveDate = styled.button`
   gap: 2rem;
   box-shadow: 0 0 0.4rem 0 ${props => props.theme.colors.colorH};
 
-  color: ${props => props.theme.colors.colorC};
-  font-style: normal;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.4rem;
-  line-height: 2.1rem;
-  &::first-letter {
-    text-transform: capitalize;
+  p {
+    color: ${props => props.theme.colors.colorC};
+    font-style: normal;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    &::first-letter {
+      text-transform: capitalize;
+    }
   }
 
   transition: ease-in 0.03s;

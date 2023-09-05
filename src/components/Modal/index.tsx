@@ -10,7 +10,8 @@ import {
   ContentFieldBlock,
   FieldCheckBlock,
   TypeFieldCheck,
-  ButtonSaveDate
+  ButtonSaveDate,
+  ViewRegistration
 } from './styles'
 
 import { useState, useEffect } from 'react'
@@ -30,6 +31,7 @@ export default function Modal({ onClose }: PropType) {
   const [final, setFinal] = useState('')
   const [checked, setChecked] = useState(false)
   const [Auth, setAuth] = useState('')
+  const [textoBotao, setTextoBotao] = useState('salvar')
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -53,12 +55,15 @@ export default function Modal({ onClose }: PropType) {
         },
         { headers: { Authorization: Auth } }
       )
+
       .then(result => {
         location.assign('/users')
       })
       .catch(error => {
         console.log(error)
       })
+
+    setTextoBotao('salvo!')
   }
 
   return (
@@ -89,7 +94,7 @@ export default function Modal({ onClose }: PropType) {
             onChange={e => {
               setSenha(e.target.value)
             }}
-            placeholder="e-mail"
+            placeholder="senha"
           />
           <FieldRegistration
             type="text"
@@ -108,6 +113,8 @@ export default function Modal({ onClose }: PropType) {
             placeholder="numero final"
           />
           <FieldRegistration type="number" placeholder="nível" />
+        </BlockRegistration>
+        <ViewRegistration>
           <ContentFieldBlock>
             <DisplayTypography DisplayTypography="clique para bloquear o usuário" />
             <FieldCheckBlock
@@ -120,7 +127,7 @@ export default function Modal({ onClose }: PropType) {
             />
           </ContentFieldBlock>
           <ContentFieldBlock>
-            <DisplayTypography DisplayTypography="tipo" />
+            <DisplayTypography DisplayTypography="selecione o tipo" />
             <TypeFieldCheck>
               <FieldCheckBlock
                 checked={tipo === 'U'}
@@ -153,9 +160,9 @@ export default function Modal({ onClose }: PropType) {
             </TypeFieldCheck>
           </ContentFieldBlock>
           <ButtonSaveDate onClick={handleUsuario}>
-            <DisplayTypography DisplayTypography="salvar" />
+            <DisplayTypography DisplayTypography={textoBotao} />
           </ButtonSaveDate>
-        </BlockRegistration>
+        </ViewRegistration>
       </ContentModal>
     </WrapperModal>
   )

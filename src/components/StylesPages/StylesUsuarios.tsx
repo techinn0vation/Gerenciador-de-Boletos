@@ -46,12 +46,13 @@ export const WrapperTable = styled.table`
   min-width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 2rem;
-
-  /* border: solid ${props => props.theme.colors.colorH} 0.02rem; */ //OBS
+  overflow-y: scroll;
+  height: 30rem;
   box-shadow: 0 0 0.5rem 0 ${props => props.theme.colors.colorH};
+  /* border: solid ${props => props.theme.colors.colorH} 0.02rem; */ //OBS
 
   border-radius: 1rem;
   padding: 1rem;
