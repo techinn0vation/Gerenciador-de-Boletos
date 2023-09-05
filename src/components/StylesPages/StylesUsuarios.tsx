@@ -56,6 +56,11 @@ export const WrapperTable = styled.table`
 
   border-radius: 1rem;
   padding: 1rem;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
 `
 export const TableRow = styled.tr`
   width: 100%;
@@ -91,13 +96,6 @@ export const TableData = styled.td`
 
   &::-webkit-scrollbar {
     width: 0;
-    height: 0;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: transparent;
   }
 `
 export const ButtonDelete = styled(BsTrashFill)`

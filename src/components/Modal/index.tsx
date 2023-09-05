@@ -31,7 +31,7 @@ export default function Modal({ onClose }: PropType) {
   const [final, setFinal] = useState('')
   const [checked, setChecked] = useState(false)
   const [Auth, setAuth] = useState('')
-  const [textoBotao, setTextoBotao] = useState('salvar')
+  const [textoBotao, setTextoBotao] = useState('Salvar')
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -63,7 +63,7 @@ export default function Modal({ onClose }: PropType) {
         console.log(error)
       })
 
-    setTextoBotao('salvo!')
+    setTextoBotao('Salvo!')
   }
 
   return (
@@ -159,9 +159,7 @@ export default function Modal({ onClose }: PropType) {
               <DisplayTypography DisplayTypography="administrador" />
             </TypeFieldCheck>
           </ContentFieldBlock>
-          <ButtonSaveDate onClick={handleUsuario}>
-            <DisplayTypography DisplayTypography={textoBotao} />
-          </ButtonSaveDate>
+          <ButtonSaveDate onClick={handleUsuario}>{textoBotao}</ButtonSaveDate>
         </ViewRegistration>
       </ContentModal>
     </WrapperModal>

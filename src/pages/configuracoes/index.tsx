@@ -194,10 +194,8 @@ export default function Configurações() {
                       setCodigoTransferencia(e.target.value)
                     }}
                   />
-                  <ButtonSaveDate>
-                    <DisplayTypography DisplayTypography="salvar" />
-                  </ButtonSaveDate>
                 </BlockRegistration>
+                <ButtonSaveDate>Salvar</ButtonSaveDate>
               </ContentModal>
             </WrapperModal>
           )}

@@ -38,6 +38,13 @@ export const BlockConsult = styled.div`
   gap: 2rem;
   justify-content: center;
   align-items: center;
+
+  @media (min-width: ${props => props.theme.screenSize.sizeMD}) {
+    input {
+      max-width: 36rem;
+      margin: 0 auto;
+    }
+  }
 `
 export const InputFieldConsult = styled.input`
   width: 100%;

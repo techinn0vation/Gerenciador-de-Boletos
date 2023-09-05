@@ -35,7 +35,7 @@ export const ContentUsuario = styled.div`
   }
 
   @media (min-width: ${props => props.theme.screenSize.sizeMD}) {
-    height: 60.7rem;
+    height: auto; // Ou 55rem
     background: ${props => props.theme.colors.colorA};
     box-shadow: 0 0 0.7rem 0 ${props => props.theme.colors.colorH};
     border-radius: 1.6rem;

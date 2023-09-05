@@ -28,6 +28,7 @@ export const ContentDashboard = styled.div`
     box-shadow: 0 0 0.7rem 0 ${props => props.theme.colors.colorH};
     border-radius: 1.6rem;
     padding: 1.6rem;
+    /* height: 55rem; */ //OBS
   }
 `
 export const HeadlineDashboard = styled.div`

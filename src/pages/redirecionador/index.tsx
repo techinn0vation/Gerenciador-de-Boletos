@@ -52,10 +52,8 @@ export default function Redirecionador() {
                 <BlockRegistration>
                   <FieldRegistration type="text" placeholder="nome" />
                   <FieldRegistration type="text" placeholder="número" />
-                  <ButtonSaveDate>
-                    <DisplayTypography DisplayTypography="salvar" />
-                  </ButtonSaveDate>
                 </BlockRegistration>
+                <ButtonSaveDate>Salvar</ButtonSaveDate>
               </ContentModal>
             </WrapperModal>
           )}
