@@ -14,7 +14,10 @@ import { api } from '@/services/api'
 import {
   BlockDividas,
   ContentGerarPixDois,
-  WrapperGerarPixDois
+  WrapperGerarPixDois,
+  ViewGerarPixDois,
+  ViewDividas,
+  ContentDividas
 } from './styles'
 
 import { Headline, DisplayTypography } from '@/components/GeralComponents'
@@ -143,145 +146,152 @@ export default function GerarPixDois() {
     <WrapperGerarPixDois>
       <Headline title="gerar pix dois" text="insira os dados abaixo." />
       <ContentGerarPixDois>
-        <BlockRegistration>
-          <FieldRegistration
-            type="text"
-            value={nomeCliente}
-            onChange={e => {
-              setNomeCliente(e.target.value)
-            }}
-            placeholder="nome cliente"
-          />
-          <FieldRegistration
-            type="text"
-            value={nomeAtendente}
-            onChange={e => {
-              setNomeAtendente(e.target.value)
-            }}
-            placeholder="nome atendente"
-          />
-          <FieldRegistration
-            type="number"
-            value={cpfAtendente}
-            onChange={e => {
-              setCpfAtendente(e.target.value)
-            }}
-            placeholder="cpf atendente"
-          />
-          <FieldRegistration
-            type="number"
-            value={cpfCnpj}
-            onChange={e => {
-              setCpfCnpj(e.target.value)
-            }}
-            placeholder="cpf/cnpj"
-          />
-          <FieldRegistration
-            type="number"
-            value={valorDesconto}
-            onChange={e => {
-              setValorDesconto(e.target.value)
-            }}
-            placeholder="valor desconto"
-          />
-          <FieldRegistration
-            type="text"
-            value={contrato}
-            onChange={e => {
-              setContrato(e.target.value)
-            }}
-            placeholder="contrato"
-          />
-          <FieldRegistration
-            type="text"
-            value={origem}
-            onChange={e => {
-              setOrigem(e.target.value)
-            }}
-            placeholder="origem"
-          />
-          <FieldRegistration
-            type="number"
-            value={saldoDevedor}
-            onChange={e => {
-              setSaldoDevedor(e.target.value)
-            }}
-            placeholder="saldo devedor"
-          />
-          <DisplayInputMask
-            type="text"
-            value={dataVencimento}
-            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-            placeholder="Data de Vencimento"
-            onKeyUp={event => {
-              formatData(event)
-            }}
-            maxLength={14}
-            onChange={e => {
-              setDataVencimento(e.target.value)
-            }}
-          />
-          <FieldRegistration
-            type="number"
-            value={protocolo}
-            onChange={e => {
-              setProtocolo(e.target.value)
-            }}
-            placeholder="protocolo"
-          />
-          <FieldRegistration
-            type="number"
-            value={numeroAcordo}
-            onChange={e => {
-              setNumeroAcordo(e.target.value)
-            }}
-            placeholder="número do acordo"
-          />
-          <ButtonSaveDate onClick={addDividas}>+</ButtonSaveDate>
+        <ViewGerarPixDois>
+          <BlockRegistration>
+            <FieldRegistration
+              type="text"
+              value={nomeCliente}
+              onChange={e => {
+                setNomeCliente(e.target.value)
+              }}
+              placeholder="nome cliente"
+            />
+            <FieldRegistration
+              type="text"
+              value={nomeAtendente}
+              onChange={e => {
+                setNomeAtendente(e.target.value)
+              }}
+              placeholder="nome atendente"
+            />
+            <FieldRegistration
+              type="number"
+              value={cpfAtendente}
+              onChange={e => {
+                setCpfAtendente(e.target.value)
+              }}
+              placeholder="cpf atendente"
+            />
+            <FieldRegistration
+              type="number"
+              value={cpfCnpj}
+              onChange={e => {
+                setCpfCnpj(e.target.value)
+              }}
+              placeholder="cpf/cnpj"
+            />
+            <FieldRegistration
+              type="number"
+              value={valorDesconto}
+              onChange={e => {
+                setValorDesconto(e.target.value)
+              }}
+              placeholder="valor desconto"
+            />
+            <FieldRegistration
+              type="text"
+              value={contrato}
+              onChange={e => {
+                setContrato(e.target.value)
+              }}
+              placeholder="contrato"
+            />
+            <FieldRegistration
+              type="text"
+              value={origem}
+              onChange={e => {
+                setOrigem(e.target.value)
+              }}
+              placeholder="origem"
+            />
+            <FieldRegistration
+              type="number"
+              value={saldoDevedor}
+              onChange={e => {
+                setSaldoDevedor(e.target.value)
+              }}
+              placeholder="saldo devedor"
+            />
+            <DisplayInputMask
+              type="text"
+              value={dataVencimento}
+              pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+              placeholder="Data de Vencimento"
+              onKeyUp={event => {
+                formatData(event)
+              }}
+              maxLength={14}
+              onChange={e => {
+                setDataVencimento(e.target.value)
+              }}
+            />
+            <FieldRegistration
+              type="number"
+              value={protocolo}
+              onChange={e => {
+                setProtocolo(e.target.value)
+              }}
+              placeholder="protocolo"
+            />
+            <FieldRegistration
+              type="number"
+              value={numeroAcordo}
+              onChange={e => {
+                setNumeroAcordo(e.target.value)
+              }}
+              placeholder="número do acordo"
+            />
+          </BlockRegistration>
+
+          {/* Line Space */}
+
           {dividas.length === 0 ? (
             <></>
           ) : (
-            <>
+            <ViewDividas>
               {dividas.map(item => (
-                <BlockDividas key={item.id}>
+                <ContentDividas key={item.id}>
                   <DisplayTypography DisplayTypography={`${item.contrato}`} />
                   <DisplayTypography DisplayTypography={`${item.origem}`} />
                   <DisplayTypography
                     DisplayTypography={`${item.saldoDevedor}`}
                   />
-                </BlockDividas>
+                </ContentDividas>
               ))}
-              <BlockRegistration>
-                <DisplayTypography DisplayTypography="total saldo devedor" />
+              <BlockDividas>
+                <DisplayTypography DisplayTypography="total saldo devedor :" />
                 <DisplayTypography DisplayTypography={`${total.toFixed(2)}`} />
-              </BlockRegistration>
-            </>
+              </BlockDividas>
+            </ViewDividas>
           )}
 
-          <ButtonSaveDate
-            onClick={handleGerarBoleto}
-            disabled={
-              !!(
-                nomeCliente === '' ||
-                cpfCnpj === '' ||
-                valorDesconto === '' ||
-                dataVencimento === '' ||
-                nomeAtendente === '' ||
-                cpfAtendente === ''
-              )
-            }
-          >
-            {nomeCliente === '' ||
+          {/* Line Space */}
+
+            <ButtonSaveDate
+              onClick={handleGerarBoleto}
+              disabled={
+                !!(
+                  nomeCliente === '' ||
+                  cpfCnpj === '' ||
+                  valorDesconto === '' ||
+                  dataVencimento === '' ||
+                  nomeAtendente === '' ||
+                  cpfAtendente === ''
+                )
+              }
+            >
+              {nomeCliente === '' ||
               cpfCnpj === '' ||
               valorDesconto === '' ||
               dataVencimento === '' ||
               cidade === '' ||
               nomeAtendente === '' ||
               cpfAtendente === ''
-              ? 'Preencha os campos'
-              : 'salvar'}
-          </ButtonSaveDate>
-        </BlockRegistration>
+                ? 'Preencha os campos'
+                : 'salvar'}
+            </ButtonSaveDate>
+            <ButtonSaveDate onClick={addDividas}>+</ButtonSaveDate>
+        </ViewGerarPixDois>
       </ContentGerarPixDois>
     </WrapperGerarPixDois>
   )

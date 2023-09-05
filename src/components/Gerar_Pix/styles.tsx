@@ -7,11 +7,6 @@ export const WrapperGerarPix = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 2rem;
-
-  /* @media (min-width: ${props => props.theme.screenSize.sizeMD}) {
-    flex-direction: row;
-    align-items: flex-start;
-  } */
 `
 export const ContentGerarPix = styled.div`
   width: 100%;
@@ -21,10 +16,23 @@ export const ContentGerarPix = styled.div`
   align-items: flex-start;
   gap: 2rem;
   padding-bottom: 2rem;
+`
+export const ViewGerarPix = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
 
   @media (min-width: ${props => props.theme.screenSize.sizeLG}) {
     div {
-      max-width: 40rem; // OBS!
+      width: 100%;
+      max-width: 90%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto;
+      place-items: center;
     }
   }
 `

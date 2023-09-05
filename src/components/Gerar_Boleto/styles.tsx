@@ -17,16 +17,10 @@ export const ContentGerarBoleto = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   gap: 2rem;
   padding-bottom: 2rem;
-
-  @media (min-width: ${props => props.theme.screenSize.sizeLG}) {
-    div {
-      max-width: 40rem; // OBS!
-    }
-  }
 `
 export const DisplayInputMask = styled.input`
   width: 100%;
@@ -78,5 +72,24 @@ export const DisplayInputMask = styled.input`
   &[type='number'] {
     -moz-appearance: textfield;
     appearance: textfield;
+  }
+`
+export const ViewGerarBoleto = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+
+  @media (min-width: ${props => props.theme.screenSize.sizeLG}) {
+    div {
+      width: 100%;
+      max-width: 90%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto;
+      place-items: center;
+    }
   }
 `

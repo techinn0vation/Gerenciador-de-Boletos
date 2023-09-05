@@ -7,11 +7,6 @@ export const WrapperGerarPixDois = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 2rem;
-
-  /* @media (min-width: ${props => props.theme.screenSize.sizeMD}) {
-    flex-direction: row;
-    align-items: flex-start;
-  } */
 `
 export const ContentGerarPixDois = styled.div`
   width: 100%;
@@ -20,21 +15,59 @@ export const ContentGerarPixDois = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   gap: 2rem;
-  padding-bottom: 2rem;
-
-  @media (min-width: ${props => props.theme.screenSize.sizeLG}) {
-    div {
-      max-width: 40rem; // OBS!
-    }
-  }
+  padding: 1rem;
   color: ${props => props.theme.colors.colorC};
 `
-export const BlockDividas = styled.div`
+export const ViewGerarPixDois = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 2.5rem;
+
+  @media (min-width: ${props => props.theme.screenSize.sizeLG}) {
+    div {
+      width: 100%;
+      max-width: 90%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto;
+      place-items: center;
+    }
+  }
+`
+export const ViewDividas = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+export const ContentDividas = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   gap: 2rem;
-  color: ${props => props.theme.colors.colorC}; //OBS
+`
+export const BlockDividas = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+
+  p {
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 2.4rem;
+    white-space: nowrap;
+    &::first-letter {
+      text-transform: capitalize;
+    }
+    color: ${props => props.theme.colors.colorC};
+  }
 `

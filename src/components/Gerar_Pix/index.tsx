@@ -10,7 +10,7 @@ import { api } from '../../services/api'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-import { ContentGerarPix, WrapperGerarPix } from './styles'
+import { ContentGerarPix, ViewGerarPix, WrapperGerarPix } from './styles'
 
 import { Headline } from '@/components/GeralComponents'
 import { DisplayInputMask } from '../Gerar_Boleto/styles'
@@ -105,6 +105,8 @@ export default function GerarPix() {
     <WrapperGerarPix>
       <Headline title="gerar pix" text="insira os dados abaixo." />
       <ContentGerarPix>
+        <ViewGerarPix>
+
         <BlockRegistration>
           <FieldRegistration
             type="text"
@@ -175,6 +177,7 @@ export default function GerarPix() {
               setChavePix(e.target.value)
             }}
           />
+        </BlockRegistration>
           <ButtonSaveDate
             onClick={handleGerarBoleto}
             disabled={
@@ -193,10 +196,8 @@ export default function GerarPix() {
               cidade === ''
               ? 'Preencha os campos!'
               : 'salvar'}
-
-            {/* <DisplayTypography DisplayTypography="salvar" /> */}
           </ButtonSaveDate>
-        </BlockRegistration>
+        </ViewGerarPix>
       </ContentGerarPix>
     </WrapperGerarPix>
   )

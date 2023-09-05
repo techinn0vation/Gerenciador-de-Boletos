@@ -10,7 +10,8 @@ import {
 import {
   ContentGerarBoleto,
   WrapperGerarBoleto,
-  DisplayInputMask
+  DisplayInputMask,
+  ViewGerarBoleto
 } from './styles'
 
 import { DisplayTitle, Headline } from '@/components/GeralComponents'
@@ -85,6 +86,7 @@ export default function GerarBoleto() {
         {loading ? (
           <DisplayTitle DisplayTitle="loading..." />
         ) : (
+          <ViewGerarBoleto>
           <BlockRegistration>
             <FieldRegistration
               type="text"
@@ -139,6 +141,7 @@ export default function GerarBoleto() {
               }}
               placeholder="código de barra"
             />
+          </BlockRegistration>
             <ButtonSaveDate
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onClick={handleGerarBoleto}
@@ -179,7 +182,7 @@ export default function GerarBoleto() {
                 </PDFDownloadLink>
               )}
             </ButtonSaveDate>
-          </BlockRegistration>
+          </ViewGerarBoleto>
         )}
       </ContentGerarBoleto>
     </WrapperGerarBoleto>
