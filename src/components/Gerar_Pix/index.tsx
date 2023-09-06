@@ -78,7 +78,7 @@ export default function GerarPix() {
         },
         { headers: { Authorization: Auth } }
       )
-      void router.push('/user')
+      void router.push('/dashboard')
     } catch (error) {
       alert(error)
     }
@@ -107,77 +107,77 @@ export default function GerarPix() {
       <ContentGerarPix>
         <ViewGerarPix>
 
-        <BlockRegistration>
-          <FieldRegistration
-            type="text"
-            placeholder="nome do cliente"
-            value={nomeCliente}
-            onChange={e => {
-              setNomeCliente(e.target.value)
-            }}
-          />
-          <FieldRegistration
-            type="number"
-            placeholder="cpf"
-            value={cpfCnpj}
-            onChange={e => {
-              setCpfCnpj(e.target.value)
-            }}
-          />
-          <FieldRegistration
-            type="number"
-            placeholder="valor"
-            value={valor}
-            onChange={e => {
-              setValor(e.target.value)
-            }}
-          />
-          <DisplayInputMask
-            type="text"
-            value={dataVencimento}
-            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-            placeholder="Data de Vencimento"
-            onKeyUp={event => {
-              formatData(event)
-            }}
-            maxLength={14}
-            onChange={e => {
-              setDataVencimento(e.target.value)
-            }}
-          />
-          <FieldRegistration
-            type="text"
-            placeholder="descrição"
-            value={descricao}
-            onChange={e => {
-              setDescricao(e.target.value)
-            }}
-          />
-          <FieldRegistration
-            type="text"
-            placeholder="cidade"
-            value={cidade}
-            onChange={e => {
-              setCidade(e.target.value)
-            }}
-          />
-          <FieldRegistration
-            type="text"
-            placeholder="nome avalista"
-            value={nomeAvalistaPix}
-            onChange={e => {
-              setNomeAvalistaPix(e.target.value)
-            }}
-          />
-          <FieldRegistration
-            type="text"
-            placeholder="chave pix"
-            value={chavePix}
-            onChange={e => {
-              setChavePix(e.target.value)
-            }}
-          />
-        </BlockRegistration>
+          <BlockRegistration>
+            <FieldRegistration
+              type="text"
+              placeholder="nome do cliente"
+              value={nomeCliente}
+              onChange={e => {
+                setNomeCliente(e.target.value)
+              }}
+            />
+            <FieldRegistration
+              type="number"
+              placeholder="cpf"
+              value={cpfCnpj}
+              onChange={e => {
+                setCpfCnpj(e.target.value)
+              }}
+            />
+            <FieldRegistration
+              type="number"
+              placeholder="valor"
+              value={valor}
+              onChange={e => {
+                setValor(e.target.value)
+              }}
+            />
+            <DisplayInputMask
+              type="text"
+              value={dataVencimento}
+              pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+              placeholder="Data de Vencimento"
+              onKeyUp={event => {
+                formatData(event)
+              }}
+              maxLength={14}
+              onChange={e => {
+                setDataVencimento(e.target.value)
+              }}
+            />
+            <FieldRegistration
+              type="text"
+              placeholder="descrição"
+              value={descricao}
+              onChange={e => {
+                setDescricao(e.target.value)
+              }}
+            />
+            <FieldRegistration
+              type="text"
+              placeholder="cidade"
+              value={cidade}
+              onChange={e => {
+                setCidade(e.target.value)
+              }}
+            />
+            <FieldRegistration
+              type="text"
+              placeholder="nome avalista"
+              value={nomeAvalistaPix}
+              onChange={e => {
+                setNomeAvalistaPix(e.target.value)
+              }}
+            />
+            <FieldRegistration
+              type="text"
+              placeholder="chave pix"
+              value={chavePix}
+              onChange={e => {
+                setChavePix(e.target.value)
+              }}
+            />
+          </BlockRegistration>
           <ButtonSaveDate
             onClick={handleGerarBoleto}
             disabled={

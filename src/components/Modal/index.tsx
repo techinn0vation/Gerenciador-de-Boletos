@@ -57,7 +57,7 @@ export default function Modal({ onClose }: PropType) {
       )
 
       .then(result => {
-        location.assign('/users')
+        location.assign('/usuarios')
       })
       .catch(error => {
         console.log(error)

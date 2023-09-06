@@ -98,7 +98,7 @@ export default function GerarPixDois() {
         },
         { headers: { Authorization: Auth } }
       )
-      void router.push('/user')
+      void router.push('/usuario')
     } catch (error) {
       alert(error)
     }
@@ -267,30 +267,30 @@ export default function GerarPixDois() {
 
           {/* Line Space */}
 
-            <ButtonSaveDate
-              onClick={handleGerarBoleto}
-              disabled={
-                !!(
-                  nomeCliente === '' ||
-                  cpfCnpj === '' ||
-                  valorDesconto === '' ||
-                  dataVencimento === '' ||
-                  nomeAtendente === '' ||
-                  cpfAtendente === ''
-                )
-              }
-            >
-              {nomeCliente === '' ||
+          <ButtonSaveDate
+            onClick={handleGerarBoleto}
+            disabled={
+              !!(
+                nomeCliente === '' ||
+                cpfCnpj === '' ||
+                valorDesconto === '' ||
+                dataVencimento === '' ||
+                nomeAtendente === '' ||
+                cpfAtendente === ''
+              )
+            }
+          >
+            {nomeCliente === '' ||
               cpfCnpj === '' ||
               valorDesconto === '' ||
               dataVencimento === '' ||
               cidade === '' ||
               nomeAtendente === '' ||
               cpfAtendente === ''
-                ? 'Preencha os campos'
-                : 'salvar'}
-            </ButtonSaveDate>
-            <ButtonSaveDate onClick={addDividas}>+</ButtonSaveDate>
+              ? 'Preencha os campos'
+              : 'salvar'}
+          </ButtonSaveDate>
+          <ButtonSaveDate onClick={addDividas}>+</ButtonSaveDate>
         </ViewGerarPixDois>
       </ContentGerarPixDois>
     </WrapperGerarPixDois>

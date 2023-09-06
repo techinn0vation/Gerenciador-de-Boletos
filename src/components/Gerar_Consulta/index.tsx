@@ -388,12 +388,8 @@ export default function ConsultaDocument({
                   }}
                   key={item.dataP}
                 >
-                  <Text style={{ width: '30%' }}>{moment(item.dataP, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
-                    'DD/MM/YYYY'
-                  )}</Text>
-                  <Text style={{ width: '30%' }}>{moment(item.dataU, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
-                    'DD/MM/YYYY'
-                  )}</Text>
+                  <Text style={{ width: '30%' }}>{item.dataP.split(" ")[0]}</Text>
+                  <Text style={{ width: '30%' }}>{item.dataU.split(" ")[0]}</Text>
                   <Text style={{ width: '30%' }}>{item.qteOcorrencias}</Text>
                 </View>
               ))
@@ -460,16 +456,17 @@ export default function ConsultaDocument({
                   key={item.data}
                 >
                   <Text style={{ width: '25%' }}>{item.nome}</Text>
-                  <Text style={{ width: '25%', marginHorizontal: 15 }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
-                    'DD/MM/YYYY'
-                  )}</Text>
+                  <Text style={{ width: '25%', marginHorizontal: 15 }}>
+                    {item.data.split(" ")[0]}
+                  </Text>
                   <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.tipo}
                   </Text>
                   <Text style={{ width: '15%' }}>{item.valor}</Text>
-                  <Text style={{ width: '40%' }}>{moment(item.disponibilidade, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
-                    'DD/MM/YYYY'
-                  )}</Text>
+                  <Text style={{ width: '40%' }}>
+                    {item.data.split(" ")[0]}
+
+                  </Text>
                 </View>
               ))
             )}
@@ -530,9 +527,7 @@ export default function ConsultaDocument({
                   }}
                   key={item.data}
                 >
-                  <Text style={{ width: '35%' }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
-                    'DD/MM/YYYY'
-                  )}</Text>
+                  <Text style={{ width: '35%' }}>{item.data.split(" ")[0]}</Text>
                   <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.cartorio}
                   </Text>
@@ -610,9 +605,7 @@ export default function ConsultaDocument({
                   }}
                   key={item.data}
                 >
-                  <Text style={{ width: '10%' }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
-                    'DD/MM/YYYY'
-                  )}</Text>
+                  <Text style={{ width: '10%' }}>{item.data.split(" ")[0]}</Text>
                   <Text style={{ width: '10%', marginHorizontal: 15 }}>
                     {item.cheque}
                   </Text>
@@ -738,11 +731,7 @@ export default function ConsultaDocument({
                   }}
                   key={item.data}
                 >
-                  <Text style={{ width: '25%' }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
-                    'DD/MM/YYYY'
-                  ) === "Invalid date" ? moment().format("L") : moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
-                    'DD/MM/YYYY'
-                  )}</Text>
+                  <Text style={{ width: '25%' }}>{item.data.split(" ")[0]}</Text>
                   <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.tipoConta}
                   </Text>
@@ -816,9 +805,7 @@ export default function ConsultaDocument({
                   }}
                   key={item.data}
                 >
-                  <Text style={{ width: '20%' }}>{moment(item.data, 'ddd MMM DD HH:mm:ss [BRT] YYYY').format(
-                    'DD/MM/YYYY'
-                  )}</Text>
+                  <Text style={{ width: '20%' }}>{item.data.split(" ")[0]}</Text>
                   <Text style={{ width: '25%', marginHorizontal: 15 }}>
                     {item.tipoFinanciamento}
                   </Text>

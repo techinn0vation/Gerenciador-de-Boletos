@@ -91,7 +91,7 @@ export default function Usuarios() {
         headers: { Authorization: Auth }
       })
       alert('Usuário deletado com sucesso!')
-      location.assign('/users')
+      location.assign('/usuarios')
     } catch (error) {
       alert('Ocorreu um erro! Tente novamente.')
     }
