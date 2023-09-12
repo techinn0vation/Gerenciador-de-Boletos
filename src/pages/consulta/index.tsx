@@ -36,7 +36,8 @@ import {
   type IChequeSemFundo,
   type ICadin,
   type ISiccf,
-  type IConvenioDevedores
+  type IConvenioDevedores,
+  type IPendencias
 } from '@/components/Gerar_Consulta'
 
 export default function Consulta() {
@@ -51,6 +52,8 @@ export default function Consulta() {
   const [convenioDevedores, setConvenioDevedores] = useState<
     IConvenioDevedores[]
   >([])
+  const [pendencias, setPendencias] = useState<IPendencias[]>([])
+  const [erro, setErro] = useState('')
 
   const [loading, setLoading] = useState(false)
 
@@ -68,6 +71,12 @@ export default function Consulta() {
     await api
       .post('/consulta', { cpf })
       .then(result => {
+        if (result.data.retorno === 'ERROR') {
+          setErro(result.data.msg)
+          setLoading(false)
+          return alert(result.data.msg)
+        }
+
         console.log(result.data)
         setNome(result.data.msg.dadosPessoais['Nome do Cliente'])
         setCpfCnpj(result.data.msg.dadosPessoais['CPF/CNPJ'])
@@ -86,6 +95,30 @@ export default function Consulta() {
                 dataU: result.data.msg.serasa[i]['Data Última Ocorrência'],
                 qteOcorrencias:
                   result.data.msg.serasa[i]['Quantidade Ocorrências']
+              }
+            ])
+          }
+        }
+
+        if (result.data.msg.pendencias.length === 0) {
+          setPendencias(prevList => [
+            ...prevList,
+            {
+              data: '',
+              origem: '',
+              tipo: '',
+              valor: ''
+            }
+          ])
+        } else if (result.data.msg.pendencias.length > 0) {
+          for (let i = 0; i < result.data.msg.pendencias.length; i++) {
+            setPendencias(prevList => [
+              ...prevList,
+              {
+                data: result.data.msg.pendencias[i].Data,
+                tipo: result.data.msg.pendencias[i]['Tipo Financ.'],
+                origem: result.data.msg.pendencias[i]['Razão Social'],
+                valor: result.data.msg.pendencias[i]['Valor (R$)']
               }
             ])
           }
@@ -318,6 +351,7 @@ export default function Consulta() {
                         scpc={scpc}
                         serasa={serasa}
                         siccf={siccf}
+                        pendencias={pendencias}
                       />
                     </PDFViewer>
                   </ScreenResult>
@@ -346,6 +380,7 @@ export default function Consulta() {
                             scpc={scpc}
                             serasa={serasa}
                             siccf={siccf}
+                            pendencias={pendencias}
                           />
                         }
                         fileName={`${nome} - CPF ${cpfCnpj} .pdf`}

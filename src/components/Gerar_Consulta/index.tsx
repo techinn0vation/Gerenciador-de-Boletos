@@ -229,6 +229,13 @@ export interface IConvenioDevedores {
   cidadeUF: string
 }
 
+export interface IPendencias {
+  data: string
+  tipo: string
+  valor: string
+  origem: string
+}
+
 export interface IConsultaProps {
   nomeCliente: string
   cpf?: string
@@ -240,6 +247,7 @@ export interface IConsultaProps {
   cadin: ICadin[]
   siccf: ISiccf[]
   convenioDevedores: IConvenioDevedores[]
+  pendencias: IPendencias[]
 }
 
 export default function ConsultaDocument({
@@ -252,7 +260,8 @@ export default function ConsultaDocument({
   chequesSF,
   cadin,
   siccf,
-  convenioDevedores
+  convenioDevedores,
+  pendencias
 }: IConsultaProps) {
   const [logo, setImgB002Url] = useState('')
   const [logo3, setImgB003Url] = useState('')
@@ -391,6 +400,67 @@ export default function ConsultaDocument({
                   <Text style={{ width: '30%' }}>{item.dataP.split(" ")[0]}</Text>
                   <Text style={{ width: '30%' }}>{item.dataU.split(" ")[0]}</Text>
                   <Text style={{ width: '30%' }}>{item.qteOcorrencias}</Text>
+                </View>
+              ))
+            )}
+          </View>
+        </View>
+
+        <View style={{ width: '100%', marginTop: 10 }}>
+          <View
+            style={{
+              backgroundColor: 'rgb(52, 108, 176)',
+              width: '100%',
+              borderRadius: 3,
+              padding: 5,
+              marginTop: 5
+            }}
+          >
+            <Text style={{ textTransform: 'uppercase', color: 'white' }}>
+              PENDENCIAS
+            </Text>
+          </View>
+          {pendencias[0].data !== '' && (
+            <View
+              style={{ display: 'flex', flexDirection: 'row', marginTop: 5 }}
+            >
+              <Text style={{ width: '25%', fontFamily: 'Helvetica-Bold' }}>
+                Data
+              </Text>
+              <Text style={{ width: '30%', fontFamily: 'Helvetica-Bold' }}>
+                Tipo
+              </Text>
+              <Text style={{ width: '20%', fontFamily: 'Helvetica-Bold' }}>
+                Valor
+              </Text>
+              <Text style={{ width: '35%', fontFamily: 'Helvetica-Bold' }}>
+                Origem
+              </Text>
+            </View>
+          )}
+
+          <View
+            style={{ display: 'flex', width: '100%' }}
+          >
+            {pendencias[0].data === '' ? (
+              <Text style={{ width: '25%', marginTop: 5, marginLeft: 5 }}>
+                Nada Consta
+              </Text>
+            ) : (
+              pendencias.map(item => (
+                <View
+                  style={{
+                    marginVertical: 5,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%'
+                  }}
+                  key={item.data}
+                >
+                  <Text style={{ width: '25%' }}>{item.data.split(" ")[0]}</Text>
+                  <Text style={{ width: '30%' }}>{item.tipo}</Text>
+                  <Text style={{ width: '20%' }}>R$ {item.valor}</Text>
+                  <Text style={{ width: '35%' }}>{item.origem}</Text>
                 </View>
               ))
             )}
