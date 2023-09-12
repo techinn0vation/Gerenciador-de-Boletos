@@ -208,13 +208,13 @@ const styles = StyleSheet.create({
 export interface IBoletoProps {
   id?: number
   // eslint-disable-next-line prettier/prettier
-  nomeCliente: string
+  nomeCliente?: string
   valor: string
   dataVencimento: string
   codigoCliente: string
   cpfCnpj?: string
   codigoBarrasPix?: string
-  descricao: string
+  descricao?: string
   nomeAvalistaBoleto: string
   tipo?: 'bo' | 'px'
   nomeAvalistaPix?: string

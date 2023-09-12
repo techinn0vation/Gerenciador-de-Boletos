@@ -99,6 +99,25 @@ export default function GerarPix() {
 
     // Atualiza o valor do input com a versão formatada
     input.value = formattedValue
+    setDataVencimento(formattedValue)
+  }
+
+  function formatCPF(event: any) {
+    const input = event.target
+    const value = input.value
+
+    // Remove qualquer caractere que não seja um dígito
+    const digitsOnly = value.replace(/\D/g, '')
+
+    // Aplica a máscara de CPF (000.000.000-00)
+    const formattedValue = digitsOnly.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{2})/,
+      '$1.$2.$3-$4'
+    )
+
+    // Atualiza o valor do input com a versão formatada
+    input.value = formattedValue
+    setCpfCnpj(formattedValue)
   }
 
   return (
@@ -116,13 +135,16 @@ export default function GerarPix() {
                 setNomeCliente(e.target.value)
               }}
             />
-            <FieldRegistration
-              type="number"
-              placeholder="cpf"
+            <DisplayInputMask
+              type="text"
               value={cpfCnpj}
               onChange={e => {
                 setCpfCnpj(e.target.value)
               }}
+              pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+              onKeyUp={event => { formatCPF(event); }}
+              maxLength={21}
+              placeholder="cpf/cnpj"
             />
             <FieldRegistration
               type="number"
@@ -151,30 +173,6 @@ export default function GerarPix() {
               value={descricao}
               onChange={e => {
                 setDescricao(e.target.value)
-              }}
-            />
-            <FieldRegistration
-              type="text"
-              placeholder="cidade"
-              value={cidade}
-              onChange={e => {
-                setCidade(e.target.value)
-              }}
-            />
-            <FieldRegistration
-              type="text"
-              placeholder="nome avalista"
-              value={nomeAvalistaPix}
-              onChange={e => {
-                setNomeAvalistaPix(e.target.value)
-              }}
-            />
-            <FieldRegistration
-              type="text"
-              placeholder="chave pix"
-              value={chavePix}
-              onChange={e => {
-                setChavePix(e.target.value)
               }}
             />
           </BlockRegistration>

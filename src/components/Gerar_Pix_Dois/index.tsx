@@ -140,6 +140,25 @@ export default function GerarPixDois() {
 
     // Atualiza o valor do input com a versão formatada
     input.value = formattedValue
+    setDataVencimento(formattedValue)
+  }
+
+  function formatCPF(event: any) {
+    const input = event.target
+    const value = input.value
+
+    // Remove qualquer caractere que não seja um dígito
+    const digitsOnly = value.replace(/\D/g, '')
+
+    // Aplica a máscara de CPF (000.000.000-00)
+    const formattedValue = digitsOnly.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{2})/,
+      '$1.$2.$3-$4'
+    )
+
+    // Atualiza o valor do input com a versão formatada
+    input.value = formattedValue
+    setCpfCnpj(formattedValue)
   }
 
   return (
@@ -165,7 +184,7 @@ export default function GerarPixDois() {
               placeholder="nome atendente"
             />
             <FieldRegistration
-              type="number"
+              type="text"
               value={cpfAtendente}
               onChange={e => {
                 setCpfAtendente(e.target.value)
@@ -173,11 +192,14 @@ export default function GerarPixDois() {
               placeholder="cpf atendente"
             />
             <FieldRegistration
-              type="number"
+              type="text"
               value={cpfCnpj}
               onChange={e => {
                 setCpfCnpj(e.target.value)
               }}
+              pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+              onKeyUp={event => { formatCPF(event); }}
+              maxLength={14}
               placeholder="cpf/cnpj"
             />
             <FieldRegistration

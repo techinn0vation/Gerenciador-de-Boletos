@@ -256,6 +256,8 @@ export default function Consulta() {
         console.log(err)
         setLoading(false)
       })
+
+    setCpf('')
   }
 
   function formatCPF(event: any) {

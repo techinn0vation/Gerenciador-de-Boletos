@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
 
@@ -19,6 +21,7 @@ import { DisplayTitle, Headline } from '@/components/GeralComponents'
 import { api } from '@/services/api'
 import { Boleto } from './Reac_Boleto'
 import { PDFDownloadLink } from '@react-pdf/renderer'
+import { useRouter } from 'next/router'
 
 export default function GerarBoleto() {
   const [loading, setLoading] = useState(false)
@@ -33,6 +36,7 @@ export default function GerarBoleto() {
   const token = localStorage.getItem('token')
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   const Auth = `Bearer ${token}`
+  const router = useRouter()
 
   useEffect(() => {
     async function getConfiguracoes() {
@@ -53,12 +57,34 @@ export default function GerarBoleto() {
       nomeCliente === '' ||
       cpfCnpj === '' ||
       valor === '' ||
-      dataVencimento === '' ||
-      codigoDeBarras === ''
+      dataVencimento === ''
     ) {
       alert('Preencha todos os campos!')
+
     } else {
-      console.log(Math.floor(Date.now() * Math.random()).toString())
+      const clienteCodigo = Math.floor(Date.now() * Math.random()).toString()
+
+      try {
+        await api.post(
+          '/boleto',
+          {
+            nomeCliente,
+            valor,
+            dataVencimento,
+            codigoCliente: clienteCodigo,
+            cpfCnpj,
+            descricao,
+            codigoBarrasPix: codigoDeBarras,
+            nomeAvalista: nomeAvalistaBoleto,
+            cidade: "",
+            tipo: 'bo'
+          },
+          { headers: { Authorization: Auth } }
+        )
+        void router.push('/dashboard')
+      } catch (error) {
+        alert(error)
+      }
     }
   }
 
@@ -77,6 +103,25 @@ export default function GerarBoleto() {
 
     // Atualiza o valor do input com a versão formatada
     input.value = formattedValue
+    setDataVencimento(formattedValue)
+  }
+
+  function formatCPF(event: any) {
+    const input = event.target
+    const value = input.value
+
+    // Remove qualquer caractere que não seja um dígito
+    const digitsOnly = value.replace(/\D/g, '')
+
+    // Aplica a máscara de CPF (000.000.000-00)
+    const formattedValue = digitsOnly.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{2})/,
+      '$1.$2.$3-$4'
+    )
+
+    // Atualiza o valor do input com a versão formatada
+    input.value = formattedValue
+    setCpfCnpj(formattedValue)
   }
 
   return (
@@ -87,100 +132,74 @@ export default function GerarBoleto() {
           <DisplayTitle DisplayTitle="loading..." />
         ) : (
           <ViewGerarBoleto>
-          <BlockRegistration>
-            <FieldRegistration
-              type="text"
-              value={nomeCliente}
-              onChange={e => {
-                setNomeCliente(e.target.value)
-              }}
-              placeholder="nome cliente"
-            />
-            <FieldRegistration
-              type="number"
-              value={cpfCnpj}
-              onChange={e => {
-                setCpfCnpj(e.target.value)
-              }}
-              placeholder="cpf/cnpj"
-            />
-            <FieldRegistration
-              type="number"
-              value={valor}
-              onChange={e => {
-                setValor(e.target.value)
-              }}
-              placeholder="valor"
-            />
-            <DisplayInputMask
-              type="text"
-              value={dataVencimento}
-              pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-              placeholder="Data de Vencimento"
-              onKeyUp={event => {
-                formatData(event)
-              }}
-              maxLength={14}
-              onChange={e => {
-                setDataVencimento(e.target.value)
-              }}
-            />
-            <FieldRegistration
-              type="text"
-              value={descricao}
-              onChange={e => {
-                setDescricao(e.target.value)
-              }}
-              placeholder="descrição"
-            />
-            <FieldRegistration
-              type="number"
-              value={codigoDeBarras}
-              onChange={e => {
-                setCodigoDeBarras(e.target.value)
-              }}
-              placeholder="código de barra"
-            />
-          </BlockRegistration>
+            <BlockRegistration>
+              <FieldRegistration
+                type="text"
+                value={nomeCliente}
+                onChange={e => {
+                  setNomeCliente(e.target.value)
+                }}
+                placeholder="nome cliente"
+              />
+              <FieldRegistration
+                type="text"
+                value={cpfCnpj}
+                onChange={e => {
+                  setCpfCnpj(e.target.value)
+                }}
+                pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                onKeyUp={event => formatCPF(event)}
+                maxLength={14}
+                placeholder="cpf/cnpj"
+              />
+              <FieldRegistration
+                type="number"
+                value={valor}
+                onChange={e => {
+                  setValor(e.target.value)
+                }}
+                placeholder="valor"
+              />
+              <DisplayInputMask
+                type="text"
+                value={dataVencimento}
+                pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                placeholder="Data de Vencimento"
+                onKeyUp={event => {
+                  formatData(event)
+                }}
+                maxLength={14}
+                onChange={e => {
+                  setDataVencimento(e.target.value)
+                }}
+              />
+              <FieldRegistration
+                type="text"
+                value={descricao}
+                onChange={e => {
+                  setDescricao(e.target.value)
+                }}
+                placeholder="descrição"
+              />
+
+            </BlockRegistration>
             <ButtonSaveDate
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onClick={handleGerarBoleto}
               disabled={
-                nomeCliente === '' ||
-                cpfCnpj === '' ||
-                valor === '' ||
-                dataVencimento === ''
+                !!(
+                  nomeCliente === '' ||
+                  cpfCnpj === '' ||
+                  valor === '' ||
+                  dataVencimento === ''
+                )
               }
             >
               {nomeCliente === '' ||
                 cpfCnpj === '' ||
                 valor === '' ||
-                dataVencimento === '' ||
-                codigoDeBarras === '' ? (
-                'Preencha os campos'
-              ) : (
-                <PDFDownloadLink
-                  style={{ textDecoration: 'none', color: 'white' }}
-                  document={
-                    <Boleto
-                      nomeCliente={nomeCliente}
-                      codigoCliente={Math.floor(
-                        Date.now() * Math.random()
-                      ).toString()}
-                      valor={valor}
-                      nomeAvalistaBoleto={nomeAvalistaBoleto}
-                      dataVencimento={dataVencimento}
-                      codigoBarrasPix={codigoDeBarras}
-                      descricao={descricao}
-                    />
-                  }
-                  fileName={`${nomeCliente} - CPF ${cpfCnpj} .pdf`}
-                >
-                  {({ blob, url, loading, error }) =>
-                    loading ? 'Carregando...' : 'Gerar Boleto'
-                  }
-                </PDFDownloadLink>
-              )}
+                dataVencimento === ''
+                ? 'Preencha os campos!'
+                : 'salvar'}
             </ButtonSaveDate>
           </ViewGerarBoleto>
         )}

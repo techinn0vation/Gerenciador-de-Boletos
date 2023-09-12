@@ -205,12 +205,12 @@ const styles = StyleSheet.create({
 })
 
 interface IBoletoProps {
-  nomeCliente: string
+  nomeCliente?: string
   valor: string
   dataVencimento: string
   codigoCliente: string
   pix?: string
-  descricao: string
+  descricao?: string
   cpfCnpj?: string
   nomeAvalistaPix: string
   cidade?: string
