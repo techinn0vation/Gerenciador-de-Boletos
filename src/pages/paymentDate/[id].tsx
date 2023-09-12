@@ -54,9 +54,14 @@ export default function PaymentDate() {
   const [tipoUser, setTipoUser] = useState('')
   const [cidade, setCidade] = useState<string | undefined>('')
 
-  const token = localStorage.getItem('token')
-  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  const Auth = `Bearer ${token}`
+  const [Auth, setAuth] = useState('')
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = window.localStorage.getItem('token')
+      setAuth(token != null ? `Bearer ${token}` : '')
+    }
+  }, [])
+
   const router = useRouter()
 
   const { id } = router.query

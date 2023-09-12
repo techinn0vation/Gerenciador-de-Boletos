@@ -52,11 +52,16 @@ export default function Usuarios() {
   const [rows, setRows] = useState<IUsers[]>([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [Auth, setAuth] = useState('')
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const Auth = `Bearer ${token}`
+    if (typeof window !== 'undefined') {
+      const token = window.localStorage.getItem('token')
+      setAuth(token != null ? `Bearer ${token}` : '')
+    }
+  }, [])
 
+  useEffect(() => {
     async function handleUsers() {
       try {
         const response = await api.get('/users', {
@@ -84,9 +89,6 @@ export default function Usuarios() {
 
   async function handleDelete(id: number) {
     try {
-      const token = localStorage.getItem('token')
-      const Auth = `Bearer ${token}`
-
       await api.delete(`/user/${id}`, {
         headers: { Authorization: Auth }
       })

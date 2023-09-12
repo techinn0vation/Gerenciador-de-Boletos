@@ -41,9 +41,15 @@ export default function GerarPixDois() {
   const [saldoDevedor, setSaldoDevedor] = useState('')
   const [dividas, setDividas] = useState<IDividas[]>([])
   const [total, setTotal] = useState(0.0)
+  const [Auth, setAuth] = useState('')
 
-  const token = localStorage.getItem('token')
-  const Auth = `Bearer ${token}`
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = window.localStorage.getItem('token')
+      setAuth(token != null ? `Bearer ${token}` : '')
+    }
+  }, [])
+
   const router = useRouter()
 
   useEffect(() => {

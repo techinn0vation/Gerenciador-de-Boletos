@@ -52,8 +52,11 @@ export default function Operador() {
     }
   }
 
-  const token = localStorage.getItem('token')
-  const Auth = `Bearer ${token}`
+  var token;
+  useEffect(() => {
+    token = localStorage.getItem('token')
+  }, [])
+
 
   async function getBoletos() {
     await api

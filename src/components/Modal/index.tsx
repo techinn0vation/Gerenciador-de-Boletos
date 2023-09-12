@@ -30,9 +30,9 @@ export default function Modal({ onClose }: PropType) {
   const [bloqueado, setBloqueado] = useState('')
   const [final, setFinal] = useState('')
   const [checked, setChecked] = useState(false)
-  const [Auth, setAuth] = useState('')
   const [textoBotao, setTextoBotao] = useState('Salvar')
 
+  const [Auth, setAuth] = useState('')
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const token = window.localStorage.getItem('token')

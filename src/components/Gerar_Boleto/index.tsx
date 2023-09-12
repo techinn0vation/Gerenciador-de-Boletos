@@ -32,10 +32,16 @@ export default function GerarBoleto() {
   const [descricao, setDescricao] = useState('')
   const [codigoDeBarras, setCodigoDeBarras] = useState('')
   const [nomeAvalistaBoleto, setNomeAvalistaBoleto] = useState('')
+  const [Auth, setAuth] = useState('')
 
-  const token = localStorage.getItem('token')
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = window.localStorage.getItem('token')
+      setAuth(token != null ? `Bearer ${token}` : '')
+    }
+  }, [])
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  const Auth = `Bearer ${token}`
+
   const router = useRouter()
 
   useEffect(() => {

@@ -52,18 +52,18 @@ export default function Configurações() {
   const [codigoTransferencia, setCodigoTransferencia] = useState('')
   const [loading, setLoading] = useState(false)
   const [modalDados, setModalDados] = useState(false)
+  const [Auth, setAuth] = useState('')
 
   function handleGerarLink() {
     setModalDados(!modalDados)
   }
 
-  var Auth: string
-
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    Auth = `Bearer ${token}`
+    if (typeof window !== 'undefined') {
+      const token = window.localStorage.getItem('token')
+      setAuth(token != null ? `Bearer ${token}` : '')
+    }
   }, [])
-
   const navitage = useRouter()
 
   useEffect(() => {

@@ -24,10 +24,15 @@ export default function GerarPix() {
   const [nomeAvalistaPix, setNomeAvalistaPix] = useState('')
   const [chavePix, setChavePix] = useState('')
   const [cidade, setCidade] = useState('')
+  const [Auth, setAuth] = useState('')
 
-  const token = localStorage.getItem('token')
-  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  const Auth = `Bearer ${token}`
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = window.localStorage.getItem('token')
+      setAuth(token != null ? `Bearer ${token}` : '')
+    }
+  }, [])
+
   const router = useRouter()
 
   useEffect(() => {

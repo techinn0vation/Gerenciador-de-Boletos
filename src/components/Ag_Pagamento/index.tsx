@@ -24,9 +24,14 @@ export default function AgPagamento() {
   const [boletos, setBoletos] = useState<IBoletoProps[]>([])
   const [loading, setLoading] = useState(false)
   const [tipoUser, setTipoUser] = useState('')
+  const [Auth, setAuth] = useState('')
 
-  const token = localStorage.getItem('token')
-  const Auth = `Bearer ${token}`
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = window.localStorage.getItem('token')
+      setAuth(token != null ? `Bearer ${token}` : '')
+    }
+  }, [])
 
   const router = useRouter()
 
