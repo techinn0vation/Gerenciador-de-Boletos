@@ -104,7 +104,6 @@ export default function Configurações() {
       nomeAvalistaBoleto === '' ||
       nomeAvalistaPix === '' ||
       chavePix === '' ||
-      chavePix === '' ||
       cidade === '' ||
       codigoTransferencia === ''
     ) {
@@ -195,7 +194,7 @@ export default function Configurações() {
                     }}
                   />
                 </BlockRegistration>
-                <ButtonSaveDate>Salvar</ButtonSaveDate>
+                <ButtonSaveDate onClick={handleConfiguracoes}>Salvar</ButtonSaveDate>
               </ContentModal>
             </WrapperModal>
           )}
