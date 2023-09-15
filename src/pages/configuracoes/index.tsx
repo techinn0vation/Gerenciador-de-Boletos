@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-var */
 /* eslint-disable @typescript-eslint/promise-function-async */
@@ -194,7 +195,9 @@ export default function Configurações() {
                     }}
                   />
                 </BlockRegistration>
-                <ButtonSaveDate onClick={handleConfiguracoes}>Salvar</ButtonSaveDate>
+                <ButtonSaveDate onClick={handleConfiguracoes}>
+                  Salvar
+                </ButtonSaveDate>
               </ContentModal>
             </WrapperModal>
           )}
