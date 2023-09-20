@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import {
@@ -24,19 +25,14 @@ export default function GerarPix() {
   const [nomeAvalistaPix, setNomeAvalistaPix] = useState('')
   const [chavePix, setChavePix] = useState('')
   const [cidade, setCidade] = useState('')
-  const [Auth, setAuth] = useState('')
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = window.localStorage.getItem('token')
-      setAuth(token != null ? `Bearer ${token}` : '')
-    }
-  }, [])
 
   const router = useRouter()
 
   useEffect(() => {
     async function getConfiguracoes() {
+      const token = window.localStorage.getItem('token')
+      const Auth = `Bearer ${token}`
       try {
         const { data } = await api.get('/configuracoes', {
           headers: { Authorization: Auth }
@@ -50,7 +46,7 @@ export default function GerarPix() {
       }
     }
     void getConfiguracoes()
-  }, [Auth])
+  }, [])
 
   async function handleGerarBoleto() {
     if (
@@ -65,7 +61,8 @@ export default function GerarPix() {
     }
 
     const clienteCodigo = Math.floor(Date.now() * Math.random()).toString()
-
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     try {
       await api.post(
         'boleto',

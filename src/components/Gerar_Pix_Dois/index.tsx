@@ -41,19 +41,13 @@ export default function GerarPixDois() {
   const [saldoDevedor, setSaldoDevedor] = useState('')
   const [dividas, setDividas] = useState<IDividas[]>([])
   const [total, setTotal] = useState(0.0)
-  const [Auth, setAuth] = useState('')
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = window.localStorage.getItem('token')
-      setAuth(token != null ? `Bearer ${token}` : '')
-    }
-  }, [])
 
   const router = useRouter()
 
   useEffect(() => {
     async function getConfiguracoes() {
+      const token = window.localStorage.getItem('token')
+      const Auth = `Bearer ${token}`
       await api
         .get('/configuracoes', { headers: { Authorization: Auth } })
         .then(({ data }) => {
@@ -67,9 +61,11 @@ export default function GerarPixDois() {
         })
     }
     void getConfiguracoes()
-  }, [Auth])
+  }, [])
 
   async function handleGerarBoleto() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     if (
       nomeCliente === '' ||
       cpfCnpj === '' ||

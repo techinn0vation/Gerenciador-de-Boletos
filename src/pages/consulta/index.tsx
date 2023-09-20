@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/no-misused-promises */
@@ -23,7 +24,7 @@ import {
 import moment from 'moment'
 
 import { api } from '@/services/api'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { PDFDownloadLink, PDFViewer, Document } from '@react-pdf/renderer'
 import { DisplayInputMask } from '@/components/Gerar_Boleto/styles'
@@ -68,39 +69,38 @@ export default function Consulta() {
       setLoading(false)
     }
 
-    await api
-      .post('/consulta', { cpf })
-      .then(result => {
-        if (result.data.retorno === 'ERROR') {
-          setErro(result.data.msg)
+    await fetch(`/api/consulta?value=${cpf}`)
+      .then(async result => {
+        const response = await result.json()
+        console.log(response)
+        if (response.retorno === 'ERROR') {
+          setErro(response.msg)
           setLoading(false)
-          return alert(result.data.msg)
+          return alert(response.msg)
         }
 
-        console.log(result.data)
-        setNome(result.data.msg.dadosPessoais['Nome do Cliente'])
-        setCpfCnpj(result.data.msg.dadosPessoais['CPF/CNPJ'])
+        setNome(response.msg.dadosPessoais['Nome do Cliente'])
+        setCpfCnpj(response.msg.dadosPessoais['CPF/CNPJ'])
 
-        if (result.data.msg.serasa.length === 0) {
+        if (response.msg.serasa.length === 0) {
           setSerasa(prevList => [
             ...prevList,
             { dataP: '', dataU: '', qteOcorrencias: '' }
           ])
-        } else if (result.data.msg.serasa.length > 0) {
-          for (let i = 0; i < result.data.msg.serasa.length; i++) {
+        } else if (response.msg.serasa.length > 0) {
+          for (let i = 0; i < response.msg.serasa.length; i++) {
             setSerasa(prevList => [
               ...prevList,
               {
-                dataP: result.data.msg.serasa[i]['Data Primeira Ocorrência'],
-                dataU: result.data.msg.serasa[i]['Data Última Ocorrência'],
-                qteOcorrencias:
-                  result.data.msg.serasa[i]['Quantidade Ocorrências']
+                dataP: response.msg.serasa[i]['Data Primeira Ocorrência'],
+                dataU: response.msg.serasa[i]['Data Última Ocorrência'],
+                qteOcorrencias: response.msg.serasa[i]['Quantidade Ocorrências']
               }
             ])
           }
         }
 
-        if (result.data.msg.pendencias.length === 0) {
+        if (response.msg.pendencias.length === 0) {
           setPendencias(prevList => [
             ...prevList,
             {
@@ -110,21 +110,21 @@ export default function Consulta() {
               valor: ''
             }
           ])
-        } else if (result.data.msg.pendencias.length > 0) {
-          for (let i = 0; i < result.data.msg.pendencias.length; i++) {
+        } else if (response.msg.pendencias.length > 0) {
+          for (let i = 0; i < response.msg.pendencias.length; i++) {
             setPendencias(prevList => [
               ...prevList,
               {
-                data: result.data.msg.pendencias[i].Data,
-                tipo: result.data.msg.pendencias[i]['Tipo Financ.'],
-                origem: result.data.msg.pendencias[i]['Razão Social'],
-                valor: result.data.msg.pendencias[i]['Valor (R$)']
+                data: response.msg.pendencias[i].Data,
+                tipo: response.msg.pendencias[i]['Tipo Financ.'],
+                origem: response.msg.pendencias[i]['Razão Social'],
+                valor: response.msg.pendencias[i]['Valor (R$)']
               }
             ])
           }
         }
 
-        if (result.data.msg.scpc.length === 0) {
+        if (response.msg.scpc.length === 0) {
           setScpc(prevList => [
             ...prevList,
             {
@@ -136,23 +136,23 @@ export default function Consulta() {
               tipo: ''
             }
           ])
-        } else if (result.data.msg.scpc.length > 0) {
-          for (let i = 0; i < result.data.msg.scpc.length; i++) {
+        } else if (response.msg.scpc.length > 0) {
+          for (let i = 0; i < response.msg.scpc.length; i++) {
             setScpc(prevList => [
               ...prevList,
               {
-                nome: result.data.msg.scpc[i].Nome,
-                disponibilidade: result.data.msg.scpc[i]['Dt Disp'],
-                cidadeUF: `${result.data.msg.scpc[i].Cidade}/${result.data.msg.scpc[i].UF}`,
-                data: result.data.msg.scpc[i]['Dt Ocorr'],
-                valor: result.data.msg.scpc[i]['Vr Dívida'],
-                tipo: result.data.msg.scpc[i]['Tp Devedor']
+                nome: response.msg.scpc[i].Nome,
+                disponibilidade: response.msg.scpc[i]['Dt Disp'],
+                cidadeUF: `${response.msg.scpc[i].Cidade}/${response.msg.scpc[i].UF}`,
+                data: response.msg.scpc[i]['Dt Ocorr'],
+                valor: response.msg.scpc[i]['Vr Dívida'],
+                tipo: response.msg.scpc[i]['Tp Devedor']
               }
             ])
           }
         }
 
-        if (result.data.msg.protestos.length === 0) {
+        if (response.msg.protestos.length === 0) {
           setProtestos(prevList => [
             ...prevList,
             {
@@ -162,21 +162,21 @@ export default function Consulta() {
               valor: ''
             }
           ])
-        } else if (result.data.msg.protestos.length) {
-          for (let i = 0; i < result.data.msg.protestos.length; i++) {
+        } else if (response.msg.protestos.length) {
+          for (let i = 0; i < response.msg.protestos.length; i++) {
             setProtestos(prevList => [
               ...prevList,
               {
-                cartorio: result.data.msg.protestos[i]['Cartório'],
-                cidadeUF: `${result.data.msg.protestos[i].Cidade}/${result.data.msg.protestos[i].UF}`,
-                data: result.data.msg.protestos[i].Data,
-                valor: result.data.msg.protestos[i]['Valor Protesto']
+                cartorio: response.msg.protestos[i]['Cartório'],
+                cidadeUF: `${response.msg.protestos[i].Cidade}/${response.msg.protestos[i].UF}`,
+                data: response.msg.protestos[i].Data,
+                valor: response.msg.protestos[i]['Valor Protesto']
               }
             ])
           }
         }
 
-        if (result.data.msg.cheques.length === 0) {
+        if (response.msg.cheques.length === 0) {
           setChequeSF(prevList => [
             ...prevList,
             {
@@ -190,25 +190,25 @@ export default function Consulta() {
               valor: ''
             }
           ])
-        } else if (result.data.msg.cheques.length > 0) {
-          for (let i = 0; i < result.data.msg.cheques.length; i++) {
+        } else if (response.msg.cheques.length > 0) {
+          for (let i = 0; i < response.msg.cheques.length; i++) {
             setChequeSF(prevList => [
               ...prevList,
               {
-                cheque: result.data.msg.cheques[i].Cheque,
-                agencia: result.data.msg.cheques[i]['Agência'],
-                alinea: result.data.msg.cheques[i].Alinea,
-                banco: result.data.msg.cheques[i].Banco,
-                cidadeUF: `${result.data.msg.cheques[i].Cidade}/${result.data.msg.cheques[i].UF}`,
-                data: result.data.msg.cheques[i].Data,
-                qteCheque: result.data.msg.cheques[i]['Qte Cheque'],
-                valor: result.data.msg.cheques[i]['Vlr Cheque']
+                cheque: response.msg.cheques[i].Cheque,
+                agencia: response.msg.cheques[i]['Agência'],
+                alinea: response.msg.cheques[i].Alinea,
+                banco: response.msg.cheques[i].Banco,
+                cidadeUF: `${response.msg.cheques[i].Cidade}/${response.msg.cheques[i].UF}`,
+                data: response.msg.cheques[i].Data,
+                qteCheque: response.msg.cheques[i]['Qte Cheque'],
+                valor: response.msg.cheques[i]['Vlr Cheque']
               }
             ])
           }
         }
 
-        if (result.data.msg.cadin.length === 0) {
+        if (response.msg.cadin.length === 0) {
           setCadin(prevList => [
             ...prevList,
             {
@@ -216,17 +216,17 @@ export default function Consulta() {
               siglaCredor: ''
             }
           ])
-        } else if (result.data.msg.cadin.length > 0) {
+        } else if (response.msg.cadin.length > 0) {
           setCadin(prevList => [
             ...prevList,
             {
-              nomeCredor: result.data.msg.cadin[1]['Nome Credor'],
-              siglaCredor: result.data.msg.cadin[1]['Sigla Credor']
+              nomeCredor: response.msg.cadin[1]['Nome Credor'],
+              siglaCredor: response.msg.cadin[1]['Sigla Credor']
             }
           ])
         }
 
-        if (result.data.msg.convenioDevedores.length === 0) {
+        if (response.msg.convenioDevedores.length === 0) {
           setConvenioDevedores(prevList => [
             ...prevList,
             {
@@ -238,24 +238,24 @@ export default function Consulta() {
               valor: ''
             }
           ])
-        } else if (result.data.msg.convenioDevedores.length > 0) {
-          for (let i = 0; i < result.data.msg.convenioDevedores.length; i++) {
+        } else if (response.msg.convenioDevedores.length > 0) {
+          for (let i = 0; i < response.msg.convenioDevedores.length; i++) {
             setConvenioDevedores(prevList => [
               ...prevList,
               {
-                cnpj: result.data.msg.convenioDevedores[i].CNPJ,
-                bancoContrato: result.data.msg.convenioDevedores[i].Contrato,
+                cnpj: response.msg.convenioDevedores[i].CNPJ,
+                bancoContrato: response.msg.convenioDevedores[i].Contrato,
                 tipoFinanciamento:
-                  result.data.msg.convenioDevedores[i]['Tp Financ'],
-                cidadeUF: `${result.data.msg.convenioDevedores[i].Cidade}/${result.data.msg.convenioDevedores[i].UF}`,
-                data: result.data.msg.convenioDevedores[i].Data,
-                valor: result.data.msg.convenioDevedores[i]['Vlr Conv']
+                  response.msg.convenioDevedores[i]['Tp Financ'],
+                cidadeUF: `${response.msg.convenioDevedores[i].Cidade}/${response.msg.convenioDevedores[i].UF}`,
+                data: response.msg.convenioDevedores[i].Data,
+                valor: response.msg.convenioDevedores[i]['Vlr Conv']
               }
             ])
           }
         }
 
-        if (result.data.msg.siccf.length === 0) {
+        if (response.msg.siccf.length === 0) {
           setSiccf(prevList => [
             ...prevList,
             {
@@ -267,17 +267,17 @@ export default function Consulta() {
               tipoConta: ''
             }
           ])
-        } else if (result.data.msg.siccf.length > 0) {
-          for (let i = 0; i < result.data.msg.siccf.length; i++) {
+        } else if (response.msg.siccf.length > 0) {
+          for (let i = 0; i < response.msg.siccf.length; i++) {
             setSiccf(prevList => [
               ...prevList,
               {
-                agencia: result.data.msg.siccf[i]['Agência'],
-                alinea: result.data.msg.siccf[i].Alinea,
-                banco: result.data.msg.siccf[i].Banco,
-                data: result.data.msg.siccf[i]['Data Ocor'],
-                qteOcorrencia: result.data.msg.siccf[i]['Qte Ocor'],
-                tipoConta: result.data.msg.siccf[i]['Tp Conta']
+                agencia: response.msg.siccf[i]['Agência'],
+                alinea: response.msg.siccf[i].Alinea,
+                banco: response.msg.siccf[i].Banco,
+                data: response.msg.siccf[i]['Data Ocor'],
+                qteOcorrencia: response.msg.siccf[i]['Qte Ocor'],
+                tipoConta: response.msg.siccf[i]['Tp Conta']
               }
             ])
           }
@@ -371,7 +371,7 @@ export default function Consulta() {
                         document={
                           <ConsultaDocument
                             nomeCliente={nome}
-                            data={new Date().toString()}
+                            data={moment().locale('pt-br').format('L')}
                             cpf={cpfCnpj}
                             cadin={cadin}
                             chequesSF={chequeSF}

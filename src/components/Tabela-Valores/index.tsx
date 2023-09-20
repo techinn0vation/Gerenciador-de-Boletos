@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useEffect, useState } from 'react'
 import { ViewTabelaValores, WrapperTabelaValores } from './styles'
@@ -14,16 +15,10 @@ import { api } from '@/services/api'
 
 export default function TabelaValores() {
   const [final, setFinal] = useState('')
-  const [Auth, setAuth] = useState('')
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = window.localStorage.getItem('token')
-      setAuth(token != null ? `Bearer ${token}` : '')
-    }
-  }, [])
-
-  useEffect(() => {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     async function getUser() {
       await api
         .get('/user', { headers: { Authorization: Auth } })

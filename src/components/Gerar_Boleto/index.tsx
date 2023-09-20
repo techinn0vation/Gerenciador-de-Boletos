@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/await-thenable */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable prettier/prettier */
@@ -32,20 +35,15 @@ export default function GerarBoleto() {
   const [descricao, setDescricao] = useState('')
   const [codigoDeBarras, setCodigoDeBarras] = useState('')
   const [nomeAvalistaBoleto, setNomeAvalistaBoleto] = useState('')
-  const [Auth, setAuth] = useState('')
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = window.localStorage.getItem('token')
-      setAuth(token != null ? `Bearer ${token}` : '')
-    }
-  }, [])
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 
   const router = useRouter()
 
   useEffect(() => {
     async function getConfiguracoes() {
+      const token = window.localStorage.getItem('token')
+      const Auth = `Bearer ${token}`
       try {
         const response = await api.get('/configuracoes', {
           headers: { Authorization: Auth }
@@ -56,9 +54,11 @@ export default function GerarBoleto() {
       }
     }
     void getConfiguracoes()
-  }, [Auth])
+  }, [])
 
   async function handleGerarBoleto(): Promise<void> {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     if (
       nomeCliente === '' ||
       cpfCnpj === '' ||

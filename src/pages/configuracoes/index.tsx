@@ -53,21 +53,16 @@ export default function Configurações() {
   const [codigoTransferencia, setCodigoTransferencia] = useState('')
   const [loading, setLoading] = useState(false)
   const [modalDados, setModalDados] = useState(false)
-  const [Auth, setAuth] = useState('')
 
   function handleGerarLink() {
     setModalDados(!modalDados)
   }
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = window.localStorage.getItem('token')
-      setAuth(token != null ? `Bearer ${token}` : '')
-    }
-  }, [])
   const navitage = useRouter()
 
   useEffect(() => {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     async function getUser() {
       setLoading(true)
       await api
@@ -84,9 +79,12 @@ export default function Configurações() {
 
   useEffect(() => {
     async function getConfiguracoes() {
+      const token = window.localStorage.getItem('token')
+      const Auth = `Bearer ${token}`
       await api
         .get('/configuracoes', { headers: { Authorization: Auth } })
         .then(({ data }: IResult) => {
+          console.log(data)
           setNomeAvalistaBoleto(data.nomeAvalistaBoleto)
           setNomeAvalistaPix(data.nomeAvalistaPix)
           setChavePix(data.chavePix)
@@ -101,6 +99,8 @@ export default function Configurações() {
   }, [])
 
   async function handleConfiguracoes() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     if (
       nomeAvalistaBoleto === '' ||
       nomeAvalistaPix === '' ||

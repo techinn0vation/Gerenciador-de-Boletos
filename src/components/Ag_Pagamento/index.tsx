@@ -24,18 +24,12 @@ export default function AgPagamento() {
   const [boletos, setBoletos] = useState<IBoletoProps[]>([])
   const [loading, setLoading] = useState(false)
   const [tipoUser, setTipoUser] = useState('')
-  const [Auth, setAuth] = useState('')
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = window.localStorage.getItem('token')
-      setAuth(token != null ? `Bearer ${token}` : '')
-    }
-  }, [])
 
   const router = useRouter()
 
   async function getBoletos() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     await api
       .get('/allBoletos', { headers: { Authorization: Auth } })
       .then(result => {
@@ -47,6 +41,8 @@ export default function AgPagamento() {
   }
 
   async function getBoletoUsuario() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     await api
       .get('/boleto', { headers: { Authorization: Auth } })
       .then(result => {
@@ -80,6 +76,8 @@ export default function AgPagamento() {
 
   useEffect(() => {
     async function getUser() {
+      const token = window.localStorage.getItem('token')
+      const Auth = `Bearer ${token}`
       setLoading(true)
       await api
         .get('/user', { headers: { Authorization: Auth } })

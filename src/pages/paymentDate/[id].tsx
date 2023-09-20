@@ -54,13 +54,7 @@ export default function PaymentDate() {
   const [tipoUser, setTipoUser] = useState('')
   const [cidade, setCidade] = useState<string | undefined>('')
 
-  const [Auth, setAuth] = useState('')
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = window.localStorage.getItem('token')
-      setAuth(token != null ? `Bearer ${token}` : '')
-    }
-  }, [])
+
 
   const router = useRouter()
 
@@ -68,6 +62,8 @@ export default function PaymentDate() {
 
   useEffect(() => {
     async function getUser() {
+      const token = window.localStorage.getItem('token')
+      const Auth = `Bearer ${token}`
       setLoading(true)
       await api
         .get('/user', { headers: { Authorization: Auth } })
@@ -81,6 +77,8 @@ export default function PaymentDate() {
 
   useEffect(() => {
     async function getBoleto() {
+      const token = window.localStorage.getItem('token')
+      const Auth = `Bearer ${token}`
       setLoading(true)
       api
         .get(`/boleto/${id}`, { headers: { Authorization: Auth } })
@@ -120,6 +118,8 @@ export default function PaymentDate() {
   }, [])
 
   async function updateBoleto() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     await api
       .put(
         `/boleto/${id}`,
@@ -140,6 +140,8 @@ export default function PaymentDate() {
   }
 
   async function HandleDelete() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     await api
       .delete(`/boleto/${id}`, { headers: { Authorization: Auth } })
       .then(async () => {

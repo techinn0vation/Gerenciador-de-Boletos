@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Headline, DisplayTypography } from '@/components/GeralComponents'
 
@@ -32,15 +33,9 @@ export default function Modal({ onClose }: PropType) {
   const [checked, setChecked] = useState(false)
   const [textoBotao, setTextoBotao] = useState('Salvar')
 
-  const [Auth, setAuth] = useState('')
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = window.localStorage.getItem('token')
-      setAuth(token != null ? `Bearer ${token}` : '')
-    }
-  }, [])
-
   async function handleUsuario() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
     api
       .post(
         'users',
