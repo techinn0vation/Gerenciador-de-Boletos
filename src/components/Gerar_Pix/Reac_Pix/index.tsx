@@ -181,9 +181,10 @@ const styles = StyleSheet.create({
   viewCodigoBarras: {
     width: '100%',
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20
   },
   body: {
     width: '100%',
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   imgCodigoBarras: {
-    width: '100%',
+    width: '40%',
     backgroundSize: 'contain',
     padding: '10px',
     margin: '5px auto'
@@ -396,13 +397,13 @@ export function Pix({
             contra apresentação
           </Text>
         </View>
-        <Text style={styles.textFloatRight}>
-          Autenticação Mecânica/Ficha de Compensação
-        </Text>
-        <Text style={styles.textPix}>{pix}</Text>
 
-        {/* <Image style={styles.imgCodigoBarras} src={(copiaCola != null) || ''}  alt='' /> */}
-        <Image style={styles.imgCodigoBarras} src={copiaCola !== null ? copiaCola : ''} />
+
+        <View style={styles.viewCodigoBarras}>
+          <Text style={styles.textPix}>ESCANEIE O QRCODE P/PAGAR!</Text>
+          {/* <Image style={styles.imgCodigoBarras} src={(copiaCola != null) || ''}  alt='' /> */}
+          <Image style={styles.imgCodigoBarras} src={copiaCola !== null ? copiaCola : ''} />
+        </View>
 
 
         {/* <View style={styles.body}>
