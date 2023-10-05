@@ -63,6 +63,25 @@ export default function Consulta() {
   const [copied, setCopied] = useState(false)
 
   async function onConsulta() {
+    if (
+      serasa.length > 0 ||
+      scpc.length > 0 ||
+      protestos.length > 0 ||
+      chequeSF.length > 0 ||
+      cadin.length > 0 ||
+      siccf.length > 0 ||
+      convenioDevedores.length > 0
+    ) {
+      setNome('')
+      setCpf('')
+      setSerasa([])
+      setScpc([])
+      setProtestos([])
+      setChequeSF([])
+      setCadin([])
+      setSiccf([])
+      setConvenioDevedores([])
+    }
     setLoading(true)
     if (cpf.length < 11) {
       alert('CPF inválido')
