@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
   img: {
     width: '100%',
     maxWidth: '35%',
-    padding: '10px 0'
   },
   img2: {
     width: '100%',
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    padding: 20
+    padding: 5
   },
   section: {
     margin: 10,
@@ -152,14 +151,14 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     width: '100%',
     marginLeft: 10,
-    marginBottom: 10
+    marginBottom: 5
   },
   borderDashed: {
     borderBottomWidth: 1,
     borderStyle: 'dashed',
     width: '100%',
     maxWidth: '95%',
-    margin: '20px auto'
+    margin: '10px auto'
   },
   containerBoerderImage: {
     width: '100%',
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     flexDirection: 'column',
-    padding: 20
+    padding: 10
   },
   containerBorderImageRow: {
     display: 'flex',
@@ -182,9 +181,7 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20
+    marginTop: 10
   },
   body: {
     width: '100%',
@@ -192,10 +189,9 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   imgCodigoBarras: {
-    width: '40%',
+    width: '30%',
     backgroundSize: 'contain',
-    padding: '10px',
-    margin: '5px auto'
+    margin: '0px auto'
   },
   textPix: {
     color: '#000',
@@ -292,11 +288,11 @@ export function Pix({
     <Document>
       <Page style={styles.page}>
         <View style={styles.header}>
-          <Image style={styles.img} src={imgB004Url} />
+          <Image style={styles.img} src={imgB002Url} />
           <View style={styles.header2}>
-            <Image style={styles.img3} src={imgB003Url} />
+            <Image style={styles.img3} src={imgB004Url} />
             <Text>Um Produto</Text>
-            <Image style={styles.img2} src={imgB002Url} />
+            <Image style={styles.img2} src={imgB003Url} />
           </View>
         </View>
         <View style={styles.containerText}>
@@ -368,11 +364,11 @@ export function Pix({
           </View>
           {/* CONTADOR DE PAGINAS Ñ APAGAR */}
         </View>
-        <Text style={styles.textFloatRight}>Autenticação Mecânica</Text>
+
         <View style={styles.borderDashed}></View>
         <Text style={styles.textFloatLeft}>documento para pagamento</Text>
         <View style={styles.containerBoerderImage}>
-          <Image style={styles.img} src={imgB004Url} />
+          <Image style={styles.img} src={imgB002Url} />
 
           <View style={styles.containerBorderImageRow}>
             <View style={styles.contentTextCheckOut}>
@@ -391,19 +387,20 @@ export function Pix({
           <Text
             style={{
               textAlign: 'left',
-              textTransform: 'uppercase'
+              textTransform: 'uppercase',
+              fontSize: 8
             }}
           >
             contra apresentação
           </Text>
         </View>
 
-
         <View style={styles.viewCodigoBarras}>
+
           <Text style={styles.textPix}>ESCANEIE O QRCODE P/PAGAR!</Text>
-          {/* <Image style={styles.imgCodigoBarras} src={(copiaCola != null) || ''}  alt='' /> */}
-          <Image style={styles.imgCodigoBarras} src={copiaCola !== null ? copiaCola : ''} />
         </View>
+        {/* <Image style={styles.imgCodigoBarras} src={(copiaCola != null) || ''}  alt='' /> */}
+        <Image style={styles.imgCodigoBarras} src={copiaCola !== null ? copiaCola : ''} />
 
 
         {/* <View style={styles.body}>

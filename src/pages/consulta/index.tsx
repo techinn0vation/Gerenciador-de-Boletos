@@ -371,7 +371,7 @@ export default function Consulta() {
                         document={
                           <ConsultaDocument
                             nomeCliente={nome}
-                            data={moment().locale('pt-br').format('L')}
+                            data={moment().locale('pt-br').format('DD/MM/YYYY')}
                             cpf={cpfCnpj}
                             cadin={cadin}
                             chequesSF={chequeSF}
