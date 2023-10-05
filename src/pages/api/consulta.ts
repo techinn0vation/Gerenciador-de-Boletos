@@ -9,7 +9,7 @@ export default async function handler(
   const { value } = req.query
   try {
     const dados = await fetch(
-      `http://24.152.38.106/caixa_plus?token=QZWexrcTVybUNimotvYUBHuij&tipo=cpf&dados=${value}`
+      `http://24.152.38.106/caixa_plus?token=EcrVtBytvFTR6CTv7y&tipo=cpf&dados=${value}`
     )
 
     const response = await dados.json()
