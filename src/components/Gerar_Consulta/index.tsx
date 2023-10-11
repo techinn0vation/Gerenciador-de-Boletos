@@ -459,7 +459,10 @@ export default function ConsultaDocument({
                 >
                   <Text style={{ width: '25%' }}>{item.data.split(" ")[0]}</Text>
                   <Text style={{ width: '30%' }}>{item.tipo}</Text>
-                  <Text style={{ width: '20%' }}>R$ {item.valor}</Text>
+                  <Text style={{ width: '20%' }}>{new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  }).format(Number(item.valor))}</Text>
                   <Text style={{ width: '35%' }}>{item.origem}</Text>
                 </View>
               ))
@@ -500,10 +503,10 @@ export default function ConsultaDocument({
               >
                 Tipo
               </Text>
-              <Text style={{ width: '15%', fontFamily: 'Helvetica-Bold' }}>
+              <Text style={{ width: '20%', fontFamily: 'Helvetica-Bold' }}>
                 Valor
               </Text>
-              <Text style={{ width: '40%', fontFamily: 'Helvetica-Bold' }}>
+              <Text style={{ width: '30%', fontFamily: 'Helvetica-Bold' }}>
                 Disponibilidade
               </Text>
             </View>
@@ -532,8 +535,11 @@ export default function ConsultaDocument({
                   <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.tipo}
                   </Text>
-                  <Text style={{ width: '15%' }}>{item.valor}</Text>
-                  <Text style={{ width: '40%' }}>
+                  <Text style={{ width: '20%' }}>{new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  }).format(Number(item.valor))}</Text>
+                  <Text style={{ width: '30%' }}>
                     {item.data.split(" ")[0]}
 
                   </Text>
@@ -601,7 +607,10 @@ export default function ConsultaDocument({
                   <Text style={{ width: '15%', marginHorizontal: 15 }}>
                     {item.cartorio}
                   </Text>
-                  <Text style={{ width: '15%' }}>{item.valor}</Text>
+                  <Text style={{ width: '15%' }}>{new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  }).format(Number(item.valor))}</Text>
                   <Text style={{ width: '35%' }}>{item.cidadeUF}</Text>
                 </View>
               ))
@@ -681,7 +690,10 @@ export default function ConsultaDocument({
                   </Text>
                   <Text style={{ width: '10%' }}>{item.alinea}</Text>
                   <Text style={{ width: '15%' }}>{item.qteCheque}</Text>
-                  <Text style={{ width: '15%' }}>{item.valor}</Text>
+                  <Text style={{ width: '15%' }}>{new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  }).format(Number(item.valor))}</Text>
                   <Text style={{ width: '15%' }}>{item.banco}</Text>
                   <Text style={{ width: '15%' }}>{item.agencia}</Text>
                   <Text style={{ width: '15%' }}>{item.cidadeUF}</Text>
@@ -879,7 +891,10 @@ export default function ConsultaDocument({
                   <Text style={{ width: '25%', marginHorizontal: 15 }}>
                     {item.tipoFinanciamento}
                   </Text>
-                  <Text style={{ width: '15%' }}>{item.valor}</Text>
+                  <Text style={{ width: '15%' }}>R$ {new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  }).format(Number(item.valor))}</Text>
                   <Text style={{ width: '15%' }}>{item.cnpj}</Text>
                   <Text style={{ width: '20%' }}>{item.bancoContrato}</Text>
                   <Text style={{ width: '15%' }}>{item.cidadeUF}</Text>

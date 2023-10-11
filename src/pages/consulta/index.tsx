@@ -339,6 +339,7 @@ export default function Consulta() {
         <SideBar />
         <ContentConsult>
           <Headline title="consultar cpf" text="insira os dados abaixo." />
+
           <BlockConsult>
             <DisplayInputMask
               type="text"
