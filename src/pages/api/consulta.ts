@@ -12,17 +12,11 @@ export default async function handler(
     `https://api.searchlock.me/caixa_plus?token=bt877bqwfncqe88&tipo=cpf&dados=${value}`
   )
 
-  const dados2 = await fetch(
-    `https://api.searchlock.me/caixa_plus_v2?token=bt877bqwfncqe88&tipo=cpf&dados=${value}`
-  )
-
   const response = await dados.json()
-  const response2 = await dados2.json()
 
   console.log(dados)
-  console.log(dados2)
-  console.log(response)
-  console.log(response2)
+
+  res.status(200).json(response)
   // } catch (error) {
   //   console.error('Erro ao buscar cpf:', error)
   //   res.status(500).json({ error: 'Erro ao buscar cpf', erro: error })
