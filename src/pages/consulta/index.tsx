@@ -88,226 +88,220 @@ export default function Consulta() {
       setLoading(false)
     }
 
-    await fetch(`/api/consulta?value=${cpf}`)
-      .then(async result => {
-        const response = await result.json()
-        console.log(response)
-        if (response.retorno === 'ERROR') {
-          setErro(response.msg)
-          setLoading(false)
-          return alert(response.msg)
-        }
+    await fetch(`/api/consulta?value=${cpf}`).then(async result => {
+      const response = await result.json()
+      console.log(response)
+      if (response.retorno === 'ERROR') {
+        setErro(response.msg)
+        setLoading(false)
+        return alert(response.msg)
+      }
 
-        setNome(response.msg.dadosPessoais['Nome do Cliente'])
-        setCpfCnpj(response.msg.dadosPessoais['CPF/CNPJ'])
+      setNome(response.msg.dadosPessoais['Nome do Cliente'])
+      setCpfCnpj(response.msg.dadosPessoais['CPF/CNPJ'])
 
-        if (response.msg.serasa.length === 0) {
+      if (response.msg.serasa.length === 0) {
+        setSerasa(prevList => [
+          ...prevList,
+          { dataP: '', dataU: '', qteOcorrencias: '' }
+        ])
+      } else if (response.msg.serasa.length > 0) {
+        for (let i = 0; i < response.msg.serasa.length; i++) {
           setSerasa(prevList => [
             ...prevList,
-            { dataP: '', dataU: '', qteOcorrencias: '' }
+            {
+              dataP: response.msg.serasa[i]['Data Primeira Ocorrência'],
+              dataU: response.msg.serasa[i]['Data Última Ocorrência'],
+              qteOcorrencias: response.msg.serasa[i]['Quantidade Ocorrências']
+            }
           ])
-        } else if (response.msg.serasa.length > 0) {
-          for (let i = 0; i < response.msg.serasa.length; i++) {
-            setSerasa(prevList => [
-              ...prevList,
-              {
-                dataP: response.msg.serasa[i]['Data Primeira Ocorrência'],
-                dataU: response.msg.serasa[i]['Data Última Ocorrência'],
-                qteOcorrencias: response.msg.serasa[i]['Quantidade Ocorrências']
-              }
-            ])
-          }
         }
+      }
 
-        if (response.msg.pendencias.length === 0) {
+      if (response.msg.pendencias.length === 0) {
+        setPendencias(prevList => [
+          ...prevList,
+          {
+            data: '',
+            origem: '',
+            tipo: '',
+            valor: ''
+          }
+        ])
+      } else if (response.msg.pendencias.length > 0) {
+        for (let i = 0; i < response.msg.pendencias.length; i++) {
           setPendencias(prevList => [
             ...prevList,
             {
-              data: '',
-              origem: '',
-              tipo: '',
-              valor: ''
+              data: response.msg.pendencias[i].Data,
+              tipo: response.msg.pendencias[i]['Tipo Financ.'],
+              origem: response.msg.pendencias[i]['Razão Social'],
+              valor: response.msg.pendencias[i]['Valor (R$)']
             }
           ])
-        } else if (response.msg.pendencias.length > 0) {
-          for (let i = 0; i < response.msg.pendencias.length; i++) {
-            setPendencias(prevList => [
-              ...prevList,
-              {
-                data: response.msg.pendencias[i].Data,
-                tipo: response.msg.pendencias[i]['Tipo Financ.'],
-                origem: response.msg.pendencias[i]['Razão Social'],
-                valor: response.msg.pendencias[i]['Valor (R$)']
-              }
-            ])
-          }
         }
+      }
 
-        if (response.msg.scpc.length === 0) {
+      if (response.msg.scpc.length === 0) {
+        setScpc(prevList => [
+          ...prevList,
+          {
+            nome: '',
+            disponibilidade: '',
+            cidadeUF: '',
+            data: '',
+            valor: '',
+            tipo: ''
+          }
+        ])
+      } else if (response.msg.scpc.length > 0) {
+        for (let i = 0; i < response.msg.scpc.length; i++) {
           setScpc(prevList => [
             ...prevList,
             {
-              nome: '',
-              disponibilidade: '',
-              cidadeUF: '',
-              data: '',
-              valor: '',
-              tipo: ''
+              nome: response.msg.scpc[i].Nome,
+              disponibilidade: response.msg.scpc[i]['Dt Disp'],
+              cidadeUF: `${response.msg.scpc[i].Cidade}/${response.msg.scpc[i].UF}`,
+              data: response.msg.scpc[i]['Dt Ocorr'],
+              valor: response.msg.scpc[i]['Vr Dívida'],
+              tipo: response.msg.scpc[i]['Tp Devedor']
             }
           ])
-        } else if (response.msg.scpc.length > 0) {
-          for (let i = 0; i < response.msg.scpc.length; i++) {
-            setScpc(prevList => [
-              ...prevList,
-              {
-                nome: response.msg.scpc[i].Nome,
-                disponibilidade: response.msg.scpc[i]['Dt Disp'],
-                cidadeUF: `${response.msg.scpc[i].Cidade}/${response.msg.scpc[i].UF}`,
-                data: response.msg.scpc[i]['Dt Ocorr'],
-                valor: response.msg.scpc[i]['Vr Dívida'],
-                tipo: response.msg.scpc[i]['Tp Devedor']
-              }
-            ])
-          }
         }
+      }
 
-        if (response.msg.protestos.length === 0) {
+      if (response.msg.protestos.length === 0) {
+        setProtestos(prevList => [
+          ...prevList,
+          {
+            cartorio: '',
+            cidadeUF: '',
+            data: '',
+            valor: ''
+          }
+        ])
+      } else if (response.msg.protestos.length) {
+        for (let i = 0; i < response.msg.protestos.length; i++) {
           setProtestos(prevList => [
             ...prevList,
             {
-              cartorio: '',
-              cidadeUF: '',
-              data: '',
-              valor: ''
+              cartorio: response.msg.protestos[i]['Cartório'],
+              cidadeUF: `${response.msg.protestos[i].Cidade}/${response.msg.protestos[i].UF}`,
+              data: response.msg.protestos[i].Data,
+              valor: response.msg.protestos[i]['Valor Protesto']
             }
           ])
-        } else if (response.msg.protestos.length) {
-          for (let i = 0; i < response.msg.protestos.length; i++) {
-            setProtestos(prevList => [
-              ...prevList,
-              {
-                cartorio: response.msg.protestos[i]['Cartório'],
-                cidadeUF: `${response.msg.protestos[i].Cidade}/${response.msg.protestos[i].UF}`,
-                data: response.msg.protestos[i].Data,
-                valor: response.msg.protestos[i]['Valor Protesto']
-              }
-            ])
-          }
         }
+      }
 
-        if (response.msg.cheques.length === 0) {
+      if (response.msg.cheques.length === 0) {
+        setChequeSF(prevList => [
+          ...prevList,
+          {
+            agencia: '',
+            alinea: '',
+            banco: '',
+            cheque: '',
+            cidadeUF: '',
+            data: '',
+            qteCheque: '',
+            valor: ''
+          }
+        ])
+      } else if (response.msg.cheques.length > 0) {
+        for (let i = 0; i < response.msg.cheques.length; i++) {
           setChequeSF(prevList => [
             ...prevList,
             {
-              agencia: '',
-              alinea: '',
-              banco: '',
-              cheque: '',
-              cidadeUF: '',
-              data: '',
-              qteCheque: '',
-              valor: ''
+              cheque: response.msg.cheques[i].Cheque,
+              agencia: response.msg.cheques[i]['Agência'],
+              alinea: response.msg.cheques[i].Alinea,
+              banco: response.msg.cheques[i].Banco,
+              cidadeUF: `${response.msg.cheques[i].Cidade}/${response.msg.cheques[i].UF}`,
+              data: response.msg.cheques[i].Data,
+              qteCheque: response.msg.cheques[i]['Qte Cheque'],
+              valor: response.msg.cheques[i]['Vlr Cheque']
             }
           ])
-        } else if (response.msg.cheques.length > 0) {
-          for (let i = 0; i < response.msg.cheques.length; i++) {
-            setChequeSF(prevList => [
-              ...prevList,
-              {
-                cheque: response.msg.cheques[i].Cheque,
-                agencia: response.msg.cheques[i]['Agência'],
-                alinea: response.msg.cheques[i].Alinea,
-                banco: response.msg.cheques[i].Banco,
-                cidadeUF: `${response.msg.cheques[i].Cidade}/${response.msg.cheques[i].UF}`,
-                data: response.msg.cheques[i].Data,
-                qteCheque: response.msg.cheques[i]['Qte Cheque'],
-                valor: response.msg.cheques[i]['Vlr Cheque']
-              }
-            ])
+        }
+      }
+
+      if (response.msg.cadin.length === 0) {
+        setCadin(prevList => [
+          ...prevList,
+          {
+            nomeCredor: '',
+            siglaCredor: ''
           }
-        }
+        ])
+      } else if (response.msg.cadin.length > 0) {
+        setCadin(prevList => [
+          ...prevList,
+          {
+            nomeCredor: response.msg.cadin[1]['Nome Credor'],
+            siglaCredor: response.msg.cadin[1]['Sigla Credor']
+          }
+        ])
+      }
 
-        if (response.msg.cadin.length === 0) {
-          setCadin(prevList => [
-            ...prevList,
-            {
-              nomeCredor: '',
-              siglaCredor: ''
-            }
-          ])
-        } else if (response.msg.cadin.length > 0) {
-          setCadin(prevList => [
-            ...prevList,
-            {
-              nomeCredor: response.msg.cadin[1]['Nome Credor'],
-              siglaCredor: response.msg.cadin[1]['Sigla Credor']
-            }
-          ])
-        }
-
-        if (response.msg.convenioDevedores.length === 0) {
+      if (response.msg.convenioDevedores.length === 0) {
+        setConvenioDevedores(prevList => [
+          ...prevList,
+          {
+            cnpj: '',
+            bancoContrato: '',
+            tipoFinanciamento: '',
+            cidadeUF: '',
+            data: '',
+            valor: ''
+          }
+        ])
+      } else if (response.msg.convenioDevedores.length > 0) {
+        for (let i = 0; i < response.msg.convenioDevedores.length; i++) {
           setConvenioDevedores(prevList => [
             ...prevList,
             {
-              cnpj: '',
-              bancoContrato: '',
-              tipoFinanciamento: '',
-              cidadeUF: '',
-              data: '',
-              valor: ''
+              cnpj: response.msg.convenioDevedores[i].CNPJ,
+              bancoContrato: response.msg.convenioDevedores[i].Contrato,
+              tipoFinanciamento: response.msg.convenioDevedores[i]['Tp Financ'],
+              cidadeUF: `${response.msg.convenioDevedores[i].Cidade}/${response.msg.convenioDevedores[i].UF}`,
+              data: response.msg.convenioDevedores[i].Data,
+              valor: response.msg.convenioDevedores[i]['Vlr Conv']
             }
           ])
-        } else if (response.msg.convenioDevedores.length > 0) {
-          for (let i = 0; i < response.msg.convenioDevedores.length; i++) {
-            setConvenioDevedores(prevList => [
-              ...prevList,
-              {
-                cnpj: response.msg.convenioDevedores[i].CNPJ,
-                bancoContrato: response.msg.convenioDevedores[i].Contrato,
-                tipoFinanciamento:
-                  response.msg.convenioDevedores[i]['Tp Financ'],
-                cidadeUF: `${response.msg.convenioDevedores[i].Cidade}/${response.msg.convenioDevedores[i].UF}`,
-                data: response.msg.convenioDevedores[i].Data,
-                valor: response.msg.convenioDevedores[i]['Vlr Conv']
-              }
-            ])
-          }
         }
+      }
 
-        if (response.msg.siccf.length === 0) {
+      if (response.msg.siccf.length === 0) {
+        setSiccf(prevList => [
+          ...prevList,
+          {
+            agencia: '',
+            alinea: '',
+            banco: '',
+            data: '',
+            qteOcorrencia: '',
+            tipoConta: ''
+          }
+        ])
+      } else if (response.msg.siccf.length > 0) {
+        for (let i = 0; i < response.msg.siccf.length; i++) {
           setSiccf(prevList => [
             ...prevList,
             {
-              agencia: '',
-              alinea: '',
-              banco: '',
-              data: '',
-              qteOcorrencia: '',
-              tipoConta: ''
+              agencia: response.msg.siccf[i]['Agência'],
+              alinea: response.msg.siccf[i].Alinea,
+              banco: response.msg.siccf[i].Banco,
+              data: response.msg.siccf[i]['Data Ocor'],
+              qteOcorrencia: response.msg.siccf[i]['Qte Ocor'],
+              tipoConta: response.msg.siccf[i]['Tp Conta']
             }
           ])
-        } else if (response.msg.siccf.length > 0) {
-          for (let i = 0; i < response.msg.siccf.length; i++) {
-            setSiccf(prevList => [
-              ...prevList,
-              {
-                agencia: response.msg.siccf[i]['Agência'],
-                alinea: response.msg.siccf[i].Alinea,
-                banco: response.msg.siccf[i].Banco,
-                data: response.msg.siccf[i]['Data Ocor'],
-                qteOcorrencia: response.msg.siccf[i]['Qte Ocor'],
-                tipoConta: response.msg.siccf[i]['Tp Conta']
-              }
-            ])
-          }
         }
+      }
 
-        setLoading(false)
-      })
-      .catch(err => {
-        console.log(err)
-        setLoading(false)
-      })
+      setLoading(false)
+    })
 
     setCpf('')
   }
