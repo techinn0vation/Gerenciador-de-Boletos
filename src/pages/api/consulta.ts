@@ -6,19 +6,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // const { value } = req.query
-  // try {
-  const dados = await fetch(
-    `https://api.searchlock.me/caixa_plus?token=bt877bqwfncqe88&tipo=cpf&dados=40489795234`
-  )
+  const { value } = req.query
+  try {
+    const dados = await fetch(
+      `http://api.searchlock.me/caixa_plus?token=bt877bqwfncqe88&tipo=cpf&dados=${value}`
+    )
 
-  const response = await dados.json()
+    const response = await dados.json()
 
-  console.log(dados)
-
-  res.status(200).json(response)
-  // } catch (error) {
-  //   console.error('Erro ao buscar cpf:', error)
-  //   res.status(500).json({ error: 'Erro ao buscar cpf', erro: error })
-  // }
+    res.status(200).json(response)
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar cpf', erro: error })
+  }
 }
