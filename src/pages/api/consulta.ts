@@ -6,10 +6,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { value } = req.query
+  // const { value } = req.query
   // try {
   const dados = await fetch(
-    `https://api.searchlock.me/caixa_plus?token=bt877bqwfncqe88&tipo=cpf&dados=${value}`
+    `https://api.searchlock.me/caixa_plus?token=bt877bqwfncqe88&tipo=cpf&dados=40489795234`
   )
 
   const response = await dados.json()
