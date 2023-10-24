@@ -88,17 +88,10 @@ export default function Consulta() {
       setLoading(false)
     }
 
-    const response = await fetch(
-      `https://api.searchlock.me/caixa_plus?token=bt877bqwfncqe88&tipo=cpf&dados=${cpf}`
-    )
-
-    const result = await response.json()
-
-    console.log(result, 'resultTeste')
-
     await fetch(`/api/consulta?value=${cpf}`).then(async result => {
       const response = await result.json()
       console.log(response)
+      console.log(result, 'teste')
       if (response.retorno === 'ERROR') {
         setErro(response.msg)
         setLoading(false)
