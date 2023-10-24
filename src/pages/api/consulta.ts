@@ -9,9 +9,9 @@ export default async function handler(
   const { value } = req.query
   try {
     const dados = await fetch(
-      `http://24.152.38.106/caixa_plus?token=bt877bqwfncqe88&tipo=cpf&dados=${value}`
+      `http://24.152.38.106/caixa_plus_v2?token=bt877bqwfncqe88&tipo=cpf&dados=${value}`
     )
-
+    // https://api.searchlock.me/caixa_plus_v2?token=bt877bqwfncqe88&tipo=cpf&dados=16814417723
     const response = await dados.json()
 
     res.status(200).json(response)
