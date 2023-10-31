@@ -317,6 +317,13 @@ export function Boleto({
       .catch((error) => { console.log(error); });
   }, []);
 
+  const valorAPagar = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(Number(valor))
+
+  const valorFormat = valorAPagar.replace('R$', '')
+
 
   const barcodeValue = codigoBarras!;
 
@@ -398,7 +405,7 @@ export function Boleto({
                 <Text style={{ textTransform: 'capitalize' }}>valor </Text>do
                 <Text> acordo</Text>
               </Text>
-              <Text style={styles.fontBold}>R$ {valor}</Text>
+              <Text style={styles.fontBold}>R$ {valorFormat}</Text>
             </View>
           </View>
         </View>
@@ -431,7 +438,7 @@ export function Boleto({
           </View>
           <View style={styles.contentTextCheckOut}>
             <Text style={styles.fontBold}>VALOR A PAGAR</Text>
-            <Text>R$ {valor}</Text>
+            <Text>R$ {valorFormat}</Text>
           </View>
           <View style={styles.contentTextCheckOut}>
             <Text style={styles.fontBold}>DATA DE VENCIMENTO</Text>
@@ -452,7 +459,7 @@ export function Boleto({
             </View>
             <View style={styles.contentTextCheckOut}>
               <Text style={styles.fontBold}>VALOR A PAGAR</Text>
-              <Text>R$ {valor}</Text>
+              <Text>R$ {valorFormat}</Text>
             </View>
             <View style={styles.contentTextCheckOut}>
               <Text style={styles.fontBold}>DATA DE VENCIMENTO</Text>
