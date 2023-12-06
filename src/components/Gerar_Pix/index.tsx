@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-sequences */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-misused-promises */
@@ -122,6 +126,27 @@ export default function GerarPix() {
     setCpfCnpj(formattedValue)
   }
 
+  const formatter = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  function formatValor(e: any) {
+    const input = e.target;
+    // elimina tudo que não é dígito
+    input.value = input.value.replace(/\D+/g, '');
+    if (input.value.length === 0) // se não tem nada preenchido, não tem o que fazer
+      return;
+    // verifica se ultrapassou a quantidade máxima de dígitos (pegar o valor no dataset)
+    const maxDigits = parseInt(input.dataset.maxDigits);
+    if (input.value.length > maxDigits) {
+      // O que fazer nesse caso? Decidi pegar somente os primeiros dígitos
+      input.value = input.value.substring(0, maxDigits);
+    }
+    // lembrando que o valor é a quantidade de centavos, então precisa dividir por 100
+    input.value = formatter.format(parseInt(input.value) / 100);
+  }
+
+
+
+
   return (
     <WrapperGerarPix>
       <Headline title="gerar pix" text="insira os dados abaixo." />
@@ -149,12 +174,13 @@ export default function GerarPix() {
               placeholder="cpf/cnpj"
             />
             <FieldRegistration
-              type="number"
+              type="text"
+              required
+              onKeyUp={event => { formatValor(event) }}
+              onChange={e => { setValor(e.target.value); }}
               placeholder="valor"
               value={valor}
-              onChange={e => {
-                setValor(e.target.value)
-              }}
+
             />
             <DisplayInputMask
               type="text"
