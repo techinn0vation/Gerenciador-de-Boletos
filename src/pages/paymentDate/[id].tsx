@@ -35,6 +35,7 @@ import {
   WrapperOperador
 } from '@/components/StylesPages/StylesOperador'
 import { ScreenCheckUsuario } from '@/components/StylesPages/StylesUsuario'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 interface IResult {
   data: IBoletoProps;
@@ -53,8 +54,13 @@ export default function PaymentDate() {
   const [codigoCliente, setCodigoCliente] = useState<string | undefined>('')
   const [tipoUser, setTipoUser] = useState('')
   const [cidade, setCidade] = useState<string | undefined>('')
+  const [chavePix, setChavePix] = useState<string | undefined>('')
+  const [chaveCopiaCola, setChaveCopiaCola] = useState<string | undefined>('')
+  const [copied, setCopied] = useState(false)
 
-
+  const handleCopy = () => {
+    setCopied(true)
+  }
 
   const router = useRouter()
 
@@ -104,8 +110,18 @@ export default function PaymentDate() {
           } else if (data.tipo === 'px') {
             await api
               .get('/configuracoes', { headers: { Authorization: Auth } })
-              .then(({ data }) => {
+              .then(async ({ data }) => {
                 setNomeAvalista(data.nomeAvalistaPix)
+                setChavePix(data.chavePix)
+
+                await api.post('/gerarPix', {
+                  nomeCliente: nomeAvalista,
+                  cidade,
+                  pix: chavePix,
+                  valorAPagar: valor
+                }).then(result => {
+                  setChaveCopiaCola(result.data.brcode)
+                })
               })
               .catch(error => {
                 alert(error)
@@ -185,6 +201,27 @@ export default function PaymentDate() {
     setCpfCnpj(formattedValue)
   }
 
+  const formatter = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  function formatValor(e: any) {
+    const input = e.target;
+    // elimina tudo que não é dígito
+    input.value = input.value.replace(/\D+/g, '');
+    if (input.value.length === 0) // se não tem nada preenchido, não tem o que fazer
+      return;
+    // verifica se ultrapassou a quantidade máxima de dígitos (pegar o valor no dataset)
+    const maxDigits = parseInt(input.dataset.maxDigits);
+    if (input.value.length > maxDigits) {
+      // O que fazer nesse caso? Decidi pegar somente os primeiros dígitos
+      input.value = input.value.substring(0, maxDigits);
+    }
+    // lembrando que o valor é a quantidade de centavos, então precisa dividir por 100
+    const formattedValue = formatter.format(parseInt(input.value) / 100);
+
+    input.value = formattedValue
+    setValor(formattedValue)
+  }
+
   return (
     <Layout>
       <WrapperOperador>
@@ -214,12 +251,11 @@ export default function PaymentDate() {
                 placeholder="cpf/cnpj"
               />
               <FieldRegistration
-                type="number"
-                value={valor}
-                onChange={e => {
-                  setValor(e.target.value)
-                }}
+                type="text"
+                onKeyUp={event => { formatValor(event) }}
+                onChange={e => { setValor(e.target.value); }}
                 placeholder="valor"
+                value={valor}
               />
               <DisplayInputMask
                 type="text"
@@ -309,6 +345,14 @@ export default function PaymentDate() {
                   </PDFDownloadLink>
                 )}
               </ButtonSaveDate>
+              <CopyToClipboard
+                text={`${chaveCopiaCola}`}
+                onCopy={handleCopy}
+              >
+                <ButtonSaveDate>
+                  {copied ? 'copiado!' : 'copiar chave'}
+                </ButtonSaveDate>
+              </CopyToClipboard>
               <ButtonSaveDate
                 onClick={updateBoleto}
                 disabled={tipoUser !== 'A'}

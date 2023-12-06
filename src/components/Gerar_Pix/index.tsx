@@ -141,11 +141,11 @@ export default function GerarPix() {
       input.value = input.value.substring(0, maxDigits);
     }
     // lembrando que o valor é a quantidade de centavos, então precisa dividir por 100
-    input.value = formatter.format(parseInt(input.value) / 100);
+    const formattedValue = formatter.format(parseInt(input.value) / 100);
+
+    input.value = formattedValue
+    setValor(formattedValue)
   }
-
-
-
 
   return (
     <WrapperGerarPix>
