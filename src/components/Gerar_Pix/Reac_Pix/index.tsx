@@ -225,7 +225,6 @@ export function Pix({
   descricao
 }: IBoletoProps) {
   const [copiaCola, setCopiaCola] = useState<string | null>(null)
-  const [chaveCopiaCola, setChaveCopiaCola] = useState<string | null>("")
 
   // const valorAPagar = new Intl.NumberFormat('pt-BR', {
   //   style: 'currency',
@@ -246,7 +245,6 @@ export function Pix({
 
     const qrcode = await QRCode.toDataURL(result.data.brcode).then(url => url)
 
-    setChaveCopiaCola(result.data.brcode)
     setCopiaCola(qrcode)
   }
 

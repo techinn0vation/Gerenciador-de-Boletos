@@ -94,11 +94,11 @@ export default function PaymentDate() {
           setDataVencimento(data.dataVencimento)
           setDescricao(data.descricao)
           setTipoDocumento(data.tipo)
-          setCodigoBarras(data.codigoBarrasPix)
           setCodigoCliente(data.codigoCliente)
           setCpfCnpj(data.cpfCnpj)
           setCidade(data.cidade)
           if (data.tipo === 'bo') {
+            setCodigoBarras(data.codigoBarrasPix)
             await api
               .get('/configuracoes', { headers: { Authorization: Auth } })
               .then(({ data }) => {
@@ -112,14 +112,15 @@ export default function PaymentDate() {
               .get('/configuracoes', { headers: { Authorization: Auth } })
               .then(async ({ data }) => {
                 setNomeAvalista(data.nomeAvalistaPix)
-                setChavePix(data.chavePix)
 
+                setChavePix(data.chavePix)
                 await api.post('/gerarPix', {
                   nomeCliente: nomeAvalista,
                   cidade,
                   pix: chavePix,
                   valorAPagar: valor
                 }).then(result => {
+                  setCodigoBarras(result.data.brcode)
                   setChaveCopiaCola(result.data.brcode)
                 })
               })
