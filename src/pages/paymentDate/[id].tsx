@@ -112,13 +112,15 @@ export default function PaymentDate() {
               .get('/configuracoes', { headers: { Authorization: Auth } })
               .then(async ({ data }) => {
                 setNomeAvalista(data.nomeAvalistaPix)
-
                 setChavePix(data.chavePix)
+
+                const valorCerto = valor.length === 6 ? valor.replace(',', '.') : valor.replace('.', '').replace(',', '.')
+
                 await api.post('/gerarPix', {
                   nomeCliente: nomeAvalista,
                   cidade,
                   pix: chavePix,
-                  valorAPagar: valor
+                  valorAPagar: valorCerto
                 }).then(result => {
                   setCodigoBarras(result.data.brcode)
                   setChaveCopiaCola(result.data.brcode)
