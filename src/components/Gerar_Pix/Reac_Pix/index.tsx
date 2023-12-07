@@ -225,24 +225,28 @@ export function Pix({
   descricao
 }: IBoletoProps) {
   const [copiaCola, setCopiaCola] = useState<string | null>(null)
+  const [chaveCopiaCola, setChaveCopiaCola] = useState<string | null>("")
 
-  const valorAPagar = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(Number(valor))
+  // const valorAPagar = new Intl.NumberFormat('pt-BR', {
+  //   style: 'currency',
+  //   currency: 'BRL'
+  // }).format(Number(valor))
 
-  const valorFormat = valorAPagar.replace('R$', '')
+  // const valorFormat = valorAPagar.replace('R$', '')
 
   async function getPixCopCol() {
+    const valorCerto = valor.length === 6 ? valor.replace(',', '.') : valor.replace('.', '').replace(',', '.')
+    console.log(valorCerto)
     const result = await api.post('/gerarPix', {
       nomeCliente: nomeAvalistaPix,
       cidade,
       pix,
-      valorAPagar: valor
+      valorAPagar: valorCerto
     })
 
     const qrcode = await QRCode.toDataURL(result.data.brcode).then(url => url)
 
+    setChaveCopiaCola(result.data.brcode)
     setCopiaCola(qrcode)
   }
 
@@ -321,7 +325,7 @@ export function Pix({
                 <Text style={{ textTransform: 'capitalize' }}>valor </Text>do
                 <Text> acordo</Text>
               </Text>
-              <Text style={styles.fontBold}>R$ {valorFormat}</Text>
+              <Text style={styles.fontBold}>R$ {valor}</Text>
             </View>
           </View>
         </View>
@@ -356,7 +360,7 @@ export function Pix({
           </View>
           <View style={styles.contentTextCheckOut}>
             <Text style={styles.fontBold}>VALOR A PAGAR</Text>
-            <Text>R$ {valorFormat}</Text>
+            <Text>R$ {valor}</Text>
           </View>
           <View style={styles.contentTextCheckOut}>
             <Text style={styles.fontBold}>DATA DE VENCIMENTO</Text>
@@ -377,7 +381,7 @@ export function Pix({
             </View>
             <View style={styles.contentTextCheckOut}>
               <Text style={styles.fontBold}>VALOR A PAGAR</Text>
-              <Text>R$ {valorFormat}</Text>
+              <Text>R$ {valor}</Text>
             </View>
             <View style={styles.contentTextCheckOut}>
               <Text style={styles.fontBold}>DATA DE VENCIMENTO</Text>
