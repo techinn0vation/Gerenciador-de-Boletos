@@ -55,7 +55,7 @@ export default function PaymentDate() {
   const [tipoUser, setTipoUser] = useState('')
   const [cidade, setCidade] = useState<string | undefined>('')
   const [chavePix, setChavePix] = useState<string | undefined>('')
-  const [chaveCopiaCola, setChaveCopiaCola] = useState<string | undefined>('')
+  const [chaveCopiaCola, setChaveCopiaCola] = useState<string>('')
   const [copied, setCopied] = useState(false)
 
   const handleCopy = () => {
@@ -85,6 +85,7 @@ export default function PaymentDate() {
     async function getBoleto() {
       const token = window.localStorage.getItem('token')
       const Auth = `Bearer ${token}`
+      let valorData: string
       setLoading(true)
       api
         .get(`/boleto/${id}`, { headers: { Authorization: Auth } })
@@ -97,6 +98,7 @@ export default function PaymentDate() {
           setCodigoCliente(data.codigoCliente)
           setCpfCnpj(data.cpfCnpj)
           setCidade(data.cidade)
+          valorData = data.valor
           if (data.tipo === 'bo') {
             setCodigoBarras(data.codigoBarrasPix)
             await api
@@ -110,16 +112,16 @@ export default function PaymentDate() {
           } else if (data.tipo === 'px') {
             await api
               .get('/configuracoes', { headers: { Authorization: Auth } })
-              .then(async ({ data }) => {
-                setNomeAvalista(data.nomeAvalistaPix)
-                setChavePix(data.chavePix)
+              .then(async ({ data: dataConfig }) => {
+                setNomeAvalista(dataConfig.nomeAvalistaPix)
+                setChavePix(dataConfig.chavePix)
 
                 const valorCerto = valor.length === 6 ? valor.replace(',', '.') : valor.replace('.', '').replace(',', '.')
 
                 await api.post('/gerarPix', {
-                  nomeCliente: nomeAvalista,
-                  cidade,
-                  pix: chavePix,
+                  nomeCliente: dataConfig.nomeAvalistaPix,
+                  cidade: dataConfig.cidade,
+                  pix: dataConfig.chavePix,
                   valorAPagar: valorCerto
                 }).then(result => {
                   setCodigoBarras(result.data.brcode)
@@ -135,6 +137,7 @@ export default function PaymentDate() {
     }
     getBoleto()
   }, [])
+
 
   async function updateBoleto() {
     const token = window.localStorage.getItem('token')
@@ -353,7 +356,7 @@ export default function PaymentDate() {
                 onCopy={handleCopy}
               >
                 <ButtonSaveDate>
-                  {copied ? 'copiado!' : 'copiar chave'}
+                  {chaveCopiaCola === "" ? "aguarde" : copied ? 'copiado!' : 'copiar chave'}
                 </ButtonSaveDate>
               </CopyToClipboard>
               <ButtonSaveDate
