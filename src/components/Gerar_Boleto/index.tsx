@@ -130,6 +130,27 @@ export default function GerarBoleto() {
     setCpfCnpj(formattedValue)
   }
 
+  const formatter = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  function formatValor(e: any) {
+    const input = e.target;
+    // elimina tudo que não é dígito
+    input.value = input.value.replace(/\D+/g, '');
+    if (input.value.length === 0) // se não tem nada preenchido, não tem o que fazer
+      return;
+    // verifica se ultrapassou a quantidade máxima de dígitos (pegar o valor no dataset)
+    const maxDigits = parseInt(input.dataset.maxDigits);
+    if (input.value.length > maxDigits) {
+      // O que fazer nesse caso? Decidi pegar somente os primeiros dígitos
+      input.value = input.value.substring(0, maxDigits);
+    }
+    // lembrando que o valor é a quantidade de centavos, então precisa dividir por 100
+    const formattedValue = formatter.format(parseInt(input.value) / 100);
+
+    input.value = formattedValue
+    setValor(formattedValue)
+  }
+
   return (
     <WrapperGerarBoleto>
       <Headline title="gerar boleto" text="insira os dados abaixo." />
@@ -159,12 +180,12 @@ export default function GerarBoleto() {
                 placeholder="cpf/cnpj"
               />
               <FieldRegistration
-                type="number"
-                value={valor}
-                onChange={e => {
-                  setValor(e.target.value)
-                }}
+                type="text"
+                required
+                onKeyUp={event => { formatValor(event) }}
+                onChange={e => { setValor(e.target.value); }}
                 placeholder="valor"
+                value={valor}
               />
               <DisplayInputMask
                 type="text"

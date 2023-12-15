@@ -235,7 +235,7 @@ export function Pix({
 
   async function getPixCopCol() {
     const valorCerto = valor.length === 6 ? valor.replace(',', '.') : valor.replace('.', '').replace(',', '.')
-    console.log(valorCerto)
+
     const result = await api.post('/gerarPix', {
       nomeCliente: nomeAvalistaPix,
       cidade,
