@@ -21,7 +21,6 @@ import {
 
 import { api } from '@/services/api'
 import { useRouter } from 'next/router'
-import { useParams } from 'next/navigation'
 import {
   Boleto,
   type IBoletoProps
@@ -30,11 +29,8 @@ import { BlockConsult } from '@/components/StylesPages/StylesConsulta'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { Pix } from '@/components/Gerar_Pix/Reac_Pix'
 import {
-  BlockOperador,
-  ContentOperador,
   WrapperOperador
 } from '@/components/StylesPages/StylesOperador'
-import { ScreenCheckUsuario } from '@/components/StylesPages/StylesUsuario'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 interface IResult {

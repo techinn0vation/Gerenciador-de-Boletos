@@ -1,4 +1,6 @@
-import { useState } from 'react'
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+import { use, useEffect, useState } from 'react'
 
 import { DisplayTitle, DisplayTypography } from '@/components/GeralComponents'
 
@@ -16,13 +18,31 @@ import {
   ToggleProfile,
   ToggleLink
 } from './styles'
+import { api } from '@/services/api'
 
 export default function TopBar() {
   const [profileOpen, setProfileOpen] = useState(false)
+  const [user, setUser] = useState({
+    nome: '',
+    tipo: ''
+  })
 
   function toggleProfile() {
     setProfileOpen(!profileOpen)
   }
+
+  useEffect(() => {
+    async function getUser() {
+      const token = window.localStorage.getItem('token')
+      const Auth = `Bearer ${token}`
+      await api
+        .get('/user', { headers: { Authorization: Auth } })
+        .then(result => {
+          setUser({ nome: result.data.nome, tipo: result.data.tipo })
+        })
+    }
+    getUser()
+  }, [])
 
   return (
     <WrapperTopBar>
@@ -36,10 +56,14 @@ export default function TopBar() {
           </FrameProfile>
           <ToggleProfile profileOpen={profileOpen}>
             <ToggleLink href="#">
-              <DisplayTitle DisplayTitle="henrique" />
+              <DisplayTitle DisplayTitle={user.nome} />
             </ToggleLink>
             <ToggleLink href="#">
-              <DisplayTypography DisplayTypography="administrador" />
+              <DisplayTypography
+                DisplayTypography={
+                  user.tipo === 'A' ? 'Administrador' : 'usuário'
+                }
+              />
             </ToggleLink>
             <ToggleLink href="/login">
               <DisplayTypography DisplayTypography="sair" />

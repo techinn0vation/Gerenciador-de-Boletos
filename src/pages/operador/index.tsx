@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { BiTime, BiBarcode } from 'react-icons/bi'
 import { MdPix } from 'react-icons/md'
+import { IoIosWater } from 'react-icons/io'
 
 import {
   Layout,
@@ -12,7 +13,6 @@ import {
   AgPagamento,
   GerarBoleto,
   GerarPix,
-  GerarPixDois,
   Headline
 } from '@/components/GeralComponents'
 
@@ -24,6 +24,7 @@ import {
   DisplayIconOperador,
   ScreenCheckOperador
 } from '..//..//components/StylesPages/StylesOperador'
+import GerarAgua from '@/components/Gerar_Agua'
 
 export default function Operador() {
   const [currentScreen, setCurrentScreen] = useState('aguardandoPagamento')
@@ -39,8 +40,8 @@ export default function Operador() {
         return <GerarBoleto />
       case 'gerarPix':
         return <GerarPix />
-      case 'gerarPixDois':
-        return <GerarPixDois />
+      case 'gerarAgua':
+        return <GerarAgua />
       default:
         return <div>Tela padrão</div>
     }
@@ -52,7 +53,7 @@ export default function Operador() {
         <SideBar />
         <ContentOperador>
           <Headline
-            title="gerador de boleto e pix - operador"
+            title="gerador de boleto e pix"
             text="o único lugar onde o sucesso vem antes do trabalho é no dicionário."
           />
           <BlockOperador>
@@ -88,13 +89,13 @@ export default function Operador() {
             </ButtonOperador>
             <ButtonOperador
               onClick={() => {
-                handleButtonClick('gerarPixDois')
+                handleButtonClick('gerarAgua')
               }}
             >
               <DisplayIconOperador>
-                <MdPix />
+                <IoIosWater />
               </DisplayIconOperador>
-              <DisplayTypography DisplayTypography="gerar pix dois" />
+              <DisplayTypography DisplayTypography="gerar agua" />
             </ButtonOperador>
           </BlockOperador>
           <ScreenCheckOperador>{renderScreen()}</ScreenCheckOperador>

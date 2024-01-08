@@ -25,11 +25,8 @@ interface PropType {
 export default function Modal({ onClose }: PropType) {
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
-  const [usuario, setUsuario] = useState('')
   const [senha, setSenha] = useState('')
   const [tipo, setTipo] = useState('U')
-  const [bloqueado, setBloqueado] = useState('')
-  const [final, setFinal] = useState('')
   const [checked, setChecked] = useState(false)
   const [textoBotao, setTextoBotao] = useState('Salvar')
 
@@ -42,10 +39,7 @@ export default function Modal({ onClose }: PropType) {
         {
           nome,
           email,
-          usuario,
           tipo,
-          bloqueado: checked ? 'S' : 'N',
-          final,
           senha
         },
         { headers: { Authorization: Auth } }
@@ -91,38 +85,10 @@ export default function Modal({ onClose }: PropType) {
             }}
             placeholder="senha"
           />
-          <FieldRegistration
-            type="text"
-            value={usuario}
-            onChange={e => {
-              setUsuario(e.target.value)
-            }}
-            placeholder="usuario"
-          />
-          <FieldRegistration
-            type="number"
-            value={final}
-            onChange={e => {
-              setFinal(e.target.value)
-            }}
-            placeholder="numero final"
-          />
-          <FieldRegistration type="number" placeholder="nível" />
         </BlockRegistration>
         <ViewRegistration>
           <ContentFieldBlock>
-            <DisplayTypography DisplayTypography="clique para bloquear o usuário" />
-            <FieldCheckBlock
-              value={bloqueado}
-              checked={checked}
-              onChange={() => {
-                setChecked(!checked)
-              }}
-              type="checkbox"
-            />
-          </ContentFieldBlock>
-          <ContentFieldBlock>
-            <DisplayTypography DisplayTypography="selecione o tipo" />
+            <DisplayTypography DisplayTypography="selecione a permissão" />
             <TypeFieldCheck>
               <FieldCheckBlock
                 checked={tipo === 'U'}
@@ -132,16 +98,6 @@ export default function Modal({ onClose }: PropType) {
                 type="checkbox"
               />
               <DisplayTypography DisplayTypography="usuário" />
-            </TypeFieldCheck>
-            <TypeFieldCheck>
-              <FieldCheckBlock
-                onChange={() => {
-                  setTipo('O')
-                }}
-                checked={tipo === 'O'}
-                type="checkbox"
-              />
-              <DisplayTypography DisplayTypography="operador" />
             </TypeFieldCheck>
             <TypeFieldCheck>
               <FieldCheckBlock

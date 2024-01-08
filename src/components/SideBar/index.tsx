@@ -50,35 +50,17 @@ export default function SideBar() {
             </DisplayIcon>
             <DisplayTypography DisplayTypography="operador" />
           </DisplayLink>
-          <DisplayLink href="/usuario">
-            <DisplayIcon>
-              <FaUser />
-            </DisplayIcon>
-            <DisplayTypography DisplayTypography="usuario" />
-          </DisplayLink>
-          <DisplayLink href="/conexao">
-            <DisplayIcon>
-              <FaServer />
-            </DisplayIcon>
-            <DisplayTypography DisplayTypography="conexão" />
-          </DisplayLink>
           <DisplayLink href="/consulta">
             <DisplayIcon>
               <FaSearch />
             </DisplayIcon>
             <DisplayTypography DisplayTypography="consultar CPF" />
           </DisplayLink>
-          <DisplayLink href="/corporativo">
+          <DisplayLink href="/conexao">
             <DisplayIcon>
-              <FaBook />
+              <FaServer />
             </DisplayIcon>
-            <DisplayTypography DisplayTypography="frases e acordos" />
-          </DisplayLink>
-          <DisplayLink href="/redirecionador">
-            <DisplayIcon>
-              <FaLink />
-            </DisplayIcon>
-            <DisplayTypography DisplayTypography="links" />
+            <DisplayTypography DisplayTypography="conexão" />
           </DisplayLink>
           <DisplayLink href="/configuracoes">
             <DisplayIcon>

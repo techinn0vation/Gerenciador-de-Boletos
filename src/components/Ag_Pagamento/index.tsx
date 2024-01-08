@@ -40,19 +40,6 @@ export default function AgPagamento() {
       })
   }
 
-  async function getBoletoUsuario() {
-    const token = window.localStorage.getItem('token')
-    const Auth = `Bearer ${token}`
-    await api
-      .get('/boleto', { headers: { Authorization: Auth } })
-      .then(result => {
-        setBoletos(result.data)
-      })
-      .catch(error => {
-        alert(error)
-      })
-  }
-
   function registerSocket() {
     const socket = io(
       'https://sistema-boleto-server-production.up.railway.app',
@@ -75,29 +62,11 @@ export default function AgPagamento() {
   }
 
   useEffect(() => {
-    async function getUser() {
-      const token = window.localStorage.getItem('token')
-      const Auth = `Bearer ${token}`
-      setLoading(true)
-      await api
-        .get('/user', { headers: { Authorization: Auth } })
-        .then(async result => {
-          if (result.data.tipo !== 'A' && router.asPath === '/operador') {
-            return await router.push('/dashboard')
-          } else {
-            if (router.asPath === '/operador') {
-              getBoletos()
-              registerSocket()
-            } else {
-              getBoletoUsuario()
+    getBoletos()
+  }, [])
 
-              registerSocket()
-            }
-          }
-        })
-      setLoading(false)
-    }
-    getUser()
+  useEffect(() => {
+    registerSocket()
   }, [])
 
   return (
@@ -106,7 +75,38 @@ export default function AgPagamento() {
       <ContentAgPagamentos>
         <ViewTabelaValores>
           <WrapperTabelaValores>
-            <Headline title="valores para acordo" text="" />
+            <Headline title="valores para acordo - boleto e pix" text="" />
+            <WrapperTable
+              style={{
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              {boletos.map(boleto => (
+                <Link
+                  style={{ textDecoration: 'none', width: '100%' }}
+                  key={boleto.id}
+                  href={`/paymentDate/${boleto.id}`}
+                >
+                  <TableRow>
+                    <TableData>
+                      {boleto.tipo?.toUpperCase()} <TableData />{' '}
+                      {boleto.nomeCliente}
+                    </TableData>
+                    <TableData>
+                      {boleto.codigoBarrasPix === ''
+                        ? 'Aguardando'
+                        : 'Registrado'}
+                    </TableData>
+                    <TableData>{boleto.dataVencimento}</TableData>
+                  </TableRow>
+                </Link>
+              ))}
+            </WrapperTable>
+          </WrapperTabelaValores>
+          <div style={{ marginTop: 20 }}></div>
+          <WrapperTabelaValores>
+            <Headline title="valores para acordo - agua" text="" />
             <WrapperTable
               style={{
                 display: 'flex',

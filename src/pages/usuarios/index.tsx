@@ -19,23 +19,11 @@ interface IUsers {
   id: string;
   nome: string;
   email: string;
-  usuario: string;
   tipo: string;
-  bloqueado: string;
-  nivel: string;
-  final: string;
 }
 
-function createData(
-  id: string,
-  nome: string,
-  email: string,
-  usuario: string,
-  tipo: string,
-  bloqueado: string,
-  nivel: string
-) {
-  return { id, nome, email, usuario, tipo, bloqueado, nivel }
+function createData(id: string, nome: string, email: string, tipo: string) {
+  return { id, nome, email, tipo }
 }
 
 export default function Usuarios() {
@@ -62,15 +50,7 @@ export default function Usuarios() {
           headers: { Authorization: Auth }
         })
         const users = response.data.map((item: IUsers) =>
-          createData(
-            item.id,
-            item.nome,
-            item.email,
-            item.usuario,
-            item.tipo,
-            item.bloqueado,
-            item.id
-          )
+          createData(item.id, item.nome, item.email, item.tipo)
         )
         setRows(users)
       } catch (error) {
@@ -112,10 +92,7 @@ export default function Usuarios() {
                 <TableHeader>id</TableHeader>
                 <TableHeader>nome</TableHeader>
                 <TableHeader>e-mail</TableHeader>
-                <TableHeader>usuario</TableHeader>
-                <TableHeader>tipo</TableHeader>
-                <TableHeader>bloqueado</TableHeader>
-                <TableHeader>nível</TableHeader>
+                <TableHeader>Permissão</TableHeader>
                 <TableHeader>ação</TableHeader>
               </TableRow>
               {rows.map(row => (
@@ -123,16 +100,13 @@ export default function Usuarios() {
                   <TableData>{row.id}</TableData>
                   <TableData>{row.nome}</TableData>
                   <TableData>{row.email}</TableData>
-                  <TableData>{row.usuario}</TableData>
                   {row.tipo === 'A' ? (
-                    <TableData>administrador</TableData>
+                    <TableData>adm</TableData>
                   ) : row.tipo === 'U' ? (
                     <TableData>usuário</TableData>
                   ) : (
                     <TableData>operador</TableData>
                   )}
-                  <TableData>{row.bloqueado}</TableData>
-                  <TableData>{row.nivel}</TableData>
                   <TableData>
                     <ButtonDelete
                       onClick={async () => {
