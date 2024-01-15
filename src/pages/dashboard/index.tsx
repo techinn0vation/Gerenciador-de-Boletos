@@ -22,6 +22,7 @@ import {
 } from '../..//components/StylesPages/StylesDashboard'
 
 import { api } from '@/services/api'
+import { type IBoletoProps } from '@/components/Gerar_Boleto/Reac_Boleto'
 
 export default function Dashboard() {
   const [countPix, setCountPix] = useState(0)
@@ -34,13 +35,13 @@ export default function Dashboard() {
     const Auth = `Bearer ${token}`
     await api
       .get('/boleto', { headers: { Authorization: Auth } })
-      .then(result => {
-        setCountPix(result.data.filter(item => item.tipo === 'px').length)
+      .then(({ data }: { data: IBoletoProps[] }) => {
+        setCountPix(data.filter(item => item.tipo === 'px').length)
 
-        setCountBoleto(result.data.filter(item => item.tipo === 'bo').length)
+        setCountBoleto(data.filter(item => item.tipo === 'bo').length)
 
         let valorTotalPix = 0
-        result.data
+        data
           .filter(fi => fi.tipo === 'px')
           .forEach(item => {
             const valorCerto =
@@ -52,7 +53,7 @@ export default function Dashboard() {
           })
 
         let valorTotalBoleto = 0
-        result.data
+        data
           .filter(fi => fi.tipo === 'bo')
           .forEach(item => {
             const valorCerto =
