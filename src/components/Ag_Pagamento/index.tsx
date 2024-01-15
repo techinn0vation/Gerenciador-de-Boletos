@@ -19,9 +19,11 @@ import {
 } from '../StylesPages/StylesUsuarios'
 import { GiTakeMyMoney } from 'react-icons/gi'
 import Link from 'next/link'
+import { type IAguaProps } from '../Gerar_Agua/Reac_Agua'
 
 export default function AgPagamento() {
   const [boletos, setBoletos] = useState<IBoletoProps[]>([])
+  const [agua, setAgua] = useState<IAguaProps[]>([])
   const [loading, setLoading] = useState(false)
   const [tipoUser, setTipoUser] = useState('')
 
@@ -31,9 +33,22 @@ export default function AgPagamento() {
     const token = window.localStorage.getItem('token')
     const Auth = `Bearer ${token}`
     await api
-      .get('/allBoletos', { headers: { Authorization: Auth } })
+      .get('/boleto', { headers: { Authorization: Auth } })
       .then(result => {
         setBoletos(result.data)
+      })
+      .catch(error => {
+        alert(error)
+      })
+  }
+
+  async function getAgua() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
+    await api
+      .get('/agua', { headers: { Authorization: Auth } })
+      .then(result => {
+        setAgua(result.data)
       })
       .catch(error => {
         alert(error)
@@ -63,6 +78,10 @@ export default function AgPagamento() {
 
   useEffect(() => {
     getBoletos()
+  }, [])
+
+  useEffect(() => {
+    getAgua()
   }, [])
 
   useEffect(() => {
@@ -114,23 +133,18 @@ export default function AgPagamento() {
               }}
             >
               {/*  */}
-              {boletos.map(boleto => (
+              {agua.map(agua => (
                 <Link
                   style={{ textDecoration: 'none', width: '100%' }}
-                  key={boleto.id}
-                  href={`/paymentDate/${boleto.id}`}
+                  key={agua.id}
+                  href={`/paymentDate/${agua.id}`}
                 >
                   <TableRow>
                     <TableData>
-                      {boleto.tipo?.toUpperCase()} <TableData />{' '}
-                      {boleto.nomeCliente}
+                      {'AG'}
+                      {agua.nomeCliente}
                     </TableData>
-                    <TableData>
-                      {boleto.codigoBarrasPix === ''
-                        ? 'Aguardando'
-                        : 'Registrado'}
-                    </TableData>
-                    <TableData>{boleto.dataVencimento}</TableData>
+                    <TableData>{agua.dataVencimento}</TableData>
                   </TableRow>
                 </Link>
               ))}

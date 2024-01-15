@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 
+import axios from 'axios'
 import { type NextApiRequest, type NextApiResponse } from 'next'
 
 export default async function handler(
@@ -8,11 +9,11 @@ export default async function handler(
 ) {
   const { value } = req.query
   try {
-    const dados = await fetch(
+    const dados = await axios.get(
       `http://24.152.38.106/caixa_plus?token=E5Xc6576V87bN8&tipo=cpf&dados=${value}`
     )
     // https://api.searchlock.me/caixa_plus_v2?token=bt877bqwfncqe88&tipo=cpf&dados=16814417723
-    const response = await dados.json()
+    const response = await dados.data
 
     res.status(200).json(response)
   } catch (error) {
