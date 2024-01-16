@@ -38,7 +38,8 @@ import {
   type ICadin,
   type ISiccf,
   type IConvenioDevedores,
-  type IPendencias
+  type IPendencias,
+  styles
 } from '@/components/Gerar_Consulta'
 
 export default function Consulta() {
@@ -59,22 +60,14 @@ export default function Consulta() {
   const [loading, setLoading] = useState(false)
 
   const [cpf, setCpf] = useState('')
-  const [showPreview, setShowPreview] = useState(false)
   const [copied, setCopied] = useState(false)
 
   async function onConsulta() {
-    if (
-      serasa.length > 0 ||
-      scpc.length > 0 ||
-      protestos.length > 0 ||
-      chequeSF.length > 0 ||
-      cadin.length > 0 ||
-      siccf.length > 0 ||
-      convenioDevedores.length > 0
-    ) {
+    if (nome !== '') {
       setNome('')
       setCpf('')
       setSerasa([])
+      setPendencias([])
       setScpc([])
       setProtestos([])
       setChequeSF([])
@@ -342,7 +335,7 @@ export default function Consulta() {
 
           <BlockConsult>
             <DisplayInputMask
-              type="text"
+              type="p"
               value={cpf}
               pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
               placeholder="Digite um CPF válido"
@@ -357,29 +350,7 @@ export default function Consulta() {
               'Preencha os campos!'
             ) : (
               <>
-                {showPreview && (
-                  <ScreenResult>
-                    <PDFViewer style={{ width: '100%', height: '100vh' }}>
-                      <ConsultaDocument
-                        nomeCliente={nome}
-                        data={moment().format('L')}
-                        cpf={cpfCnpj}
-                        cadin={cadin}
-                        chequesSF={chequeSF}
-                        convenioDevedores={convenioDevedores}
-                        protestos={protestos}
-                        scpc={scpc}
-                        serasa={serasa}
-                        siccf={siccf}
-                        pendencias={pendencias}
-                      />
-                    </PDFViewer>
-                  </ScreenResult>
-                )}
                 <ContentButtons>
-                  <ButtonConsult onClick={() => setShowPreview(!showPreview)}>
-                    {showPreview ? 'voltar' : 'visualizar'}
-                  </ButtonConsult>
                   <ButtonConsult
                     disabled={nome === '' || cpfCnpj === '' || loading}
                   >
@@ -451,6 +422,982 @@ export default function Consulta() {
                     </ButtonConsult>
                   </CopyToClipboard>
                 </ContentButtons>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginTop: 50,
+                    width: '100%'
+                  }}
+                >
+                  <div style={(styles.containerText, { width: '100%' })}>
+                    <div style={styles.contentBlock}>
+                      <div style={styles.contentText}>
+                        <div
+                          style={
+                            (styles.rowView,
+                            {
+                              backgroundColor: 'rgb(52, 108, 176)',
+                              width: '100%',
+                              borderRadius: 3,
+                              padding: 5,
+                              marginTop: 5
+                            })
+                          }
+                        >
+                          <p
+                            style={{
+                              textTransform: 'uppercase',
+                              fontWeight: 'bold',
+                              fontSize: 12,
+                              color: 'white'
+                            }}
+                          >
+                            Informações gerais
+                          </p>
+                        </div>
+
+                        <p
+                          style={{
+                            textTransform: 'uppercase',
+                            marginLeft: 20,
+                            marginTop: 5,
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          NOME DO CLIENTE: {nome}
+                        </p>
+                        <p
+                          style={{
+                            textTransform: 'uppercase',
+                            fontWeight: 'bold',
+                            marginLeft: 20,
+                            marginTop: 5
+                          }}
+                        >
+                          CPF: {cpfCnpj}
+                        </p>
+                        <p
+                          style={{
+                            textTransform: 'uppercase',
+                            fontWeight: 'bold',
+                            marginLeft: 20,
+                            marginTop: 5
+                          }}
+                        >
+                          data: {moment().locale('pt-br').format('DD/MM/YYYY')}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ width: '100%', marginTop: 10 }}>
+                    <div
+                      style={{
+                        backgroundColor: 'rgb(52, 108, 176)',
+                        width: '100%',
+                        borderRadius: 3,
+                        padding: 5,
+                        marginTop: 5
+                      }}
+                    >
+                      <p
+                        style={{
+                          textTransform: 'uppercase',
+                          color: 'white'
+                        }}
+                      >
+                        SERASA
+                      </p>
+                    </div>
+                    {serasa[0].qteOcorrencias !== '' && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          marginTop: 5
+                        }}
+                      >
+                        <p
+                          style={{
+                            width: '30%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Data Primeira Ocorrência
+                        </p>
+                        <p
+                          style={{
+                            width: '30%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Data Última Ocorrência
+                        </p>
+                        <p
+                          style={{
+                            width: '30%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Quantidade Ocorrências
+                        </p>
+                      </div>
+                    )}
+
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        flexDirection: 'column',
+                        marginTop: 10
+                      }}
+                    >
+                      {serasa[0].qteOcorrencias === '' ? (
+                        <p
+                          style={{
+                            width: '25%',
+                            marginLeft: 5
+                          }}
+                        >
+                          Nada Consta
+                        </p>
+                      ) : (
+                        serasa.map(item => (
+                          <div
+                            style={{
+                              margin: '5px 5px',
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%'
+                            }}
+                            key={item.dataP}
+                          >
+                            <p style={{ width: '30%' }}>
+                              {item.dataP.split(' ')[0]}
+                            </p>
+                            <p style={{ width: '30%' }}>
+                              {item.dataU.split(' ')[0]}
+                            </p>
+                            <p style={{ width: '30%' }}>
+                              {item.qteOcorrencias}
+                            </p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ width: '100%', marginTop: 10 }}>
+                    <div
+                      style={{
+                        backgroundColor: 'rgb(52, 108, 176)',
+                        width: '100%',
+                        borderRadius: 3,
+                        padding: 5,
+                        marginTop: 5
+                      }}
+                    >
+                      <p
+                        style={{
+                          textTransform: 'uppercase',
+                          color: 'white'
+                        }}
+                      >
+                        PENDENCIAS
+                      </p>
+                    </div>
+                    {pendencias[0].data !== '' && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          marginTop: 5
+                        }}
+                      >
+                        <p
+                          style={{
+                            width: '25%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Data
+                        </p>
+                        <p
+                          style={{
+                            width: '30%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Tipo
+                        </p>
+                        <p
+                          style={{
+                            width: '20%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Valor
+                        </p>
+                        <p
+                          style={{
+                            width: '35%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Origem
+                        </p>
+                      </div>
+                    )}
+
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        flexDirection: 'column',
+                        marginTop: 10
+                      }}
+                    >
+                      {pendencias[0].data === '' ? (
+                        <p
+                          style={{
+                            width: '25%',
+                            marginLeft: 5
+                          }}
+                        >
+                          Nada Consta
+                        </p>
+                      ) : (
+                        pendencias.map(item => (
+                          <div
+                            style={{
+                              margin: '5px 5px',
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%'
+                            }}
+                            key={item.data}
+                          >
+                            <p style={{ width: '25%' }}>
+                              {item.data.split(' ')[0]}
+                            </p>
+                            <p style={{ width: '30%' }}>{item.tipo}</p>
+                            <p style={{ width: '20%' }}>
+                              {new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                              }).format(Number(item.valor))}
+                            </p>
+                            <p style={{ width: '35%' }}>{item.origem}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ width: '100%' }}>
+                    <div
+                      style={{
+                        backgroundColor: 'rgb(52, 108, 176)',
+                        width: '100%',
+                        borderRadius: 3,
+                        padding: 5,
+                        marginTop: 5
+                      }}
+                    >
+                      <p
+                        style={{
+                          textTransform: 'uppercase',
+                          color: 'white'
+                        }}
+                      >
+                        SCPC
+                      </p>
+                    </div>
+                    {scpc[0].data !== '' && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          marginTop: 5
+                        }}
+                      >
+                        <p
+                          style={{
+                            width: '25%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Nome
+                        </p>
+                        <p
+                          style={{
+                            width: '25%',
+                            fontFamily: 'Helvetica-Bold',
+                            marginLeft: 20
+                          }}
+                        >
+                          Data
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Tipo
+                        </p>
+                        <p
+                          style={{
+                            width: '20%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Valor
+                        </p>
+                        <p
+                          style={{
+                            width: '30%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Disponibilidade
+                        </p>
+                      </div>
+                    )}
+
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        flexDirection: 'column',
+                        marginTop: 10
+                      }}
+                    >
+                      {scpc[0].data === '' ? (
+                        <p
+                          style={{
+                            width: '25%',
+                            marginLeft: 5
+                          }}
+                        >
+                          Nada Consta
+                        </p>
+                      ) : (
+                        scpc.map(item => (
+                          <div
+                            style={{
+                              margin: '5px 5px',
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%'
+                            }}
+                            key={item.data}
+                          >
+                            <p style={{ width: '25%' }}>{item.nome}</p>
+                            <p style={{ width: '25%', margin: '0px 15px' }}>
+                              {item.data.split(' ')[0]}
+                            </p>
+                            <p style={{ width: '15%', marginLeft: -10 }}>
+                              {item.tipo}
+                            </p>
+                            <p style={{ width: '20%' }}>
+                              {new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                              }).format(Number(item.valor))}
+                            </p>
+                            <p style={{ width: '30%' }}>
+                              {item.data.split(' ')[0]}
+                            </p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ width: '100%' }}>
+                    <div
+                      style={{
+                        backgroundColor: 'rgb(52, 108, 176)',
+                        width: '100%',
+                        borderRadius: 3,
+                        padding: 5,
+                        marginTop: 5
+                      }}
+                    >
+                      <p
+                        style={{
+                          textTransform: 'uppercase',
+                          color: 'white'
+                        }}
+                      >
+                        Protestos
+                      </p>
+                    </div>
+                    {protestos[0].data !== '' && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          marginTop: 5
+                        }}
+                      >
+                        <p
+                          style={{
+                            width: '25%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Data
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Cartório
+                        </p>
+                        <p
+                          style={{
+                            width: '25%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Valor
+                        </p>
+                        <p
+                          style={{
+                            width: '35%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Cidade/Estado
+                        </p>
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        flexDirection: 'column',
+                        marginTop: 10
+                      }}
+                    >
+                      {protestos[0].data === '' ? (
+                        <p
+                          style={{
+                            width: '25%',
+                            marginLeft: 5
+                          }}
+                        >
+                          Nada Consta
+                        </p>
+                      ) : (
+                        protestos.map(item => (
+                          <div
+                            style={{
+                              margin: '5px 5px',
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%'
+                            }}
+                            key={item.data}
+                          >
+                            <p style={{ width: '25%' }}>
+                              {item.data.split(' ')[0]}
+                            </p>
+                            <p style={{ width: '15%' }}>{item.cartorio}</p>
+                            <p style={{ width: '25%' }}>
+                              {new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                              }).format(Number(item.valor))}
+                            </p>
+                            <p style={{ width: '35%' }}>{item.cidadeUF}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ width: '100%' }}>
+                    <div
+                      style={{
+                        backgroundColor: 'rgb(52, 108, 176)',
+                        width: '100%',
+                        borderRadius: 3,
+                        padding: 5,
+                        marginTop: 5
+                      }}
+                    >
+                      <p
+                        style={{
+                          textTransform: 'uppercase',
+                          color: 'white'
+                        }}
+                      >
+                        Cheques sem fundo
+                      </p>
+                    </div>
+                    {chequeSF[0].data !== '' && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          marginTop: 5
+                        }}
+                      >
+                        <p
+                          style={{
+                            width: '10%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Data
+                        </p>
+                        <p
+                          style={{
+                            width: '10%',
+                            margin: '0px 15px',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Cheque
+                        </p>
+                        <p
+                          style={{
+                            width: '10%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Alinea
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Qte Cheque
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Valor
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Banco
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Agência
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Cidade/Estado
+                        </p>
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        flexDirection: 'column',
+                        marginTop: 10
+                      }}
+                    >
+                      {chequeSF[0].data === '' ? (
+                        <p
+                          style={{
+                            width: '25%',
+                            marginLeft: 5
+                          }}
+                        >
+                          Nada Consta
+                        </p>
+                      ) : (
+                        chequeSF.map(item => (
+                          <div
+                            style={{
+                              margin: '5px 5px',
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%'
+                            }}
+                            key={item.data}
+                          >
+                            <p style={{ width: '10%' }}>
+                              {item.data.split(' ')[0]}
+                            </p>
+                            <p style={{ width: '10%', margin: 'px 15px' }}>
+                              {item.cheque}
+                            </p>
+                            <p style={{ width: '10%' }}>{item.alinea}</p>
+                            <p style={{ width: '15%' }}>{item.qteCheque}</p>
+                            <p style={{ width: '15%' }}>
+                              {new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                              }).format(Number(item.valor))}
+                            </p>
+                            <p style={{ width: '15%' }}>{item.banco}</p>
+                            <p style={{ width: '15%' }}>{item.agencia}</p>
+                            <p style={{ width: '15%' }}>{item.cidadeUF}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ width: '100%' }}>
+                    <div
+                      style={{
+                        backgroundColor: 'rgb(52, 108, 176)',
+                        width: '100%',
+                        borderRadius: 3,
+                        padding: 5,
+                        marginTop: 5
+                      }}
+                    >
+                      <p
+                        style={{
+                          textTransform: 'uppercase',
+                          color: 'white'
+                        }}
+                      >
+                        CADIN
+                      </p>
+                    </div>
+                    {cadin[0].nomeCredor !== '' && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          marginTop: 5
+                        }}
+                      >
+                        <p
+                          style={{
+                            width: '50%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Sigla Credor
+                        </p>
+                        <p
+                          style={{
+                            width: '50%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Nome Credor
+                        </p>
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        flexDirection: 'column',
+                        marginTop: 10
+                      }}
+                    >
+                      {cadin[0].nomeCredor === '' ? (
+                        <p
+                          style={{
+                            width: '25%',
+                            marginLeft: 5
+                          }}
+                        >
+                          Nada Consta
+                        </p>
+                      ) : (
+                        cadin.map(item => (
+                          <div
+                            style={{
+                              margin: '5px 5px',
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%'
+                            }}
+                            key={item.siglaCredor}
+                          >
+                            <p style={{ width: '50%%' }}>{item.siglaCredor}</p>
+                            <p style={{ width: '50%' }}>{item.nomeCredor}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ width: '100%' }}>
+                    <div
+                      style={{
+                        backgroundColor: 'rgb(52, 108, 176)',
+                        width: '100%',
+                        borderRadius: 3,
+                        padding: 5,
+                        marginTop: 5
+                      }}
+                    >
+                      <p
+                        style={{
+                          textTransform: 'uppercase',
+                          color: 'white'
+                        }}
+                      >
+                        SICCF
+                      </p>
+                    </div>
+                    {siccf[0].data !== '' && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          marginTop: 5
+                        }}
+                      >
+                        <p
+                          style={{
+                            width: '25%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Data
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            margin: '0px 15px',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Tipo Conta
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Banco
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Agência
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Alinea
+                        </p>
+                        <p
+                          style={{
+                            width: '25%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Qte Ocorrência
+                        </p>
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        flexDirection: 'column',
+                        marginTop: 10
+                      }}
+                    >
+                      {siccf[0].data === '' ? (
+                        <p
+                          style={{
+                            width: '25%',
+                            marginLeft: 5
+                          }}
+                        >
+                          Nada Consta
+                        </p>
+                      ) : (
+                        siccf.map(item => (
+                          <div
+                            style={{
+                              margin: '5px 5px',
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%'
+                            }}
+                            key={item.data}
+                          >
+                            <p style={{ width: '25%' }}>
+                              {item.data.split(' ')[0]}
+                            </p>
+                            <p style={{ width: '15%', margin: '0px 15px' }}>
+                              {item.tipoConta}
+                            </p>
+                            <p style={{ width: '15%' }}>{item.banco}</p>
+                            <p style={{ width: '15%' }}>{item.agencia}</p>
+                            <p style={{ width: '15%' }}>{item.alinea}</p>
+                            <p style={{ width: '25%' }}>{item.qteOcorrencia}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ width: '100%' }}>
+                    <div
+                      style={{
+                        backgroundColor: 'rgb(52, 108, 176)',
+                        width: '100%',
+                        borderRadius: 3,
+                        padding: 5,
+                        marginTop: 5
+                      }}
+                    >
+                      <p
+                        style={{
+                          textTransform: 'uppercase',
+                          color: 'white'
+                        }}
+                      >
+                        Convenio devedores
+                      </p>
+                    </div>
+                    {convenioDevedores[0].data !== '' && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          marginTop: 5
+                        }}
+                      >
+                        <p
+                          style={{
+                            width: '20%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Data
+                        </p>
+                        <p
+                          style={{
+                            width: '25%',
+                            margin: '0px 15px',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Tipo Financiamento
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Valor
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          CNPJ
+                        </p>
+                        <p
+                          style={{
+                            width: '20%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Banco Contrato
+                        </p>
+                        <p
+                          style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Cidade/Estado
+                        </p>
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '100%',
+                        flexDirection: 'column',
+                        marginTop: 10
+                      }}
+                    >
+                      {convenioDevedores[0].data === '' ? (
+                        <p
+                          style={{
+                            width: '25%',
+                            marginLeft: 5
+                          }}
+                        >
+                          Nada Consta
+                        </p>
+                      ) : (
+                        convenioDevedores.map(item => (
+                          <div
+                            style={{
+                              margin: '5px 5px',
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%'
+                            }}
+                            key={item.data}
+                          >
+                            <p style={{ width: '20%' }}>
+                              {item.data.split(' ')[0]}
+                            </p>
+                            <p style={{ width: '25%', margin: '0px 15px' }}>
+                              {item.tipoFinanciamento}
+                            </p>
+                            <p style={{ width: '15%' }}>
+                              R${' '}
+                              {new Intl.NumberFormat('pt-BR', {
+                                style: 'currency',
+                                currency: 'BRL'
+                              }).format(Number(item.valor))}
+                            </p>
+                            <p style={{ width: '15%' }}>{item.cnpj}</p>
+                            <p style={{ width: '20%' }}>{item.bancoContrato}</p>
+                            <p style={{ width: '15%' }}>{item.cidadeUF}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
               </>
             )}
           </BlockConsult>

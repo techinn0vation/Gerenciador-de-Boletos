@@ -9,6 +9,7 @@
 /* eslint-disable react/jsx-no-undef */
 import React, { useEffect, useRef, useState } from 'react'
 import { Page, Text, View, Document, StyleSheet, Image, Svg } from '@react-pdf/renderer'
+import ImageSanepar from '../../../../public/img/logo-sanepar-br.png'
 
 import QRCode from 'qrcode'
 import { api } from '@/services/api';
@@ -28,9 +29,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    borderBottomStyle: 'solid'
+  },
+  bold: {
+    fontSize: 15,
+    fontWeight: 'bold'
   },
   header2: {
     width: '100%',
@@ -63,8 +65,8 @@ const styles = StyleSheet.create({
   },
   img: {
     width: '100%',
-    maxWidth: '35%',
-    padding: '10px 0'
+    maxWidth: '45%',
+    padding: '10px 0',
   },
   body: {
     width: '100%',
@@ -76,6 +78,13 @@ const styles = StyleSheet.create({
     backgroundSize: 'contain',
     margin: '0px auto'
   },
+  via: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 20
+  }
 })
 
 export interface IAguaProps {
@@ -93,7 +102,7 @@ export interface IAguaProps {
   pix?: string
 }
 
-export function Boleto({
+export function Agua({
   nomeCliente,
   endereco,
   dataVencimento,
@@ -140,7 +149,7 @@ export function Boleto({
 
   useEffect(() => {
     // Carregar as imagens ao montar o componente
-    convertImageToDataUrl('/img/IMG_B002.png')
+    convertImageToDataUrl('/img/IMG_B005.png')
       .then((url) => { setImgB002Url(url); })
       .catch((error) => { console.log(error); });
   }, []);
@@ -149,9 +158,14 @@ export function Boleto({
     <Document>
       <Page style={styles.page}>
         <View style={styles.header}>
-          <Image style={styles.img} src={imgB002Url} />
-          <View style={styles.header2}>
-            <Text>Segunda via simplificada</Text>
+          <View>
+            <Image style={styles.img} src={imgB002Url} />
+          </View>
+          <View>
+            <Text style={styles.bold}>Segunda via simplificada</Text>
+          </View>
+          <View style={styles.via}>
+            <Text>Via do cliente</Text>
           </View>
         </View>
         <View style={styles.containerText}>

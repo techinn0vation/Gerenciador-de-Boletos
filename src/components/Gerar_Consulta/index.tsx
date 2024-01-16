@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from 'react'
 import moment from 'moment'
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   page: {
     flex: 1,
     padding: 20,
@@ -903,40 +903,7 @@ export default function ConsultaDocument({
             )}
           </View>
         </View>
-
-        {/* <Image src={Logo} /> */}
-
-        {/* <View style={styles.body}>
-          <Text>
-            Restrições no SPC SERASA serão regularizadas em até 3 dias úteis -
-            Devolução de documentos (cheques, carta de anuência e aplicável):
-            somente após a quitação deste Acordo.
-          </Text>
-        </View> */}
-        {/* <Text
-          render={({ pageNumber, totalPages }) =>
-            `${pageNumber} / ${totalPages}`
-          }
-        /> */}
       </Page>
-      {/* {cpf !== '' && (
-        <Page style={styles.page}>
-          <View style={styles.header}>
-            <Image style={styles.img} src={Logo} />
-            <View style={styles.header2}>
-              <Image style={styles.img3} src={Logo3} />
-              <Text>Um Produto</Text>
-              <Image style={styles.img2} src={Logo2} />
-            </View>
-          </View>
-          <View style={styles.containerText}>
-            <Text style={styles.fontBold}>
-              DEMOSTRATIVO DOS VALORES DO CONTRATO ORIGINAL EM ABERTO
-            </Text>
-            <Text>{cpf}</Text>
-          </View>
-        </Page>
-      )} */}
     </Document>
   )
 }

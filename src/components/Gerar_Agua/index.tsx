@@ -22,9 +22,10 @@ import {
 import { DisplayTitle, Headline } from '@/components/GeralComponents'
 
 import { api } from '@/services/api'
-import { PDFDownloadLink } from '@react-pdf/renderer'
+import { PDFViewer } from '@react-pdf/renderer'
 import { useRouter } from 'next/router'
 import moment from 'moment'
+import { Agua } from './Reac_Agua'
 
 export default function GerarAgua() {
   const [loading, setLoading] = useState(false)
@@ -132,80 +133,95 @@ export default function GerarAgua() {
   }
 
   return (
-    <WrapperGerarBoleto>
-      <Headline title="gerar agua" text="insira os dados abaixo." />
-      <ContentGerarBoleto>
-        {loading ? (
-          <DisplayTitle DisplayTitle="loading..." />
-        ) : (
-          <ViewGerarBoleto>
-            <BlockRegistration>
-              <FieldRegistration
-                type="text"
-                value={nomeCliente}
-                onChange={e => {
-                  setNomeCliente(e.target.value)
-                }}
-                placeholder="nome cliente"
-              />
-              <FieldRegistration
-                type="text"
-                value={endereco}
-                onChange={e => {
-                  setEndereco(e.target.value)
-                }}
-                placeholder="Endereço"
-              />
-              <FieldRegistration
-                type="text"
-                required
-                onKeyUp={event => { formatValor(event) }}
-                onChange={e => { setValor(e.target.value); }}
-                placeholder="valor"
-                value={valor}
-              />
-              {/* <DisplayInputMask
-                type="text"
-                value={dataVencimento}
-                pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-                placeholder="Data de Vencimento"
-                onKeyUp={event => {
-                  formatData(event)
-                }}
-                maxLength={14}
-                onChange={e => {
-                  setDataVencimento(e.target.value)
-                }}
-              /> */}
-              <FieldRegistration
-                type="text"
-                value={matricula}
-                onChange={e => {
-                  setMatricula(e.target.value)
-                }}
-                placeholder="matricula"
-              />
+    // <WrapperGerarBoleto>
+    //   <Headline title="gerar agua" text="insira os dados abaixo." />
+    //   <ContentGerarBoleto>
+    //     {loading ? (
+    //       <DisplayTitle DisplayTitle="loading..." />
+    //     ) : (
+    //       <ViewGerarBoleto>
+    //         <BlockRegistration>
+    //           <FieldRegistration
+    //             type="text"
+    //             value={nomeCliente}
+    //             onChange={e => {
+    //               setNomeCliente(e.target.value)
+    //             }}
+    //             placeholder="nome cliente"
+    //           />
+    //           <FieldRegistration
+    //             type="text"
+    //             value={endereco}
+    //             onChange={e => {
+    //               setEndereco(e.target.value)
+    //             }}
+    //             placeholder="Endereço"
+    //           />
+    //           <FieldRegistration
+    //             type="text"
+    //             required
+    //             onKeyUp={event => { formatValor(event) }}
+    //             onChange={e => { setValor(e.target.value); }}
+    //             placeholder="valor"
+    //             value={valor}
+    //           />
+    //           {/* <DisplayInputMask
+    //             type="text"
+    //             value={dataVencimento}
+    //             pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+    //             placeholder="Data de Vencimento"
+    //             onKeyUp={event => {
+    //               formatData(event)
+    //             }}
+    //             maxLength={14}
+    //             onChange={e => {
+    //               setDataVencimento(e.target.value)
+    //             }}
+    //           /> */}
+    //           <FieldRegistration
+    //             type="text"
+    //             value={matricula}
+    //             onChange={e => {
+    //               setMatricula(e.target.value)
+    //             }}
+    //             placeholder="matricula"
+    //           />
 
-            </BlockRegistration>
-            <ButtonSaveDate
-              onClick={handleGerarAgua}
-              disabled={
-                !!(
-                  nomeCliente === '' ||
-                  valor === '' ||
-                  dataVencimento === ''
-                )
-              }
-            >
-              {nomeCliente === '' ||
-                valor === '' ||
-                dataVencimento === ''
-                ? 'Preencha os campos!'
-                : 'salvar'}
-            </ButtonSaveDate>
-          </ViewGerarBoleto>
-        )}
-      </ContentGerarBoleto>
-    </WrapperGerarBoleto>
+    //         </BlockRegistration>
+    //         <ButtonSaveDate
+    //           onClick={handleGerarAgua}
+    //           disabled={
+    //             !!(
+    //               nomeCliente === '' ||
+    //               valor === '' ||
+    //               dataVencimento === ''
+    //             )
+    //           }
+    //         >
+    //           {nomeCliente === '' ||
+    //             valor === '' ||
+    //             dataVencimento === ''
+    //             ? 'Preencha os campos!'
+    //             : 'salvar'}
+    //         </ButtonSaveDate>
+    //       </ViewGerarBoleto>
+    //     )}
+    //   </ContentGerarBoleto>
+    // </WrapperGerarBoleto>
+    <PDFViewer style={{ display: 'flex', width: '100vw', height: '100vh' }}>
+
+      <Agua
+        nomeCliente="Luiz Vinicius"
+        codigoCliente="123456"
+        valor="599.99"
+        dataVencimento="16/01/2024"
+        pix="klirineu.js@gmail.com"
+        nomeAvalistaPix="Ana Maria"
+        cidade="São Paulo"
+        endereco='Avenia Paulista Rio de Janeiro'
+        matricula='12313123'
+        referencia='01/2024'
+      />
+    </PDFViewer>
   )
 }
