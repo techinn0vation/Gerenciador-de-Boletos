@@ -33,42 +33,87 @@ export default function Dashboard() {
   async function getBoletos() {
     const token = window.localStorage.getItem('token')
     const Auth = `Bearer ${token}`
+
     await api
-      .get('/boleto', { headers: { Authorization: Auth } })
-      .then(({ data }: { data: IBoletoProps[] }) => {
-        setCountPix(data.filter(item => item.tipo === 'px').length)
+      .get('/user', { headers: { Authorization: Auth } })
+      .then(async result => {
+        if (result.data.tipo === 'A') {
+          await api
+            .get('/allBoletos', { headers: { Authorization: Auth } })
+            .then(({ data }: { data: IBoletoProps[] }) => {
+              setCountPix(data.filter(item => item.tipo === 'px').length)
 
-        setCountBoleto(data.filter(item => item.tipo === 'bo').length)
+              setCountBoleto(data.filter(item => item.tipo === 'bo').length)
 
-        let valorTotalPix = 0
-        data
-          .filter(fi => fi.tipo === 'px')
-          .forEach(item => {
-            const valorCerto =
-              item.valor.length === 6
-                ? item.valor.replace(',', '.')
-                : item.valor.replace('.', '').replace(',', '.')
+              let valorTotalPix = 0
+              data
+                .filter(fi => fi.tipo === 'px')
+                .forEach(item => {
+                  const valorCerto =
+                    item.valor.length === 6
+                      ? item.valor.replace(',', '.')
+                      : item.valor.replace('.', '').replace(',', '.')
 
-            valorTotalPix += parseFloat(valorCerto) || 0
-          })
+                  valorTotalPix += parseFloat(valorCerto) || 0
+                })
 
-        let valorTotalBoleto = 0
-        data
-          .filter(fi => fi.tipo === 'bo')
-          .forEach(item => {
-            const valorCerto =
-              item.valor.length === 6
-                ? item.valor.replace(',', '.')
-                : item.valor.replace('.', '').replace(',', '.')
+              let valorTotalBoleto = 0
+              data
+                .filter(fi => fi.tipo === 'bo')
+                .forEach(item => {
+                  const valorCerto =
+                    item.valor.length === 6
+                      ? item.valor.replace(',', '.')
+                      : item.valor.replace('.', '').replace(',', '.')
 
-            valorTotalBoleto += parseFloat(valorCerto) || 0
-          })
+                  valorTotalBoleto += parseFloat(valorCerto) || 0
+                })
 
-        setValorPix(valorTotalPix)
-        setValorBoleto(valorTotalBoleto)
-      })
-      .catch(error => {
-        alert(error)
+              setValorPix(valorTotalPix)
+              setValorBoleto(valorTotalBoleto)
+            })
+            .catch(error => {
+              alert(error)
+            })
+        } else {
+          await api
+            .get('/boleto', { headers: { Authorization: Auth } })
+            .then(({ data }: { data: IBoletoProps[] }) => {
+              setCountPix(data.filter(item => item.tipo === 'px').length)
+
+              setCountBoleto(data.filter(item => item.tipo === 'bo').length)
+
+              let valorTotalPix = 0
+              data
+                .filter(fi => fi.tipo === 'px')
+                .forEach(item => {
+                  const valorCerto =
+                    item.valor.length === 6
+                      ? item.valor.replace(',', '.')
+                      : item.valor.replace('.', '').replace(',', '.')
+
+                  valorTotalPix += parseFloat(valorCerto) || 0
+                })
+
+              let valorTotalBoleto = 0
+              data
+                .filter(fi => fi.tipo === 'bo')
+                .forEach(item => {
+                  const valorCerto =
+                    item.valor.length === 6
+                      ? item.valor.replace(',', '.')
+                      : item.valor.replace('.', '').replace(',', '.')
+
+                  valorTotalBoleto += parseFloat(valorCerto) || 0
+                })
+
+              setValorPix(valorTotalPix)
+              setValorBoleto(valorTotalBoleto)
+            })
+            .catch(error => {
+              alert(error)
+            })
+        }
       })
   }
 

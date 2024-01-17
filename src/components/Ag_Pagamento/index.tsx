@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useEffect, useState } from 'react'
 import { ContentAgPagamentos, WrapperAgPagamentos } from './styles'
 import { Headline } from '@/components/GeralComponents'
-import { type IBoletoProps } from '../Gerar_Boleto/Reac_Boleto'
+import { Boleto, type IBoletoProps } from '../Gerar_Boleto/Reac_Boleto'
 import { api } from '@/services/api'
 import { useRouter } from 'next/router'
 import { io } from 'socket.io-client'
@@ -20,14 +22,37 @@ import {
 import { GiTakeMyMoney } from 'react-icons/gi'
 import Link from 'next/link'
 import { type IAguaProps } from '../Gerar_Agua/Reac_Agua'
+import { ButtonSaveDate } from '../Modal/styles'
+import { FaTrashAlt, FaEdit } from 'react-icons/fa'
+import { IoMdDownload, IoMdRefresh } from 'react-icons/io'
+
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { Pix } from '../Gerar_Pix/Reac_Pix'
 
 export default function AgPagamento() {
   const [boletos, setBoletos] = useState<IBoletoProps[]>([])
   const [agua, setAgua] = useState<IAguaProps[]>([])
   const [loading, setLoading] = useState(false)
   const [tipoUser, setTipoUser] = useState('')
+  const [chavePix, setChavePix] = useState<string | undefined>('')
+
+  const [nomeAvalista, setNomeAvalista] = useState('')
 
   const router = useRouter()
+
+  async function getConfig() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
+    await api
+      .get('/configuracoes', { headers: { Authorization: Auth } })
+      .then(({ data }) => {
+        setNomeAvalista(data.nomeAvalistaBoleto)
+        setChavePix(data.chavePix)
+      })
+      .catch(error => {
+        alert(error)
+      })
+  }
 
   async function getBoletos() {
     const token = window.localStorage.getItem('token')
@@ -85,8 +110,22 @@ export default function AgPagamento() {
   }, [])
 
   useEffect(() => {
+    getConfig()
+  }, [])
+
+  useEffect(() => {
     registerSocket()
   }, [])
+
+  async function HandleDelete(id?: number) {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
+    await api
+      .delete(`/boleto/${id}`, { headers: { Authorization: Auth } })
+      .then(async () => {
+        return await router.push('/dashboard')
+      })
+  }
 
   return (
     <WrapperAgPagamentos>
@@ -112,12 +151,106 @@ export default function AgPagamento() {
                       {boleto.tipo?.toUpperCase()} <TableData />{' '}
                       {boleto.nomeCliente}
                     </TableData>
-                    <TableData>
-                      {boleto.codigoBarrasPix === ''
-                        ? 'Aguardando'
-                        : 'Registrado'}
-                    </TableData>
+
                     <TableData>{boleto.dataVencimento}</TableData>
+
+                    <Link
+                      style={{
+                        textDecoration: 'none',
+                        color: 'white',
+                        padding: 2.5,
+                        margin: 0,
+                        width: 25,
+                        backgroundColor: '#00cc4c',
+                        boxShadow: '0 0 0.4rem 0 #00cc4c',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        borderRadius: 25
+                      }}
+                      key={boleto.id}
+                      href={`/paymentDate/${boleto.id}`}
+                    >
+                      <FaEdit size={15} />
+                    </Link>
+
+                    <ButtonSaveDate
+                      style={{ padding: 5, margin: 0, width: '25px' }}
+                      onClick={() => {
+                        HandleDelete(boleto.id)
+                      }}
+                    >
+                      <FaTrashAlt />
+                    </ButtonSaveDate>
+
+                    <ButtonSaveDate
+                      style={{
+                        padding: 2.5,
+                        margin: 0,
+                        width: '25px',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                    >
+                      {boleto.nomeCliente === '' ||
+                        boleto.valor === '' ||
+                        boleto.dataVencimento === '' ||
+                        nomeAvalista === '' ||
+                        boleto.codigoBarrasPix === '' ? (
+                        'Aguarde'
+                      ) : boleto.tipo === 'bo' ? (
+                        <PDFDownloadLink
+                          style={{
+                            display: 'flex',
+                            textDecoration: 'none',
+                            color: 'white',
+                            textAlign: 'center',
+                            justifyContent: 'center'
+                          }}
+                          document={
+                            <Boleto
+                              nomeCliente={boleto.nomeCliente}
+                              codigoCliente={Math.floor(
+                                Date.now() * Math.random()
+                              ).toString()}
+                              valor={boleto.valor}
+                              nomeAvalistaBoleto={nomeAvalista}
+                              dataVencimento={boleto.dataVencimento}
+                              codigoBarrasPix={boleto.codigoBarrasPix}
+                              descricao={boleto.descricao}
+                            />
+                          }
+                          fileName={`${boleto.nomeCliente} - CPF ${boleto.cpfCnpj} .pdf`}
+                        >
+                          {({ blob, url, loading, error }) =>
+                            loading ? <IoMdRefresh /> : <IoMdDownload />
+                          }
+                        </PDFDownloadLink>
+                      ) : (
+                        <PDFDownloadLink
+                          style={{ textDecoration: 'none', color: 'white' }}
+                          document={
+                            <Pix
+                              cidade={boleto.cidade}
+                              nomeCliente={boleto.nomeCliente}
+                              codigoCliente={Math.floor(
+                                Date.now() * Math.random()
+                              ).toString()}
+                              valor={boleto.valor}
+                              nomeAvalistaPix={nomeAvalista}
+                              dataVencimento={boleto.dataVencimento}
+                              pix={boleto.codigoBarrasPix}
+                              cpfCnpj={boleto?.cpfCnpj}
+                              descricao={boleto.descricao}
+                            />
+                          }
+                          fileName={`${boleto.nomeCliente} - CPF ${boleto.cpfCnpj} .pdf`}
+                        >
+                          {({ blob, url, loading, error }) =>
+                            loading ? <IoMdRefresh /> : <IoMdDownload />
+                          }
+                        </PDFDownloadLink>
+                      )}
+                    </ButtonSaveDate>
                   </TableRow>
                 </Link>
               ))}

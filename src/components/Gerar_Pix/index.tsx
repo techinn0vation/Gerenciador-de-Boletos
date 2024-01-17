@@ -8,7 +8,8 @@
 import {
   BlockRegistration,
   FieldRegistration,
-  ButtonSaveDate
+  ButtonSaveDate,
+  FieldRegistrationTextArea
 } from '../Modal/styles' // Importando Styles de Modal.
 
 import { api } from '../../services/api'
@@ -73,7 +74,7 @@ export default function GerarPix() {
         {
           nomeCliente,
           valor,
-          dataVencimento,
+          dataVencimento: dataVencimento.split('-').reverse().join('/'),
           codigoCliente: clienteCodigo,
           cpfCnpj,
           descricao,
@@ -105,7 +106,8 @@ export default function GerarPix() {
 
     // Atualiza o valor do input com a versão formatada
     input.value = formattedValue
-    setDataVencimento(formattedValue)
+    const formatoCerto = formattedValue.split('-').reverse().join('/')
+    setDataVencimento(formatoCerto)
   }
 
   function formatCPF(event: any) {
@@ -183,7 +185,7 @@ export default function GerarPix() {
 
             />
             <DisplayInputMask
-              type="text"
+              type="date"
               value={dataVencimento}
               pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
               placeholder="Data de Vencimento"
@@ -195,8 +197,7 @@ export default function GerarPix() {
                 setDataVencimento(e.target.value)
               }}
             />
-            <FieldRegistration
-              type="text"
+            <FieldRegistrationTextArea
               placeholder="descrição"
               value={descricao}
               onChange={e => {

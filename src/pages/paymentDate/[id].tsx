@@ -9,7 +9,8 @@ import { useState, useEffect } from 'react'
 import {
   BlockRegistration,
   FieldRegistration,
-  ButtonSaveDate
+  ButtonSaveDate,
+  FieldRegistrationTextArea
 } from '@components/Modal/styles'
 
 import {
@@ -272,8 +273,7 @@ export default function PaymentDate() {
                   setDataVencimento(e.target.value)
                 }}
               />
-              <FieldRegistration
-                type="text"
+              <FieldRegistrationTextArea
                 value={descricao}
                 onChange={e => {
                   setDescricao(e.target.value)
