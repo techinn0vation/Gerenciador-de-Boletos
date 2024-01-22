@@ -165,7 +165,8 @@ export default function AgPagamento() {
                         boxShadow: '0 0 0.4rem 0 #00cc4c',
                         alignItems: 'center',
                         textAlign: 'center',
-                        borderRadius: 25
+                        borderRadius: 25,
+                        marginBottom: 20
                       }}
                       key={boleto.id}
                       href={`/paymentDate/${boleto.id}`}
@@ -174,7 +175,12 @@ export default function AgPagamento() {
                     </Link>
 
                     <ButtonSaveDate
-                      style={{ padding: 5, margin: 0, width: '25px' }}
+                      style={{
+                        padding: 5,
+                        margin: 0,
+                        width: '25px',
+                        marginBottom: 20
+                      }}
                       onClick={() => {
                         HandleDelete(boleto.id)
                       }}
@@ -188,7 +194,8 @@ export default function AgPagamento() {
                         margin: 0,
                         width: '25px',
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        marginBottom: 20
                       }}
                     >
                       {boleto.nomeCliente === '' ||

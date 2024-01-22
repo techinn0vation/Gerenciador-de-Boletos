@@ -1,4 +1,6 @@
-import { useState } from 'react'
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+import { useEffect, useState } from 'react'
 import { DisplayTypography } from '@/components/GeralComponents'
 
 import { AiFillHome, AiFillSetting } from 'react-icons/ai'
@@ -20,13 +22,30 @@ import {
   DisplayLink,
   WrapperSideBar
 } from './styles'
+import { api } from '@/services/api'
 
 export default function SideBar() {
   const [profileOpen, setProfileOpen] = useState(false)
+  const [admin, setAdmin] = useState(false)
 
   function toggleProfile() {
     setProfileOpen(!profileOpen)
   }
+
+  async function handleUser() {
+    const token = window.localStorage.getItem('token')
+    const Auth = `Bearer ${token}`
+
+    await api
+      .get('/user', { headers: { Authorization: Auth } })
+      .then(result => {
+        setAdmin(result.data.tipo === 'A')
+      })
+  }
+
+  useEffect(() => {
+    handleUser()
+  }, [])
 
   return (
     <WrapperSideBar>
@@ -38,12 +57,14 @@ export default function SideBar() {
             </DisplayIcon>
             <DisplayTypography DisplayTypography="painel" />
           </DisplayLink>
-          <DisplayLink href="/usuarios">
-            <DisplayIcon>
-              <FaUsers />
-            </DisplayIcon>
-            <DisplayTypography DisplayTypography="usuários" />
-          </DisplayLink>
+          {admin && (
+            <DisplayLink href="/usuarios">
+              <DisplayIcon>
+                <FaUsers />
+              </DisplayIcon>
+              <DisplayTypography DisplayTypography="usuários" />
+            </DisplayLink>
+          )}
           <DisplayLink href="/operador">
             <DisplayIcon>
               <MdPrecisionManufacturing />

@@ -44,6 +44,12 @@ export default function TopBar() {
     getUser()
   }, [])
 
+  function handleLogOut() {
+    window.localStorage.clear()
+
+    window.location.href = '/login'
+  }
+
   return (
     <WrapperTopBar>
       <ContentTopBar>
@@ -65,7 +71,7 @@ export default function TopBar() {
                 }
               />
             </ToggleLink>
-            <ToggleLink href="/login">
+            <ToggleLink href="/login" onClick={handleLogOut}>
               <DisplayTypography DisplayTypography="sair" />
             </ToggleLink>
           </ToggleProfile>
