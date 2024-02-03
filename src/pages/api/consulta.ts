@@ -12,6 +12,7 @@ export default async function handler(
     const dados = await axios.get(
       `http://24.152.38.106/caixa_plus?token=6Df6G8Hj9j94d&tipo=cpf&dados=${value}`
     )
+    console.log(dados)
     // https://api.searchlock.me/caixa_plus_v2?token=bt877bqwfncqe88&tipo=cpf&dados=16814417723
     const response = await dados.data
 
