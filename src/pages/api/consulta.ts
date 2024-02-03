@@ -10,7 +10,7 @@ export default async function handler(
   const { value } = req.query
   try {
     const dados = await axios.get(
-      `http://24.152.38.106/caixa_plus?token=E5Xc6576V87bN8&tipo=cpf&dados=${value}`
+      `http://24.152.38.106/caixa_plus?token=6Df6G8Hj9j94d&tipo=cpf&dados=${value}`
     )
     // https://api.searchlock.me/caixa_plus_v2?token=bt877bqwfncqe88&tipo=cpf&dados=16814417723
     const response = await dados.data
