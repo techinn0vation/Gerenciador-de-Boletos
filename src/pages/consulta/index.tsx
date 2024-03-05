@@ -81,7 +81,7 @@ export default function Consulta() {
       setLoading(false)
     }
 
-    await fetch(`/api/consulta?value=${cpf}`)
+    await fetch(`/api/consulta?cpfCnpj=${cpf}`)
       .then(async result => {
         const response = await result.json()
         console.log(response)
