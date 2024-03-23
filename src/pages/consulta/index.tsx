@@ -327,27 +327,27 @@ export default function Consulta() {
     setCopied(true)
   }
 
-  function copyHtmlContent() {
-    if (!contentRef.current) return
+  // function copyHtmlContent() {
+  //   if (!contentRef.current) return
 
-    const range = document.createRange()
-    range.selectNode(contentRef.current)
+  //   const range = document.createRange()
+  //   range.selectNode(contentRef.current)
 
-    try {
-      navigator.clipboard
-        .writeText(contentRef.current.innerHTML)
-        .then(() => {
-          console.log('Conteúdo copiado com sucesso')
-        })
-        .catch(err => {
-          console.error('Erro ao copiar o conteúdo', err)
-        })
-    } catch (err) {
-      console.error('Erro ao copiar o conteúdo', err)
-    }
+  //   try {
+  //     navigator.clipboard
+  //       .writeText(contentRef.current.innerHTML)
+  //       .then(() => {
+  //         console.log('Conteúdo copiado com sucesso')
+  //       })
+  //       .catch(err => {
+  //         console.error('Erro ao copiar o conteúdo', err)
+  //       })
+  //   } catch (err) {
+  //     console.error('Erro ao copiar o conteúdo', err)
+  //   }
 
-    window.getSelection()?.removeAllRanges()
-  }
+  //   window.getSelection()?.removeAllRanges()
+  // }
 
   return (
     <Layout>
@@ -444,7 +444,7 @@ export default function Consulta() {
                       {copied ? 'copiado!' : 'copiar dados'}
                     </ButtonConsult>
                   </CopyToClipboard>
-                  <ButtonConsult onClick={copyHtmlContent}>Teste</ButtonConsult>
+                  {/* <ButtonConsult onClick={copyHtmlContent}>Teste</ButtonConsult> */}
                 </ContentButtons>
                 <div
                   style={{
