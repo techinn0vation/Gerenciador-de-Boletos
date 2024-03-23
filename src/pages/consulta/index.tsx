@@ -24,7 +24,7 @@ import {
 import moment from 'moment'
 
 import { api } from '@/services/api'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { PDFDownloadLink, PDFViewer, Document } from '@react-pdf/renderer'
 import { DisplayInputMask } from '@/components/Gerar_Boleto/styles'
@@ -43,6 +43,7 @@ import {
 } from '@/components/Gerar_Consulta'
 
 export default function Consulta() {
+  const contentRef = useRef<HTMLDivElement>(null)
   const [nome, setNome] = useState('')
   const [cpfCnpj, setCpfCnpj] = useState('')
   const [serasa, setSerasa] = useState<ISerasa[]>([])
@@ -326,6 +327,28 @@ export default function Consulta() {
     setCopied(true)
   }
 
+  function copyHtmlContent() {
+    if (!contentRef.current) return
+
+    const range = document.createRange()
+    range.selectNode(contentRef.current)
+
+    window.getSelection()?.removeAllRanges()
+    window.getSelection()?.addRange(range)
+
+    try {
+      const successful = document.execCommand('copy')
+      const message = successful
+        ? 'Conteúdo copiado com sucesso'
+        : 'Falha ao copiar o conteúdo'
+      console.log(message)
+    } catch (err) {
+      console.error('Erro ao copiar o conteúdo', err)
+    }
+
+    window.getSelection()?.removeAllRanges()
+  }
+
   return (
     <Layout>
       <WrapperConsult>
@@ -421,6 +444,7 @@ export default function Consulta() {
                       {copied ? 'copiado!' : 'copiar dados'}
                     </ButtonConsult>
                   </CopyToClipboard>
+                  <ButtonConsult onClick={copyHtmlContent}>Teste</ButtonConsult>
                 </ContentButtons>
                 <div
                   style={{
@@ -429,6 +453,8 @@ export default function Consulta() {
                     marginTop: 50,
                     width: '100%'
                   }}
+                  ref={contentRef}
+                  id="copy"
                 >
                   <div style={(styles.containerText, { width: '100%' })}>
                     <div style={styles.contentBlock}>
