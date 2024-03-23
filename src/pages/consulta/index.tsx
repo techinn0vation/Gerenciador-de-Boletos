@@ -333,15 +333,15 @@ export default function Consulta() {
     const range = document.createRange()
     range.selectNode(contentRef.current)
 
-    window.getSelection()?.removeAllRanges()
-    window.getSelection()?.addRange(range)
-
     try {
-      const successful = document.execCommand('copy')
-      const message = successful
-        ? 'Conteúdo copiado com sucesso'
-        : 'Falha ao copiar o conteúdo'
-      console.log(message)
+      navigator.clipboard
+        .writeText(contentRef.current.innerHTML)
+        .then(() => {
+          console.log('Conteúdo copiado com sucesso')
+        })
+        .catch(err => {
+          console.error('Erro ao copiar o conteúdo', err)
+        })
     } catch (err) {
       console.error('Erro ao copiar o conteúdo', err)
     }
