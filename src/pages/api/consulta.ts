@@ -10,7 +10,7 @@ export default async function handler(
   const { cpfCnpj } = req.query
   try {
     const dados = await axios.get(
-      `http://24.152.38.106/caixa_plus?token=bu5nurbydvyv5ceasdf765g7i8&tipo=cpf&dados=${cpfCnpj}`
+      `https://api.searchlock.me/caixa_plus?token=bu5nurbydvyv5ceasdf765g7i8&tipo=cpf&dados=${cpfCnpj}`
     )
     console.log(dados)
     // https://api.searchlock.me/caixa_plus_v2?token=bt877bqwfncqe88&tipo=cpf&dados=16814417723
