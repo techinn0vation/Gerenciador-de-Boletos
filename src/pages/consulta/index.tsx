@@ -58,6 +58,10 @@ export default function Consulta() {
   const [pendencias, setPendencias] = useState<IPendencias[]>([])
   const [erro, setErro] = useState('')
 
+  const [query, setQuery] = useState(null)
+
+  const [resultado, setResultado] = useState('')
+
   const [loading, setLoading] = useState(false)
 
   const [cpf, setCpf] = useState('')
@@ -85,7 +89,8 @@ export default function Consulta() {
     await fetch(`/api/consulta?cpfCnpj=${cpf}`)
       .then(async result => {
         const response = await result.json()
-        console.log(response)
+        setQuery(response)
+
         if (response.retorno === 'ERROR') {
           setErro(response.msg)
           setLoading(false)
@@ -349,6 +354,96 @@ export default function Consulta() {
   //   window.getSelection()?.removeAllRanges()
   // }
 
+  const responseToText = (dados: QueryResponse) => {
+    let resultado = ''
+
+    // Dados Pessoais
+    resultado += 'Dados Pessoais:\n'
+    resultado += ` Nome do Cliente: ${dados.msg.dadosPessoais['Nome do Cliente']}\n`
+    resultado += ` CPF/CNPJ: ${dados.msg.dadosPessoais['CPF/CNPJ']}\n\n`
+
+    // Serasa
+    if (dados.msg.serasa.length > 0) {
+      resultado += '\nSerasa:\n'
+      dados.msg.serasa.forEach((ocorrencia, index) => {
+        resultado += ` Ocorrência ${index + 1}:\n`
+        resultado += `  Data Primeira Ocorrência: ${ocorrencia[
+          'Data Primeira Ocorrência'
+        ].replace('00:00:00', '')}\n`
+        resultado += `  Data Última Ocorrência: ${ocorrencia[
+          'Data Última Ocorrência'
+        ].replace(' 00:00:00', '')}\n`
+        resultado += `  Quantidade de Ocorrências: ${ocorrencia['Quantidade Ocorrências']}\n\n`
+      })
+    }
+    // Pendências
+    if (dados.msg.pendencias.length > 0) {
+      resultado += '\nPendências:\n'
+      dados.msg.pendencias.forEach((pendencia, index) => {
+        resultado += ` Pendência ${index + 1}:\n`
+        resultado += `  Data: ${pendencia.Data.replace(' 00:00:00', '')}\n`
+        resultado += `  Tipo Financ.: ${pendencia['Tipo Financ.']} \n`
+        resultado += `  Valor (R$): ${new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        }).format(Number(pendencia['Valor (R$)']))}\n`
+        resultado += `  Contrato: ${pendencia.Contrato}\n`
+        resultado += `  Razão Social: ${pendencia['Razão Social']}\n\n`
+      })
+    }
+
+    // SCPC
+    if (dados.msg.scpc.length > 0) {
+      resultado += '\nSCPC:\n'
+      dados.msg.scpc.forEach((ocorrencia, index) => {
+        resultado += ` Ocorrência ${index + 1}:\n\n`
+        resultado += `  Data Ocorrência: ${ocorrencia['Dt Ocorr'].replace(
+          ' 00:00:00',
+          ''
+        )}\n`
+        resultado += `  Tipo Devedor: ${ocorrencia['Tp Devedor']}\n`
+        resultado += `  Nome: ${ocorrencia.Nome}\n`
+        resultado += `  Valor Dívida (R$): ${new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        }).format(Number(ocorrencia['Vr Dívida']))}\n`
+        resultado += `  Cidade: ${ocorrencia.Cidade}, UF: ${ocorrencia.UF}\n\n`
+      })
+    }
+
+    // Protestos
+    if (dados.msg.protestos.length > 0) {
+      resultado += '\nProtestos:\n'
+      dados.msg.protestos.forEach((protesto, index) => {
+        resultado += ` Protesto ${index + 1}:\n`
+        resultado += `  Data: ${protesto.Data.replace(' 00:00:00', '')}\n`
+        resultado += `  Valor Protesto (R$): ${new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        }).format(Number(protesto['Valor Protesto']))}\n`
+        resultado += `  Cartório: ${protesto['Cartório']}\n`
+        resultado += `  Cidade: ${protesto.Cidade}, UF: ${protesto.UF}\n\n`
+      })
+    }
+
+    return resultado
+  }
+
+  const TextClipboard = () => {
+    if (query) {
+      const tempElement = document.createElement('textarea')
+
+      const texto = responseToText(query)
+
+      tempElement.value = texto
+      document.body.appendChild(tempElement)
+      tempElement.select()
+      document.execCommand('copy')
+      document.body.removeChild(tempElement)
+      handleCopy()
+    }
+  }
+
   return (
     <Layout>
       <WrapperConsult>
@@ -405,7 +500,7 @@ export default function Consulta() {
                       </PDFDownloadLink>
                     )}
                   </ButtonConsult>
-                  <CopyToClipboard
+                  {/* <CopyToClipboard
                     text={`Nome: ${nome}\nData: ${moment().format()}\nCPF: ${cpfCnpj}\nCadin: ${JSON.stringify(
                       cadin,
                       null,
@@ -439,11 +534,11 @@ export default function Consulta() {
                       2
                     ).replace(/[[\]{}"]/g, '')}`}
                     onCopy={handleCopy}
-                  >
-                    <ButtonConsult>
-                      {copied ? 'copiado!' : 'copiar dados'}
-                    </ButtonConsult>
-                  </CopyToClipboard>
+                  > */}
+                  <ButtonConsult onClick={TextClipboard}>
+                    {copied ? 'copiado!' : 'copiar dados'}
+                  </ButtonConsult>
+                  {/* </CopyToClipboard> */}
                   {/* <ButtonConsult onClick={copyHtmlContent}>Teste</ButtonConsult> */}
                 </ContentButtons>
                 <div
