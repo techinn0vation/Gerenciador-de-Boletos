@@ -431,15 +431,9 @@ export default function Consulta() {
 
   const TextClipboard = () => {
     if (query) {
-      const tempElement = document.createElement('textarea')
-
       const texto = responseToText(query)
 
-      tempElement.value = texto
-      document.body.appendChild(tempElement)
-      tempElement.select()
-      document.execCommand('copy')
-      document.body.removeChild(tempElement)
+      navigator.clipboard.writeText(texto)
       handleCopy()
     }
   }
