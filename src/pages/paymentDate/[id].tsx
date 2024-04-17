@@ -50,6 +50,7 @@ export default function PaymentDate() {
   const [codigoBarras, setCodigoBarras] = useState<string | undefined>('')
   const [codigoCliente, setCodigoCliente] = useState<string | undefined>('')
   const [tipoUser, setTipoUser] = useState('')
+  const [txid, setTxid] = useState('')
   const [cidade, setCidade] = useState<string | undefined>('')
   const [chavePix, setChavePix] = useState<string | undefined>('')
   const [chaveCopiaCola, setChaveCopiaCola] = useState<string>('')
@@ -112,6 +113,7 @@ export default function PaymentDate() {
               .then(async ({ data: dataConfig }) => {
                 setNomeAvalista(dataConfig.nomeAvalistaPix)
                 setChavePix(dataConfig.chavePix)
+                setTxid(dataConfig.codigoTransferencia)
 
                 const valorCerto = valor.length === 6 ? valor.replace(',', '.') : valor.replace('.', '').replace(',', '.')
 
@@ -119,7 +121,8 @@ export default function PaymentDate() {
                   nomeCliente: dataConfig.nomeAvalistaPix,
                   cidade: dataConfig.cidade,
                   pix: dataConfig.chavePix,
-                  valorAPagar: valorCerto
+                  valorAPagar: valorCerto,
+                  txid: dataConfig.codigoTransferencia
                 }).then(result => {
                   setCodigoBarras(result.data.brcode)
                   setChaveCopiaCola(result.data.brcode)

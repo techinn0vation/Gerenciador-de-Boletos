@@ -211,6 +211,7 @@ interface IBoletoProps {
   cpfCnpj?: string
   nomeAvalistaPix: string
   cidade?: string
+  txid?: string
 }
 
 export function Pix({
@@ -222,6 +223,7 @@ export function Pix({
   dataVencimento,
   codigoCliente,
   pix,
+  txid,
   descricao
 }: IBoletoProps) {
   const [copiaCola, setCopiaCola] = useState<string | null>(null)
@@ -240,7 +242,8 @@ export function Pix({
       nomeCliente: nomeAvalistaPix,
       cidade,
       pix,
-      valorAPagar: valorCerto
+      valorAPagar: valorCerto,
+      txid
     })
 
     const qrcode = await QRCode.toDataURL(result.data.brcode).then(url => url)

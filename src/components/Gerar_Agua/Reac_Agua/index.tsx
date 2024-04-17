@@ -99,7 +99,8 @@ export interface IAguaProps {
   matricula?: string
   nomeAvalistaPix: string
   cidade?: string
-  pix?: string
+  pix?: string,
+  txid?: string
 }
 
 export function Agua({
@@ -112,7 +113,8 @@ export function Agua({
   matricula,
   nomeAvalistaPix,
   cidade,
-  pix
+  pix,
+  txid
 }: IAguaProps) {
 
   const [imgB002Url, setImgB002Url] = useState('');
