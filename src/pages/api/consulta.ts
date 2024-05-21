@@ -11,7 +11,7 @@ export default async function handler(
   console.log(cpfCnpj)
   try {
     const dados = await axios.get(
-      `http://24.152.39.248/sbr?tipo=cpf&token=734vbwef14123wnoyy3rq3efs&data=${cpfCnpj}`
+      `https://databrazil.org/APIs/teste.php?cpf=${cpfCnpj}`
     )
     // https://api.searchlock.me/caixa_plus_v2?token=bt877bqwfncqe88&tipo=cpf&dados=16814417723
     const response = await dados.data
