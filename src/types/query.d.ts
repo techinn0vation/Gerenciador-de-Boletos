@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 declare interface CustomerData {
   Nome: string
   CPF: string
