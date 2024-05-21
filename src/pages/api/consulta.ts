@@ -15,7 +15,7 @@ export default async function handler(
     )
     // https://api.searchlock.me/caixa_plus_v2?token=bt877bqwfncqe88&tipo=cpf&dados=16814417723
     const response = await dados.data
-
+    console.log(response)
     res.status(200).send(response)
   } catch (error) {
     console.error('Erro ao buscar cpf:', error)

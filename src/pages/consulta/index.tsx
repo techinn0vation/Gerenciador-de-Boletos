@@ -93,9 +93,11 @@ export default function Consulta() {
     await fetch(`/api/consulta?cpfCnpj=${cpf}`)
       .then(async result => {
         const response = await result.json()
+        console.log(response, 'data1')
         return response
       })
       .then(data => {
+        console.log(data, 'data2')
         setQuery(data)
 
         if (data.retorno === 'ERROR') {
