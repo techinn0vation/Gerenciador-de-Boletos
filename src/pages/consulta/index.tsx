@@ -97,7 +97,6 @@ export default function Consulta() {
         return response
       })
       .then(data => {
-        console.log(data, 'data2')
         setQuery(data)
 
         if (data.retorno === 'ERROR') {
@@ -227,8 +226,8 @@ export default function Consulta() {
     // Dados Pessoais
     resultado += 'Dados Pessoais:\n'
     resultado += ` Nome do Cliente: ${dados.msg['IDENTIFICAÇÃO']['Nome']}\n`
-    resultado += ` CPF/CNPJ: ${dados.msg.IDENTIFICAÇÃO.CPF}\n`
-    resultado += ` Data de Nascimento: ${dados.msg.IDENTIFICAÇÃO['Data de Nascimento']}\n\n`
+    resultado += ` CPF/CNPJ: ${dados.msg['IDENTIFICAÇÃO'].CPF}\n`
+    resultado += ` Data de Nascimento: ${dados.msg['IDENTIFICAÇÃO']['Data de Nascimento']}\n\n`
 
     // Debitos
     if (debitos.length > 0) {
