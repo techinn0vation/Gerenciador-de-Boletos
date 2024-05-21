@@ -19,6 +19,6 @@ export default async function handler(
     res.status(200).send(response)
   } catch (error) {
     console.error('Erro ao buscar cpf:', error)
-    res.status(500).json({ error: 'Erro ao buscar cpf' })
+    res.status(500).json({ error: 'Erro ao buscar cpf', err: error })
   }
 }
