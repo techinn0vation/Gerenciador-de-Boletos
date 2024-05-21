@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
@@ -31,31 +32,34 @@ import { DisplayInputMask } from '@/components/Gerar_Boleto/styles'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import {
-  type ISerasa,
-  type ISCPC,
-  type IProtestos,
-  type IChequeSemFundo,
-  type ICadin,
-  type ISiccf,
-  type IConvenioDevedores,
-  type IPendencias,
-  styles
+  type IIdentificacao,
+  styles,
+  type IRegistrosDebitos,
+  type IRegistrosDebitosItem,
+  type IProtestosItem,
+  type IProtestos
 } from '@/components/Gerar_Consulta'
+import { debug } from 'console'
 
 export default function Consulta() {
   const contentRef = useRef<HTMLDivElement>(null)
-  const [nome, setNome] = useState('')
-  const [cpfCnpj, setCpfCnpj] = useState('')
-  const [serasa, setSerasa] = useState<ISerasa[]>([])
-  const [scpc, setScpc] = useState<ISCPC[]>([])
-  const [protestos, setProtestos] = useState<IProtestos[]>([])
-  const [chequeSF, setChequeSF] = useState<IChequeSemFundo[]>([])
-  const [cadin, setCadin] = useState<ICadin[]>([])
-  const [siccf, setSiccf] = useState<ISiccf[]>([])
-  const [convenioDevedores, setConvenioDevedores] = useState<
-    IConvenioDevedores[]
-  >([])
-  const [pendencias, setPendencias] = useState<IPendencias[]>([])
+  const [identificacao, setIdentificacao] = useState<IIdentificacao>({
+    'Data de Nascimento': '',
+    CPF: '',
+    Nome: ''
+  })
+  const [registroDebitos, setRegistroDebitos] = useState<IRegistrosDebitos>({
+    'Valor total (R$):': ''
+  })
+
+  const [registroProtestos, setRegistroProtestos] = useState<IProtestos>({
+    'Valor total (R$):': ''
+  })
+
+  const [protestos, setProtestos] = useState<IProtestosItem[]>([])
+
+  const [debitos, setDebitos] = useState<IRegistrosDebitosItem[]>([])
+
   const [erro, setErro] = useState('')
 
   const [query, setQuery] = useState(null)
@@ -68,18 +72,18 @@ export default function Consulta() {
   const [copied, setCopied] = useState(false)
 
   async function onConsulta() {
-    if (nome !== '') {
-      setNome('')
-      setCpf('')
-      setSerasa([])
-      setPendencias([])
-      setScpc([])
-      setProtestos([])
-      setChequeSF([])
-      setCadin([])
-      setSiccf([])
-      setConvenioDevedores([])
-    }
+    // if (nome !== '') {
+    //   setNome('')
+    //   setCpf('')
+    //   setSerasa([])
+    //   setPendencias([])
+    //   setScpc([])
+    //   setProtestos([])
+    //   setChequeSF([])
+    //   setCadin([])
+    //   setSiccf([])
+    //   setConvenioDevedores([])
+    // }
     setLoading(true)
     if (cpf.length < 11) {
       alert('CPF inválido')
@@ -89,213 +93,74 @@ export default function Consulta() {
     await fetch(`/api/consulta?cpfCnpj=${cpf}`)
       .then(async result => {
         const response = await result.json()
-        setQuery(response)
+        return response
+      })
+      .then(data => {
+        setQuery(data)
 
-        if (response.retorno === 'ERROR') {
-          setErro(response.msg)
+        if (data.retorno === 'ERROR') {
+          setErro(data.msg)
           setLoading(false)
-          return alert(response.msg)
+          return alert(data.msg)
         }
 
-        setNome(response.msg.dadosPessoais['Nome do Cliente'])
-        setCpfCnpj(response.msg.dadosPessoais['CPF/CNPJ'])
+        setIdentificacao({
+          'Data de Nascimento': data.msg['IDENTIFICAÇÃO']['Data de Nascimento'],
+          Nome: data.msg['IDENTIFICAÇÃO'].Nome,
+          CPF: data.msg['IDENTIFICAÇÃO'].CPF
+        })
 
-        if (response.msg.serasa.length === 0) {
-          setSerasa(prevList => [
-            ...prevList,
-            { dataP: '', dataU: '', qteOcorrencias: '' }
-          ])
-        } else if (response.msg.serasa.length > 0) {
-          for (let i = 0; i < response.msg.serasa.length; i++) {
-            setSerasa(prevList => [
-              ...prevList,
-              {
-                dataP: response.msg.serasa[i]['Data Primeira Ocorrência'],
-                dataU: response.msg.serasa[i]['Data Última Ocorrência'],
-                qteOcorrencias: response.msg.serasa[i]['Quantidade Ocorrências']
-              }
-            ])
-          }
-        }
+        const qntDebitos = Number(data.msg['PAINEL DE CONTROLE'][0].Quantidade)
+        const qntProtestos = Number(
+          data.msg['PAINEL DE CONTROLE'][6].Quantidade
+        )
 
-        if (response.msg.pendencias.length === 0) {
-          setPendencias(prevList => [
-            ...prevList,
-            {
-              data: '',
-              origem: '',
-              tipo: '',
-              valor: ''
-            }
-          ])
-        } else if (response.msg.pendencias.length > 0) {
-          for (let i = 0; i < response.msg.pendencias.length; i++) {
-            setPendencias(prevList => [
-              ...prevList,
-              {
-                data: response.msg.pendencias[i].Data,
-                tipo: response.msg.pendencias[i]['Tipo Financ.'],
-                origem: response.msg.pendencias[i]['Razão Social'],
-                valor: response.msg.pendencias[i]['Valor (R$)']
-              }
-            ])
-          }
-        }
-
-        if (response.msg.scpc.length === 0) {
-          setScpc(prevList => [
-            ...prevList,
-            {
-              nome: '',
-              disponibilidade: '',
-              cidadeUF: '',
-              data: '',
-              valor: '',
-              tipo: ''
-            }
-          ])
-        } else if (response.msg.scpc.length > 0) {
-          for (let i = 0; i < response.msg.scpc.length; i++) {
-            setScpc(prevList => [
-              ...prevList,
-              {
-                nome: response.msg.scpc[i].Nome,
-                disponibilidade: response.msg.scpc[i]['Dt Disp'],
-                cidadeUF: `${response.msg.scpc[i].Cidade}/${response.msg.scpc[i].UF}`,
-                data: response.msg.scpc[i]['Dt Ocorr'],
-                valor: response.msg.scpc[i]['Vr Dívida'],
-                tipo: response.msg.scpc[i]['Tp Devedor']
-              }
-            ])
-          }
-        }
-
-        if (response.msg.protestos.length === 0) {
-          setProtestos(prevList => [
-            ...prevList,
-            {
-              cartorio: '',
-              cidadeUF: '',
-              data: '',
-              valor: ''
-            }
-          ])
-        } else if (response.msg.protestos.length) {
-          for (let i = 0; i < response.msg.protestos.length; i++) {
+        if (qntProtestos > 0) {
+          setRegistroProtestos({
+            'Valor total (R$):': data.msg['PROTESTOS']['Valor total (R$):']
+          })
+          for (let i = 0; i < qntProtestos; i++) {
             setProtestos(prevList => [
               ...prevList,
               {
-                cartorio: response.msg.protestos[i]['Cartório'],
-                cidadeUF: `${response.msg.protestos[i].Cidade}/${response.msg.protestos[i].UF}`,
-                data: response.msg.protestos[i].Data,
-                valor: response.msg.protestos[i]['Valor Protesto']
+                // eslint-disable-next-line prettier/prettier
+                "Data do protesto": data.msg['PROTESTOS'][`${i}`]['Data do protesto'],
+                // eslint-disable-next-line prettier/prettier
+                "Valor(R$)": data.msg['PROTESTOS'][`${i}`]['Valor(R$)'],
+                Cartório: data.msg['PROTESTOS'][`${i}`]['Cartório'],
+                Cidade: data.msg['PROTESTOS'][`${i}`]['Cidade'],
+                UF: data.msg['PROTESTOS'][`${i}`]['UF']
               }
             ])
           }
         }
 
-        if (response.msg.cheques.length === 0) {
-          setChequeSF(prevList => [
-            ...prevList,
-            {
-              agencia: '',
-              alinea: '',
-              banco: '',
-              cheque: '',
-              cidadeUF: '',
-              data: '',
-              qteCheque: '',
-              valor: ''
-            }
-          ])
-        } else if (response.msg.cheques.length > 0) {
-          for (let i = 0; i < response.msg.cheques.length; i++) {
-            setChequeSF(prevList => [
+        if (qntDebitos > 0) {
+          setRegistroDebitos({
+            'Valor total (R$):':
+              data.msg['REGISTROS DE DÉBITOS']['Valor total (R$):']
+          })
+
+          for (let i = 0; i < qntDebitos; i++) {
+            setDebitos(prevList => [
               ...prevList,
               {
-                cheque: response.msg.cheques[i].Cheque,
-                agencia: response.msg.cheques[i]['Agência'],
-                alinea: response.msg.cheques[i].Alinea,
-                banco: response.msg.cheques[i].Banco,
-                cidadeUF: `${response.msg.cheques[i].Cidade}/${response.msg.cheques[i].UF}`,
-                data: response.msg.cheques[i].Data,
-                qteCheque: response.msg.cheques[i]['Qte Cheque'],
-                valor: response.msg.cheques[i]['Vlr Cheque']
-              }
-            ])
-          }
-        }
-
-        if (response.msg.cadin.length === 0) {
-          setCadin(prevList => [
-            ...prevList,
-            {
-              nomeCredor: '',
-              siglaCredor: ''
-            }
-          ])
-        } else if (response.msg.cadin.length > 0) {
-          setCadin(prevList => [
-            ...prevList,
-            {
-              nomeCredor: response.msg.cadin[1]['Nome Credor'],
-              siglaCredor: response.msg.cadin[1]['Sigla Credor']
-            }
-          ])
-        }
-
-        if (response.msg.convenioDevedores.length === 0) {
-          setConvenioDevedores(prevList => [
-            ...prevList,
-            {
-              cnpj: '',
-              bancoContrato: '',
-              tipoFinanciamento: '',
-              cidadeUF: '',
-              data: '',
-              valor: ''
-            }
-          ])
-        } else if (response.msg.convenioDevedores.length > 0) {
-          for (let i = 0; i < response.msg.convenioDevedores.length; i++) {
-            setConvenioDevedores(prevList => [
-              ...prevList,
-              {
-                cnpj: response.msg.convenioDevedores[i].CNPJ,
-                bancoContrato: response.msg.convenioDevedores[i].Contrato,
-                tipoFinanciamento:
-                  response.msg.convenioDevedores[i]['Tp Financ'],
-                cidadeUF: `${response.msg.convenioDevedores[i].Cidade}/${response.msg.convenioDevedores[i].UF}`,
-                data: response.msg.convenioDevedores[i].Data,
-                valor: response.msg.convenioDevedores[i]['Vlr Conv']
-              }
-            ])
-          }
-        }
-
-        if (response.msg.siccf.length === 0) {
-          setSiccf(prevList => [
-            ...prevList,
-            {
-              agencia: '',
-              alinea: '',
-              banco: '',
-              data: '',
-              qteOcorrencia: '',
-              tipoConta: ''
-            }
-          ])
-        } else if (response.msg.siccf.length > 0) {
-          for (let i = 0; i < response.msg.siccf.length; i++) {
-            setSiccf(prevList => [
-              ...prevList,
-              {
-                agencia: response.msg.siccf[i]['Agência'],
-                alinea: response.msg.siccf[i].Alinea,
-                banco: response.msg.siccf[i].Banco,
-                data: response.msg.siccf[i]['Data Ocor'],
-                qteOcorrencia: response.msg.siccf[i]['Qte Ocor'],
-                tipoConta: response.msg.siccf[i]['Tp Conta']
+                // eslint-disable-next-line prettier/prettier
+                'Ocorrência':
+                  data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Ocorrência'],
+                Disponibilizado:
+                  data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Disponibilizado'],
+                Informante:
+                  data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Informante'],
+                Segmento: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Segmento'],
+                Tipo: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Tipo'],
+                Contrato: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Contrato'],
+                Cidade: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Cidade'],
+                UF: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['UF'],
+                // eslint-disable-next-line prettier/prettier
+                'Situação': data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Situação'],
+                'Valor(R$)':
+                  data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Valor(R$)']
               }
             ])
           }
@@ -359,72 +224,73 @@ export default function Consulta() {
 
     // Dados Pessoais
     resultado += 'Dados Pessoais:\n'
-    resultado += ` Nome do Cliente: ${dados.msg.dadosPessoais['Nome do Cliente']}\n`
-    resultado += ` CPF/CNPJ: ${dados.msg.dadosPessoais['CPF/CNPJ']}\n\n`
+    resultado += ` Nome do Cliente: ${dados.msg['IDENTIFICAÇÃO']['Nome']}\n`
+    resultado += ` CPF/CNPJ: ${dados.msg.IDENTIFICAÇÃO.CPF}\n`
+    resultado += ` Data de Nascimento: ${dados.msg.IDENTIFICAÇÃO['Data de Nascimento']}\n\n`
 
-    // Serasa
-    if (dados.msg.serasa.length > 0) {
-      resultado += '\nSerasa:\n'
-      dados.msg.serasa.forEach((ocorrencia, index) => {
-        resultado += ` Ocorrência ${index + 1}:\n`
-        resultado += `  Data Primeira Ocorrência: ${ocorrencia[
-          'Data Primeira Ocorrência'
-        ].replace('00:00:00', '')}\n`
-        resultado += `  Data Última Ocorrência: ${ocorrencia[
-          'Data Última Ocorrência'
-        ].replace(' 00:00:00', '')}\n`
-        resultado += `  Quantidade de Ocorrências: ${ocorrencia['Quantidade Ocorrências']}\n\n`
+    // Debitos
+    if (debitos.length > 0) {
+      resultado += '\nDébitos:\n'
+      debitos.forEach((ocorrencia, index) => {
+        resultado += ` Débito ${index + 1}:\n`
+        resultado += ` Ocorrência ${ocorrencia.Ocorrência}:\n`
+        resultado += `  Disponibilizado: ${ocorrencia.Disponibilizado}\n`
+        resultado += `  Segmento: ${ocorrencia.Segmento}\n`
+        resultado += `  Tipo: ${ocorrencia.Tipo}\n`
+        resultado += `  Contrato: ${ocorrencia.Contrato}\n`
+        resultado += `  Cidade: ${ocorrencia.Cidade}\n`
+        resultado += `  UF: ${ocorrencia.UF}\n`
+        resultado += `  Valor(R$): ${ocorrencia['Valor(R$)']}\n\n`
       })
+      resultado += `Valor Total (R$): ${registroDebitos['Valor total (R$):']}\n\n`
     }
     // Pendências
-    if (dados.msg.pendencias.length > 0) {
-      resultado += '\nPendências:\n'
-      dados.msg.pendencias.forEach((pendencia, index) => {
-        resultado += ` Pendência ${index + 1}:\n`
-        resultado += `  Data: ${pendencia.Data.replace(' 00:00:00', '')}\n`
-        resultado += `  Tipo Financ.: ${pendencia['Tipo Financ.']} \n`
-        resultado += `  Valor (R$): ${new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(Number(pendencia['Valor (R$)']))}\n`
-        resultado += `  Contrato: ${pendencia.Contrato}\n`
-        resultado += `  Razão Social: ${pendencia['Razão Social']}\n\n`
-      })
-    }
-
-    // SCPC
-    if (dados.msg.scpc.length > 0) {
-      resultado += '\nSCPC:\n'
-      dados.msg.scpc.forEach((ocorrencia, index) => {
-        resultado += ` Ocorrência ${index + 1}:\n\n`
-        resultado += `  Data Ocorrência: ${ocorrencia['Dt Ocorr'].replace(
-          ' 00:00:00',
-          ''
-        )}\n`
-        resultado += `  Tipo Devedor: ${ocorrencia['Tp Devedor']}\n`
-        resultado += `  Nome: ${ocorrencia.Nome}\n`
-        resultado += `  Valor Dívida (R$): ${new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(Number(ocorrencia['Vr Dívida']))}\n`
-        resultado += `  Cidade: ${ocorrencia.Cidade}, UF: ${ocorrencia.UF}\n\n`
-      })
-    }
-
-    // Protestos
-    if (dados.msg.protestos.length > 0) {
+    if (protestos.length > 0) {
       resultado += '\nProtestos:\n'
-      dados.msg.protestos.forEach((protesto, index) => {
-        resultado += ` Protesto ${index + 1}:\n`
-        resultado += `  Data: ${protesto.Data.replace(' 00:00:00', '')}\n`
-        resultado += `  Valor Protesto (R$): ${new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(Number(protesto['Valor Protesto']))}\n`
-        resultado += `  Cartório: ${protesto['Cartório']}\n`
-        resultado += `  Cidade: ${protesto.Cidade}, UF: ${protesto.UF}\n\n`
+      protestos.forEach((pendencia, index) => {
+        resultado += ` protesto ${index + 1}:\n`
+        resultado += `  Data: ${pendencia['Data do protesto']}\n`
+        resultado += `  Cartório: ${pendencia.Cartório} \n`
+        resultado += `  Cidade: ${pendencia.Cidade} \n`
+        resultado += `  UF: ${pendencia.UF} \n`
+        resultado += `  Valor (R$): ${pendencia['Valor(R$)']}\n\n`
       })
+      resultado += `Valor Total (R$): ${registroProtestos['Valor total (R$):']}\n\n`
     }
+
+    // // SCPC
+    // if (dados.msg.scpc.length > 0) {
+    //   resultado += '\nSCPC:\n'
+    //   dados.msg.scpc.forEach((ocorrencia, index) => {
+    //     resultado += ` Ocorrência ${index + 1}:\n\n`
+    //     resultado += `  Data Ocorrência: ${ocorrencia['Dt Ocorr'].replace(
+    //       ' 00:00:00',
+    //       ''
+    //     )}\n`
+    //     resultado += `  Tipo Devedor: ${ocorrencia['Tp Devedor']}\n`
+    //     resultado += `  Nome: ${ocorrencia.Nome}\n`
+    //     resultado += `  Valor Dívida (R$): ${new Intl.NumberFormat('pt-BR', {
+    //       style: 'currency',
+    //       currency: 'BRL'
+    //     }).format(Number(ocorrencia['Vr Dívida']))}\n`
+    //     resultado += `  Cidade: ${ocorrencia.Cidade}, UF: ${ocorrencia.UF}\n\n`
+    //   })
+    // }
+
+    // // Protestos
+    // if (dados.msg.protestos.length > 0) {
+    //   resultado += '\nProtestos:\n'
+    //   dados.msg.protestos.forEach((protesto, index) => {
+    //     resultado += ` Protesto ${index + 1}:\n`
+    //     resultado += `  Data: ${protesto.Data.replace(' 00:00:00', '')}\n`
+    //     resultado += `  Valor Protesto (R$): ${new Intl.NumberFormat('pt-BR', {
+    //       style: 'currency',
+    //       currency: 'BRL'
+    //     }).format(Number(protesto['Valor Protesto']))}\n`
+    //     resultado += `  Cartório: ${protesto['Cartório']}\n`
+    //     resultado += `  Cidade: ${protesto.Cidade}, UF: ${protesto.UF}\n\n`
+    //   })
+    // }
 
     return resultado
   }
@@ -458,35 +324,29 @@ export default function Consulta() {
             <ButtonConsult disabled={loading} onClick={onConsulta}>
               {loading ? 'Carregando informações.' : 'Consultar'}
             </ButtonConsult>
-            {nome === '' || cpfCnpj === '' || siccf.length === 0 ? (
+            {identificacao.Nome === '' ? (
               'Preencha os campos!'
             ) : (
               <>
                 <ContentButtons>
                   <ButtonConsult
-                    disabled={nome === '' || cpfCnpj === '' || loading}
+                    disabled={identificacao.Nome === '' || loading}
                   >
-                    {nome === '' || cpfCnpj === '' || siccf.length === 0 ? (
+                    {identificacao.Nome === '' ? (
                       'Preencha os campos'
                     ) : (
                       <PDFDownloadLink
                         style={{ textDecoration: 'none', color: 'white' }}
                         document={
                           <ConsultaDocument
-                            nomeCliente={nome}
-                            data={moment().locale('pt-br').format('DD/MM/YYYY')}
-                            cpf={cpfCnpj}
-                            cadin={cadin}
-                            chequesSF={chequeSF}
-                            convenioDevedores={convenioDevedores}
+                            debitos={debitos}
+                            identificacao={identificacao}
                             protestos={protestos}
-                            scpc={scpc}
-                            serasa={serasa}
-                            siccf={siccf}
-                            pendencias={pendencias}
+                            registroDebitos={registroDebitos}
+                            registroProtestos={registroProtestos}
                           />
                         }
-                        fileName={`${nome} - CPF ${cpfCnpj} .pdf`}
+                        fileName={`${identificacao.Nome} - CPF ${identificacao.CPF} .pdf`}
                       >
                         {({ blob, url, loading, error }) =>
                           loading ? 'Carregando...' : 'Gerar PDF'
@@ -494,46 +354,10 @@ export default function Consulta() {
                       </PDFDownloadLink>
                     )}
                   </ButtonConsult>
-                  {/* <CopyToClipboard
-                    text={`Nome: ${nome}\nData: ${moment().format()}\nCPF: ${cpfCnpj}\nCadin: ${JSON.stringify(
-                      cadin,
-                      null,
-                      2
-                    ).replace(/[[\]{}"]/g, '')}\nCheques SF: ${JSON.stringify(
-                      chequeSF,
-                      null,
-                      2
-                    ).replace(
-                      /[[\]{}"]/g,
-                      ''
-                    )}\nConvênio de Devedores: ${JSON.stringify(
-                      convenioDevedores,
-                      null,
-                      2
-                    ).replace(/[[\]{}"]/g, '')}\nProtestos: ${JSON.stringify(
-                      protestos,
-                      null,
-                      2
-                    ).replace(/[[\]{}"]/g, '')}\nSCPC: ${JSON.stringify(
-                      scpc,
-                      null,
-                      2
-                    ).replace(/[[\]{}"]/g, '')}\nSerasa: ${JSON.stringify(
-                      serasa,
-                      null,
-                      2
-                    ).replace(/[[\]{}"]/g, '')}\nSICCF: ${JSON.stringify(
-                      siccf,
-                      null,
-                      2
-                    ).replace(/[[\]{}"]/g, '')}`}
-                    onCopy={handleCopy}
-                  > */}
+
                   <ButtonConsult onClick={TextClipboard}>
                     {copied ? 'copiado!' : 'copiar dados'}
                   </ButtonConsult>
-                  {/* </CopyToClipboard> */}
-                  {/* <ButtonConsult onClick={copyHtmlContent}>Teste</ButtonConsult> */}
                 </ContentButtons>
                 <div
                   style={{
@@ -580,7 +404,7 @@ export default function Consulta() {
                             fontWeight: 'bold'
                           }}
                         >
-                          NOME DO CLIENTE: {nome}
+                          NOME DO CLIENTE: {identificacao.Nome}
                         </p>
                         <p
                           style={{
@@ -590,8 +414,9 @@ export default function Consulta() {
                             marginTop: 5
                           }}
                         >
-                          CPF: {cpfCnpj}
+                          CPF: {identificacao.CPF}
                         </p>
+
                         <p
                           style={{
                             textTransform: 'uppercase',
@@ -600,7 +425,8 @@ export default function Consulta() {
                             marginTop: 5
                           }}
                         >
-                          data: {moment().locale('pt-br').format('DD/MM/YYYY')}
+                          data de Nascimento:{' '}
+                          {identificacao['Data de Nascimento']}
                         </p>
                       </div>
                     </div>
@@ -622,10 +448,11 @@ export default function Consulta() {
                           color: 'white'
                         }}
                       >
-                        SERASA
+                        Débitos
                       </p>
                     </div>
-                    {serasa[0].qteOcorrencias !== '' && (
+
+                    {debitos.length > 0 && (
                       <div
                         style={{
                           display: 'flex',
@@ -635,11 +462,27 @@ export default function Consulta() {
                       >
                         <p
                           style={{
+                            width: '15%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Ocorrência
+                        </p>
+                        <p
+                          style={{
+                            width: '17%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          Disponibilizado
+                        </p>
+                        <p
+                          style={{
                             width: '30%',
                             fontFamily: 'Helvetica-Bold'
                           }}
                         >
-                          Data Primeira Ocorrência
+                          Informante
                         </p>
                         <p
                           style={{
@@ -647,100 +490,11 @@ export default function Consulta() {
                             fontFamily: 'Helvetica-Bold'
                           }}
                         >
-                          Data Última Ocorrência
+                          Segmento
                         </p>
                         <p
                           style={{
-                            width: '30%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Quantidade Ocorrências
-                        </p>
-                      </div>
-                    )}
-
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        flexDirection: 'column',
-                        marginTop: 10
-                      }}
-                    >
-                      {serasa[0].qteOcorrencias === '' ? (
-                        <p
-                          style={{
-                            width: '25%',
-                            marginLeft: 5
-                          }}
-                        >
-                          Nada Consta
-                        </p>
-                      ) : (
-                        serasa.map(item => (
-                          <div
-                            style={{
-                              margin: '5px 5px',
-                              display: 'flex',
-                              flexDirection: 'row',
-                              width: '100%'
-                            }}
-                            key={item.dataP}
-                          >
-                            <p style={{ width: '30%' }}>
-                              {item.dataP.split(' ')[0]}
-                            </p>
-                            <p style={{ width: '30%' }}>
-                              {item.dataU.split(' ')[0]}
-                            </p>
-                            <p style={{ width: '30%' }}>
-                              {item.qteOcorrencias}
-                            </p>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-
-                  <div style={{ width: '100%', marginTop: 10 }}>
-                    <div
-                      style={{
-                        backgroundColor: 'rgb(52, 108, 176)',
-                        width: '100%',
-                        borderRadius: 3,
-                        padding: 5,
-                        marginTop: 5
-                      }}
-                    >
-                      <p
-                        style={{
-                          textTransform: 'uppercase',
-                          color: 'white'
-                        }}
-                      >
-                        PENDENCIAS
-                      </p>
-                    </div>
-                    {pendencias[0].data !== '' && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          marginTop: 5
-                        }}
-                      >
-                        <p
-                          style={{
-                            width: '25%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Data
-                        </p>
-                        <p
-                          style={{
-                            width: '30%',
+                            width: '8%',
                             fontFamily: 'Helvetica-Bold'
                           }}
                         >
@@ -748,135 +502,36 @@ export default function Consulta() {
                         </p>
                         <p
                           style={{
-                            width: '20%',
+                            width: '30%',
                             fontFamily: 'Helvetica-Bold'
                           }}
                         >
-                          Valor
+                          Contrato
                         </p>
                         <p
                           style={{
-                            width: '35%',
+                            width: '25%',
                             fontFamily: 'Helvetica-Bold'
                           }}
                         >
-                          Origem
+                          Cidade
                         </p>
-                      </div>
-                    )}
+                        <p
+                          style={{
+                            width: '8%',
+                            fontFamily: 'Helvetica-Bold'
+                          }}
+                        >
+                          UF
+                        </p>
 
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        flexDirection: 'column',
-                        marginTop: 10
-                      }}
-                    >
-                      {pendencias[0].data === '' ? (
-                        <p
-                          style={{
-                            width: '25%',
-                            marginLeft: 5
-                          }}
-                        >
-                          Nada Consta
-                        </p>
-                      ) : (
-                        pendencias.map(item => (
-                          <div
-                            style={{
-                              margin: '5px 5px',
-                              display: 'flex',
-                              flexDirection: 'row',
-                              width: '100%'
-                            }}
-                            key={item.data}
-                          >
-                            <p style={{ width: '25%' }}>
-                              {item.data.split(' ')[0]}
-                            </p>
-                            <p style={{ width: '30%' }}>{item.tipo}</p>
-                            <p style={{ width: '20%' }}>
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                              }).format(Number(item.valor))}
-                            </p>
-                            <p style={{ width: '35%' }}>{item.origem}</p>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-
-                  <div style={{ width: '100%' }}>
-                    <div
-                      style={{
-                        backgroundColor: 'rgb(52, 108, 176)',
-                        width: '100%',
-                        borderRadius: 3,
-                        padding: 5,
-                        marginTop: 5
-                      }}
-                    >
-                      <p
-                        style={{
-                          textTransform: 'uppercase',
-                          color: 'white'
-                        }}
-                      >
-                        SCPC
-                      </p>
-                    </div>
-                    {scpc[0].data !== '' && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          marginTop: 5
-                        }}
-                      >
-                        <p
-                          style={{
-                            width: '25%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Nome
-                        </p>
-                        <p
-                          style={{
-                            width: '25%',
-                            fontFamily: 'Helvetica-Bold',
-                            marginLeft: 20
-                          }}
-                        >
-                          Data
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Tipo
-                        </p>
-                        <p
-                          style={{
-                            width: '20%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Valor
-                        </p>
                         <p
                           style={{
                             width: '30%',
                             fontFamily: 'Helvetica-Bold'
                           }}
                         >
-                          Disponibilidade
+                          Valor(R$)
                         </p>
                       </div>
                     )}
@@ -889,7 +544,7 @@ export default function Consulta() {
                         marginTop: 10
                       }}
                     >
-                      {scpc[0].data === '' ? (
+                      {debitos.length === 0 ? (
                         <p
                           style={{
                             width: '25%',
@@ -899,7 +554,7 @@ export default function Consulta() {
                           Nada Consta
                         </p>
                       ) : (
-                        scpc.map(item => (
+                        debitos.map(item => (
                           <div
                             style={{
                               margin: '5px 5px',
@@ -907,609 +562,158 @@ export default function Consulta() {
                               flexDirection: 'row',
                               width: '100%'
                             }}
-                            key={item.data}
+                            key={item.Contrato}
                           >
-                            <p style={{ width: '25%' }}>{item.nome}</p>
-                            <p style={{ width: '25%', margin: '0px 15px' }}>
-                              {item.data.split(' ')[0]}
+                            <p style={{ width: '15%' }}>{item.Ocorrência}</p>
+                            <p style={{ width: '17%' }}>
+                              {item.Disponibilizado}
                             </p>
-                            <p style={{ width: '15%', marginLeft: -10 }}>
-                              {item.tipo}
-                            </p>
-                            <p style={{ width: '20%' }}>
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                              }).format(Number(item.valor))}
-                            </p>
-                            <p style={{ width: '30%' }}>
-                              {item.data.split(' ')[0]}
-                            </p>
+                            <p style={{ width: '30%' }}>{item.Informante}</p>
+                            <p style={{ width: '30%' }}>{item.Segmento}</p>
+                            <p style={{ width: '8%' }}>{item.Tipo}</p>
+                            <p style={{ width: '30%' }}>{item.Contrato}</p>
+                            <p style={{ width: '25%' }}>{item.Cidade}</p>
+                            <p style={{ width: '8%' }}>{item.UF}</p>
+                            <p style={{ width: '30%' }}>{item['Valor(R$)']}</p>
                           </div>
                         ))
                       )}
-                    </div>
-                  </div>
-
-                  <div style={{ width: '100%' }}>
-                    <div
-                      style={{
-                        backgroundColor: 'rgb(52, 108, 176)',
-                        width: '100%',
-                        borderRadius: 3,
-                        padding: 5,
-                        marginTop: 5
-                      }}
-                    >
                       <p
                         style={{
                           textTransform: 'uppercase',
-                          color: 'white'
+                          marginLeft: 20,
+                          marginTop: 5,
+                          fontWeight: 'bold'
                         }}
                       >
-                        Protestos
+                        Valor Total (R$): {registroDebitos['Valor total (R$):']}
                       </p>
                     </div>
-                    {protestos[0].data !== '' && (
+
+                    <div style={{ width: '100%', marginTop: 10 }}>
                       <div
                         style={{
-                          display: 'flex',
-                          flexDirection: 'row',
+                          backgroundColor: 'rgb(52, 108, 176)',
+                          width: '100%',
+                          borderRadius: 3,
+                          padding: 5,
                           marginTop: 5
                         }}
                       >
                         <p
                           style={{
-                            width: '25%',
-                            fontFamily: 'Helvetica-Bold'
+                            textTransform: 'uppercase',
+                            color: 'white'
                           }}
                         >
-                          Data
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Cartório
-                        </p>
-                        <p
-                          style={{
-                            width: '25%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Valor
-                        </p>
-                        <p
-                          style={{
-                            width: '35%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Cidade/Estado
+                          Protestos
                         </p>
                       </div>
-                    )}
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        flexDirection: 'column',
-                        marginTop: 10
-                      }}
-                    >
-                      {protestos[0].data === '' ? (
-                        <p
+
+                      {protestos.length > 0 && (
+                        <div
                           style={{
-                            width: '25%',
-                            marginLeft: 5
+                            display: 'flex',
+                            flexDirection: 'row',
+                            marginTop: 5
                           }}
                         >
-                          Nada Consta
-                        </p>
-                      ) : (
-                        protestos.map(item => (
-                          <div
+                          <p
                             style={{
-                              margin: '5px 5px',
-                              display: 'flex',
-                              flexDirection: 'row',
-                              width: '100%'
+                              width: '25%',
+                              fontFamily: 'Helvetica-Bold'
                             }}
-                            key={item.data}
                           >
-                            <p style={{ width: '25%' }}>
-                              {item.data.split(' ')[0]}
-                            </p>
-                            <p style={{ width: '15%' }}>{item.cartorio}</p>
-                            <p style={{ width: '25%' }}>
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                              }).format(Number(item.valor))}
-                            </p>
-                            <p style={{ width: '35%' }}>{item.cidadeUF}</p>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
+                            Data do Protesto
+                          </p>
+                          <p
+                            style={{
+                              width: '25%',
+                              fontFamily: 'Helvetica-Bold'
+                            }}
+                          >
+                            Cartório
+                          </p>
+                          <p
+                            style={{
+                              width: '25%',
+                              fontFamily: 'Helvetica-Bold'
+                            }}
+                          >
+                            Cidade
+                          </p>
+                          <p
+                            style={{
+                              width: '25%',
+                              fontFamily: 'Helvetica-Bold'
+                            }}
+                          >
+                            UF
+                          </p>
 
-                  <div style={{ width: '100%' }}>
-                    <div
-                      style={{
-                        backgroundColor: 'rgb(52, 108, 176)',
-                        width: '100%',
-                        borderRadius: 3,
-                        padding: 5,
-                        marginTop: 5
-                      }}
-                    >
-                      <p
-                        style={{
-                          textTransform: 'uppercase',
-                          color: 'white'
-                        }}
-                      >
-                        Cheques sem fundo
-                      </p>
-                    </div>
-                    {chequeSF[0].data !== '' && (
+                          <p
+                            style={{
+                              width: '25%',
+                              fontFamily: 'Helvetica-Bold'
+                            }}
+                          >
+                            Valor(R$)
+                          </p>
+                        </div>
+                      )}
+
                       <div
                         style={{
                           display: 'flex',
-                          flexDirection: 'row',
-                          marginTop: 5
+                          width: '100%',
+                          flexDirection: 'column',
+                          marginTop: 10
                         }}
                       >
+                        {protestos.length === 0 ? (
+                          <p
+                            style={{
+                              width: '25%',
+                              marginLeft: 5
+                            }}
+                          >
+                            Nada Consta
+                          </p>
+                        ) : (
+                          protestos.map(item => (
+                            <div
+                              style={{
+                                margin: '5px 5px',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                width: '100%'
+                              }}
+                              key={item['Data do protesto']}
+                            >
+                              <p style={{ width: '25%' }}>
+                                {item['Data do protesto']}
+                              </p>
+                              <p style={{ width: '25%' }}>{item.Cartório}</p>
+                              <p style={{ width: '25%' }}>{item.Cidade}</p>
+                              <p style={{ width: '25%' }}>{item.UF}</p>
+                              <p style={{ width: '25%' }}>
+                                {item['Valor(R$)']}
+                              </p>
+                            </div>
+                          ))
+                        )}
                         <p
                           style={{
-                            width: '10%',
-                            fontFamily: 'Helvetica-Bold'
+                            textTransform: 'uppercase',
+                            marginLeft: 20,
+                            marginTop: 5,
+                            fontWeight: 'bold'
                           }}
                         >
-                          Data
-                        </p>
-                        <p
-                          style={{
-                            width: '10%',
-                            margin: '0px 15px',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Cheque
-                        </p>
-                        <p
-                          style={{
-                            width: '10%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Alinea
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Qte Cheque
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Valor
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Banco
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Agência
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Cidade/Estado
+                          Valor Total (R$):{' '}
+                          {registroProtestos['Valor total (R$):']}
                         </p>
                       </div>
-                    )}
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        flexDirection: 'column',
-                        marginTop: 10
-                      }}
-                    >
-                      {chequeSF[0].data === '' ? (
-                        <p
-                          style={{
-                            width: '25%',
-                            marginLeft: 5
-                          }}
-                        >
-                          Nada Consta
-                        </p>
-                      ) : (
-                        chequeSF.map(item => (
-                          <div
-                            style={{
-                              margin: '5px 5px',
-                              display: 'flex',
-                              flexDirection: 'row',
-                              width: '100%'
-                            }}
-                            key={item.data}
-                          >
-                            <p style={{ width: '10%' }}>
-                              {item.data.split(' ')[0]}
-                            </p>
-                            <p style={{ width: '10%', margin: 'px 15px' }}>
-                              {item.cheque}
-                            </p>
-                            <p style={{ width: '10%' }}>{item.alinea}</p>
-                            <p style={{ width: '15%' }}>{item.qteCheque}</p>
-                            <p style={{ width: '15%' }}>
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                              }).format(Number(item.valor))}
-                            </p>
-                            <p style={{ width: '15%' }}>{item.banco}</p>
-                            <p style={{ width: '15%' }}>{item.agencia}</p>
-                            <p style={{ width: '15%' }}>{item.cidadeUF}</p>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-
-                  <div style={{ width: '100%' }}>
-                    <div
-                      style={{
-                        backgroundColor: 'rgb(52, 108, 176)',
-                        width: '100%',
-                        borderRadius: 3,
-                        padding: 5,
-                        marginTop: 5
-                      }}
-                    >
-                      <p
-                        style={{
-                          textTransform: 'uppercase',
-                          color: 'white'
-                        }}
-                      >
-                        CADIN
-                      </p>
-                    </div>
-                    {cadin[0].nomeCredor !== '' && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          marginTop: 5
-                        }}
-                      >
-                        <p
-                          style={{
-                            width: '50%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Sigla Credor
-                        </p>
-                        <p
-                          style={{
-                            width: '50%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Nome Credor
-                        </p>
-                      </div>
-                    )}
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        flexDirection: 'column',
-                        marginTop: 10
-                      }}
-                    >
-                      {cadin[0].nomeCredor === '' ? (
-                        <p
-                          style={{
-                            width: '25%',
-                            marginLeft: 5
-                          }}
-                        >
-                          Nada Consta
-                        </p>
-                      ) : (
-                        cadin.map(item => (
-                          <div
-                            style={{
-                              margin: '5px 5px',
-                              display: 'flex',
-                              flexDirection: 'row',
-                              width: '100%'
-                            }}
-                            key={item.siglaCredor}
-                          >
-                            <p style={{ width: '50%%' }}>{item.siglaCredor}</p>
-                            <p style={{ width: '50%' }}>{item.nomeCredor}</p>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-
-                  <div style={{ width: '100%' }}>
-                    <div
-                      style={{
-                        backgroundColor: 'rgb(52, 108, 176)',
-                        width: '100%',
-                        borderRadius: 3,
-                        padding: 5,
-                        marginTop: 5
-                      }}
-                    >
-                      <p
-                        style={{
-                          textTransform: 'uppercase',
-                          color: 'white'
-                        }}
-                      >
-                        SICCF
-                      </p>
-                    </div>
-                    {siccf[0].data !== '' && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          marginTop: 5
-                        }}
-                      >
-                        <p
-                          style={{
-                            width: '25%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Data
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            margin: '0px 15px',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Tipo Conta
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Banco
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Agência
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Alinea
-                        </p>
-                        <p
-                          style={{
-                            width: '25%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Qte Ocorrência
-                        </p>
-                      </div>
-                    )}
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        flexDirection: 'column',
-                        marginTop: 10
-                      }}
-                    >
-                      {siccf[0].data === '' ? (
-                        <p
-                          style={{
-                            width: '25%',
-                            marginLeft: 5
-                          }}
-                        >
-                          Nada Consta
-                        </p>
-                      ) : (
-                        siccf.map(item => (
-                          <div
-                            style={{
-                              margin: '5px 5px',
-                              display: 'flex',
-                              flexDirection: 'row',
-                              width: '100%'
-                            }}
-                            key={item.data}
-                          >
-                            <p style={{ width: '25%' }}>
-                              {item.data.split(' ')[0]}
-                            </p>
-                            <p style={{ width: '15%', margin: '0px 15px' }}>
-                              {item.tipoConta}
-                            </p>
-                            <p style={{ width: '15%' }}>{item.banco}</p>
-                            <p style={{ width: '15%' }}>{item.agencia}</p>
-                            <p style={{ width: '15%' }}>{item.alinea}</p>
-                            <p style={{ width: '25%' }}>{item.qteOcorrencia}</p>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-
-                  <div style={{ width: '100%' }}>
-                    <div
-                      style={{
-                        backgroundColor: 'rgb(52, 108, 176)',
-                        width: '100%',
-                        borderRadius: 3,
-                        padding: 5,
-                        marginTop: 5
-                      }}
-                    >
-                      <p
-                        style={{
-                          textTransform: 'uppercase',
-                          color: 'white'
-                        }}
-                      >
-                        Convenio devedores
-                      </p>
-                    </div>
-                    {convenioDevedores[0].data !== '' && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          marginTop: 5
-                        }}
-                      >
-                        <p
-                          style={{
-                            width: '20%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Data
-                        </p>
-                        <p
-                          style={{
-                            width: '25%',
-                            margin: '0px 15px',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Tipo Financiamento
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Valor
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          CNPJ
-                        </p>
-                        <p
-                          style={{
-                            width: '20%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Banco Contrato
-                        </p>
-                        <p
-                          style={{
-                            width: '15%',
-                            fontFamily: 'Helvetica-Bold'
-                          }}
-                        >
-                          Cidade/Estado
-                        </p>
-                      </div>
-                    )}
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        flexDirection: 'column',
-                        marginTop: 10
-                      }}
-                    >
-                      {convenioDevedores[0].data === '' ? (
-                        <p
-                          style={{
-                            width: '25%',
-                            marginLeft: 5
-                          }}
-                        >
-                          Nada Consta
-                        </p>
-                      ) : (
-                        convenioDevedores.map(item => (
-                          <div
-                            style={{
-                              margin: '5px 5px',
-                              display: 'flex',
-                              flexDirection: 'row',
-                              width: '100%'
-                            }}
-                            key={item.data}
-                          >
-                            <p style={{ width: '20%' }}>
-                              {item.data.split(' ')[0]}
-                            </p>
-                            <p style={{ width: '25%', margin: '0px 15px' }}>
-                              {item.tipoFinanciamento}
-                            </p>
-                            <p style={{ width: '15%' }}>
-                              R${' '}
-                              {new Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL'
-                              }).format(Number(item.valor))}
-                            </p>
-                            <p style={{ width: '15%' }}>{item.cnpj}</p>
-                            <p style={{ width: '20%' }}>{item.bancoContrato}</p>
-                            <p style={{ width: '15%' }}>{item.cidadeUF}</p>
-                          </div>
-                        ))
-                      )}
                     </div>
                   </div>
                 </div>
