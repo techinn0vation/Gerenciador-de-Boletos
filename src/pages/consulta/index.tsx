@@ -72,18 +72,23 @@ export default function Consulta() {
   const [copied, setCopied] = useState(false)
 
   async function onConsulta() {
-    // if (nome !== '') {
-    //   setNome('')
-    //   setCpf('')
-    //   setSerasa([])
-    //   setPendencias([])
-    //   setScpc([])
-    //   setProtestos([])
-    //   setChequeSF([])
-    //   setCadin([])
-    //   setSiccf([])
-    //   setConvenioDevedores([])
-    // }
+    if (identificacao.Nome !== '') {
+      setIdentificacao({
+        'Data de Nascimento': '',
+        CPF: '',
+        Nome: ''
+      })
+      setRegistroDebitos({
+        'Valor total (R$):': ''
+      })
+      setRegistroProtestos({
+        'Valor total (R$):': ''
+      })
+      setDebitos([])
+      setProtestos([])
+      setQuery(null)
+      setCpf('')
+    }
     setLoading(true)
     if (cpf.length < 11) {
       alert('CPF inválido')

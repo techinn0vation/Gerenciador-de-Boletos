@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-
 import axios from 'axios'
 import { type NextApiRequest, type NextApiResponse } from 'next'
+export const maxDuration = 120
 
 export default async function handler(
   req: NextApiRequest,
