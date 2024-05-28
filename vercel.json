@@ -1,7 +1,7 @@
 {
   "functions": {
     "src/pages/api/consulta.ts": {
-      "maxDuration": 60
+      "maxDuration": 10
     }
   }
 }
