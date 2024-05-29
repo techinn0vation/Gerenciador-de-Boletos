@@ -24,9 +24,9 @@ export const ContentGerarBoleto = styled.div`
 `
 export const DisplayInputMask = styled.input`
   width: 100%;
-  background: ${props => props.theme.colors.colorC};
+  background: ${props => props.theme.colors.colorG};
 
-  color: ${props => props.theme.colors.colorA};
+  color: ${props => props.theme.colors.colorC};
   font-style: normal;
   font-weight: 500;
   font-size: 1.4rem;

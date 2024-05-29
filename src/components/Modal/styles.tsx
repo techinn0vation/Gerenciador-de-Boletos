@@ -27,7 +27,7 @@ export const ContentModal = styled.div`
   position: relative;
 
   border-radius: 1.6rem;
-  background: ${props => props.theme.colors.colorA};
+  background: ${props => props.theme.colors.colorF};
   box-shadow: 0 0 0.8rem 0 ${props => props.theme.colors.colorH};
   padding: 2rem;
   overflow: scroll;
@@ -63,6 +63,21 @@ export const BlockRegistration = styled.div`
     place-items: center;
   }
 `
+
+export const BlockRegistrationQuestion = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+
+  @media (min-width: ${props => props.theme.screenSize.sizeMD}) {
+    display: grid;
+    grid-template-rows: auto;
+    place-items: center;
+  }
+`
+
 export const ViewRegistration = styled.div`
   width: 100%;
   display: flex;
@@ -73,9 +88,9 @@ export const ViewRegistration = styled.div`
 `
 export const FieldRegistration = styled.input`
   width: 100%;
-  background: ${props => props.theme.colors.colorC};
+  background: ${props => props.theme.colors.colorG};
 
-  color: ${props => props.theme.colors.colorA};
+  color: ${props => props.theme.colors.colorC};
   font-style: normal;
   font-weight: 500;
   font-size: 1.4rem;
@@ -126,9 +141,9 @@ export const FieldRegistration = styled.input`
 
 export const FieldRegistrationTextArea = styled.textarea`
   width: 100%;
-  background: ${props => props.theme.colors.colorC};
+  background: ${props => props.theme.colors.colorG};
 
-  color: ${props => props.theme.colors.colorA};
+  color: ${props => props.theme.colors.colorC};
   font-style: normal;
   font-weight: 500;
   font-size: 1.4rem;
@@ -229,7 +244,7 @@ export const FieldCheckBlock = styled.input`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: ${props => props.theme.colors.colorC};
+    color: ${props => props.theme.colors.colorF};
     font-size: 1.2rem;
   }
 
@@ -276,7 +291,7 @@ export const ButtonSaveDate = styled.button`
   gap: 2rem;
   box-shadow: 0 0 0.4rem 0 ${props => props.theme.colors.colorH};
 
-  color: ${props => props.theme.colors.colorC};
+  color: ${props => props.theme.colors.colorJ};
   font-style: normal;
   cursor: pointer;
   font-weight: 700;

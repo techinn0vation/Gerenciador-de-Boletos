@@ -77,6 +77,12 @@ export default function SideBar() {
             </DisplayIcon>
             <DisplayTypography DisplayTypography="consultar CPF" />
           </DisplayLink>
+          <DisplayLink href="/questoes">
+            <DisplayIcon>
+              <FaBook />
+            </DisplayIcon>
+            <DisplayTypography DisplayTypography="frases e acordos" />
+          </DisplayLink>
           <DisplayLink href="/conexao">
             <DisplayIcon>
               <FaServer />

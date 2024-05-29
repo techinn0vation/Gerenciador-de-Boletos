@@ -16,7 +16,7 @@ export const WrapperCorporativo = styled.section`
 `
 export const ContentCorporativo = styled.div`
   width: 100%;
-  height: 55rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -53,9 +53,59 @@ export const AreaTextCorporativo = styled.div`
     background: transparent;
   }
 `
-export const TextBlock = styled.div`
-  width: 100%;
+
+export const TextBlockGrupo = styled.div`
+  width: 80%;
   display: flex;
+  margin: 10px auto;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1.6rem;
+
+  &:hover {
+    cursor: pointer;
+    background: ${props => props.theme.colors.colorH};
+
+    h1 {
+      color: ${props => props.theme.colors.colorJ};
+    }
+
+    button {
+      background: ${props => props.theme.colors.colorJ};
+      color: ${props => props.theme.colors.colorH};
+    }
+  }
+
+  h1 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    text-align: left;
+    color: ${props => props.theme.colors.colorH};
+    scroll-snap-align: start;
+    text-transform: uppercase;
+  }
+
+  p {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 2.1rem;
+    text-align: left;
+    color: ${props => props.theme.colors.colorC};
+    scroll-snap-align: start;
+    &::first-letter {
+      text-transform: capitalize;
+    }
+  }
+`
+
+export const TextBlock = styled.div`
+  width: 80%;
+  display: flex;
+  margin: 10px auto;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
@@ -86,6 +136,7 @@ export const TextBlock = styled.div`
   }
 `
 export const ButtonCopyText = styled.button`
+  cursor: pointer;
   width: auto;
   margin: 0 auto;
   padding: 0.6rem;
@@ -103,7 +154,7 @@ export const ButtonCopyText = styled.button`
   font-weight: 700;
   font-size: 1.4rem;
   line-height: 2.1rem;
-  color: ${props => props.theme.colors.colorA};
+  color: ${props => props.theme.colors.colorJ};
   &::first-letter {
     text-transform: capitalize;
   }

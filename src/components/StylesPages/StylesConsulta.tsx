@@ -113,7 +113,7 @@ export const ButtonConsult = styled.button`
   font-weight: 700;
   font-size: 1.4rem;
   line-height: 2.1rem;
-  color: ${props => props.theme.colors.colorC};
+  color: ${props => props.theme.colors.colorJ};
   text-transform: capitalize;
 
   transition: ease-in 0.03s;

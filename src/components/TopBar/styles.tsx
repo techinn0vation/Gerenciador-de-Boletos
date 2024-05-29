@@ -56,15 +56,15 @@ export const ProfileImage = styled(Image)`
 `
 export const ToggleProfile =
   styled.div <
-  PropProfile >
-  `
+    PropProfile >
+    `
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  background: ${props => props.theme.colors.colorD};
+  background: ${props => props.theme.colors.colorJ};
   border-radius: 1rem;
   position: absolute;
   top: 100%;

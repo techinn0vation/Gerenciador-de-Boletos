@@ -185,7 +185,7 @@ export default function AgPagamento() {
                         HandleDelete(boleto.id)
                       }}
                     >
-                      <FaTrashAlt />
+                      <FaTrashAlt color="white" />
                     </ButtonSaveDate>
 
                     <ButtonSaveDate
@@ -199,10 +199,10 @@ export default function AgPagamento() {
                       }}
                     >
                       {boleto.nomeCliente === '' ||
-                      boleto.valor === '' ||
-                      boleto.dataVencimento === '' ||
-                      nomeAvalista === '' ||
-                      boleto.codigoBarrasPix === '' ? (
+                        boleto.valor === '' ||
+                        boleto.dataVencimento === '' ||
+                        nomeAvalista === '' ||
+                        boleto.codigoBarrasPix === '' ? (
                         'Aguarde'
                       ) : boleto.tipo === 'bo' ? (
                         <PDFDownloadLink

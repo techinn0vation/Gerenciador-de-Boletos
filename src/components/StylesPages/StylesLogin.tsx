@@ -56,8 +56,8 @@ export const BlockFields = styled.div`
 `
 export const InputField = styled.input`
   width: 100%;
-  background: ${props => props.theme.colors.colorC};
-  color: ${props => props.theme.colors.colorA};
+  background: ${props => props.theme.colors.colorG};
+  color: ${props => props.theme.colors.colorC};
   font-style: normal;
   font-weight: 500;
   font-size: 1.4rem;
@@ -128,7 +128,7 @@ export const ButtonLogin = styled.button`
     font-weight: 700;
     font-size: 1.4rem;
     line-height: 2.1rem;
-    color: ${props => props.theme.colors.colorA};
+    color: ${props => props.theme.colors.colorJ};
     &::first-letter {
       text-transform: capitalize;
     }
@@ -181,7 +181,7 @@ export const CheckField = styled.input`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: ${props => props.theme.colors.colorC};
+    color: ${props => props.theme.colors.colorJ};
     font-size: 1.2rem;
   }
 

@@ -104,7 +104,7 @@ export const DisplayCard = styled.div`
 
   /* Component DisplayTitle */
   h1 {
-    color: ${props => props.theme.colors.colorA};
+    color: ${props => props.theme.colors.colorJ};
     font-style: normal;
     font-weight: 700;
     font-size: 1.4rem;
@@ -121,7 +121,7 @@ export const DisplayCard = styled.div`
     font-size: 1.4rem;
     line-height: 2.1rem;
     text-align: center;
-    color: ${props => props.theme.colors.colorA};
+    color: ${props => props.theme.colors.colorJ};
     text-transform: uppercase;
     z-index: 9;
   }
