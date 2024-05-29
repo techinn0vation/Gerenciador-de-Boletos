@@ -54,10 +54,8 @@ export const ProfileImage = styled(Image)`
   height: auto;
   object-fit: fill;
 `
-export const ToggleProfile =
-  styled.div <
-    PropProfile >
-    `
+// eslint-disable-next-line prettier/prettier
+export const ToggleProfile = styled.div<PropProfile>`
   width: 100%;
   display: flex;
   flex-direction: column;

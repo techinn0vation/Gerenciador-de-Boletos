@@ -199,10 +199,10 @@ export default function AgPagamento() {
                       }}
                     >
                       {boleto.nomeCliente === '' ||
-                        boleto.valor === '' ||
-                        boleto.dataVencimento === '' ||
-                        nomeAvalista === '' ||
-                        boleto.codigoBarrasPix === '' ? (
+                      boleto.valor === '' ||
+                      boleto.dataVencimento === '' ||
+                      nomeAvalista === '' ||
+                      boleto.codigoBarrasPix === '' ? (
                         'Aguarde'
                       ) : boleto.tipo === 'bo' ? (
                         <PDFDownloadLink
