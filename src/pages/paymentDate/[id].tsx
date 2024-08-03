@@ -340,6 +340,7 @@ export default function PaymentDate() {
                         pix={codigoBarras}
                         cpfCnpj={cpfCnpj}
                         descricao={descricao}
+                        txid={txid}
                       />
                     }
                     fileName={`${nomeCliente} - CPF ${cpfCnpj} .pdf`}

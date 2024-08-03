@@ -37,6 +37,7 @@ export default function AgPagamento() {
   const [chavePix, setChavePix] = useState<string | undefined>('')
 
   const [nomeAvalista, setNomeAvalista] = useState('')
+  const [txid, setTxid] = useState('')
 
   const router = useRouter()
 
@@ -48,6 +49,7 @@ export default function AgPagamento() {
       .then(({ data }) => {
         setNomeAvalista(data.nomeAvalistaBoleto)
         setChavePix(data.chavePix)
+        setTxid(data.codigoTransferencia)
       })
       .catch(error => {
         alert(error)
@@ -248,6 +250,7 @@ export default function AgPagamento() {
                               pix={boleto.codigoBarrasPix}
                               cpfCnpj={boleto?.cpfCnpj}
                               descricao={boleto.descricao}
+                              txid={txid}
                             />
                           }
                           fileName={`${boleto.nomeCliente} - CPF ${boleto.cpfCnpj} .pdf`}
