@@ -95,7 +95,6 @@ export default function PaymentDate() {
           setTipoDocumento(data.tipo)
           setCodigoCliente(data.codigoCliente)
           setCpfCnpj(data.cpfCnpj)
-          setCidade(data.cidade)
           valorData = data.valor
           if (data.tipo === 'bo') {
             setCodigoBarras(data.codigoBarrasPix)
@@ -114,18 +113,21 @@ export default function PaymentDate() {
                 setNomeAvalista(dataConfig.nomeAvalistaPix)
                 setChavePix(dataConfig.chavePix)
                 setTxid(dataConfig.codigoTransferencia)
+                setCidade(dataConfig.cidade)
 
-                const valorCerto = valor.length === 6 ? valor.replace(',', '.') : valor.replace('.', '').replace(',', '.')
+                const valorCerto = data.valor.length === 6 ? data.valor.replace(',', '.') : data.valor.replace('.', '').replace(',', '.')
+                console.log(valorCerto, "valorCerto")
 
-                await api.post('/gerarPix', {
+                await api.post('/generate-pix-qrcode', {
                   nomeCliente: dataConfig.nomeAvalistaPix,
                   cidade: dataConfig.cidade,
                   pix: dataConfig.chavePix,
                   valorAPagar: valorCerto,
                   txid: dataConfig.codigoTransferencia
                 }).then(result => {
-                  setCodigoBarras(result.data.brcode)
-                  setChaveCopiaCola(result.data.brcode)
+                  console.log(result.data.pixCopyPasteKey)
+                  setCodigoBarras(result.data.pixCopyPasteKey)
+                  setChaveCopiaCola(result.data.pixCopyPasteKey)
                 })
               })
               .catch(error => {
@@ -337,7 +339,7 @@ export default function PaymentDate() {
                         valor={valor}
                         nomeAvalistaPix={nomeAvalista}
                         dataVencimento={dataVencimento}
-                        pix={codigoBarras}
+                        pix={chavePix}
                         cpfCnpj={cpfCnpj}
                         descricao={descricao}
                         txid={txid}

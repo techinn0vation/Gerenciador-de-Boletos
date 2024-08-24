@@ -132,14 +132,15 @@ export function Agua({
   async function getPixCopCol() {
     const valorCerto = valor.length === 6 ? valor.replace(',', '.') : valor.replace('.', '').replace(',', '.')
 
-    const result = await api.post('/gerarPix', {
+    const result = await api.post('/generate-pix-qrcode', {
       nomeCliente: nomeAvalistaPix,
       cidade,
       pix,
-      valorAPagar: valorCerto
+      valorAPagar: valorCerto,
+      txid
     })
 
-    const qrcode = await QRCode.toDataURL(result.data.brcode).then(url => url)
+    const qrcode = result.data.qrCodeUrl
 
     setCopiaCola(qrcode)
   }

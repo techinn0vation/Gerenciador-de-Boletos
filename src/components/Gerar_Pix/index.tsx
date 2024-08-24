@@ -30,6 +30,7 @@ export default function GerarPix() {
   const [nomeAvalistaPix, setNomeAvalistaPix] = useState('')
   const [chavePix, setChavePix] = useState('')
   const [cidade, setCidade] = useState('')
+  const [txid, setTxId] = useState('')
 
 
   const router = useRouter()
@@ -42,10 +43,10 @@ export default function GerarPix() {
         const { data } = await api.get('/configuracoes', {
           headers: { Authorization: Auth }
         })
-        console.log(data)
         setNomeAvalistaPix(data.nomeAvalistaPix)
         setChavePix(data.chavePix)
         setCidade(data.cidade)
+        setTxId(data.codigoTransferencia)
       } catch (error) {
         alert(error)
       }
