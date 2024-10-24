@@ -65,6 +65,7 @@ export default function SideBar() {
               <DisplayTypography DisplayTypography="usuários" />
             </DisplayLink>
           )}
+
           <DisplayLink href="/operador">
             <DisplayIcon>
               <MdPrecisionManufacturing />
@@ -89,6 +90,14 @@ export default function SideBar() {
             </DisplayIcon>
             <DisplayTypography DisplayTypography="conexão" />
           </DisplayLink>
+          {admin && (
+            <DisplayLink href="/configuracoesPixBot">
+              <DisplayIcon>
+                <AiFillSetting />
+              </DisplayIcon>
+              <DisplayTypography DisplayTypography="Config pix bot" />
+            </DisplayLink>
+          )}
           <DisplayLink href="/configuracoes">
             <DisplayIcon>
               <AiFillSetting />
