@@ -84,6 +84,12 @@ export default function SideBar() {
             </DisplayIcon>
             <DisplayTypography DisplayTypography="frases e acordos" />
           </DisplayLink>
+          <DisplayLink href="/resultados">
+            <DisplayIcon>
+              <FaBook />
+            </DisplayIcon>
+            <DisplayTypography DisplayTypography="Resultados" />
+          </DisplayLink>
           <DisplayLink href="/conexao">
             <DisplayIcon>
               <FaServer />
