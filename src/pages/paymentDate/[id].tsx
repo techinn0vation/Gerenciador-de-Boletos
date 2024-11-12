@@ -33,6 +33,7 @@ import {
   WrapperOperador
 } from '@/components/StylesPages/StylesOperador'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import { PixNovo } from '@/components/Gerar_Pix/Reac_Pix_Novo'
 
 interface IResult {
   data: IBoletoProps;
@@ -353,6 +354,42 @@ export default function PaymentDate() {
                   </PDFDownloadLink>
                 )}
               </ButtonSaveDate>
+              {tipoDocumento === 'px' && (
+                <ButtonSaveDate>
+                  {nomeCliente === '' ||
+                    valor === '' ||
+                    dataVencimento === '' ||
+                    nomeAvalista === '' ||
+                    codigoBarras === '' ? (
+                    'Aguarde'
+                  ) : (
+                    <PDFDownloadLink
+                      style={{ textDecoration: 'none', color: 'white' }}
+                      document={
+                        <PixNovo
+                          cidade={cidade}
+                          nomeCliente={nomeCliente}
+                          codigoCliente={Math.floor(
+                            Date.now() * Math.random()
+                          ).toString()}
+                          valor={valor}
+                          nomeAvalistaPix={nomeAvalista}
+                          dataVencimento={dataVencimento}
+                          pix={chavePix}
+                          cpfCnpj={cpfCnpj}
+                          descricao={descricao}
+                          txid={txid}
+                        />
+                      }
+                      fileName={`${nomeCliente} - CPF ${cpfCnpj} .pdf`}
+                    >
+                      {({ blob, url, loading, error }) =>
+                        loading ? 'Carregando' : 'Baixar Novo PDF'
+                      }
+                    </PDFDownloadLink>
+                  )}
+                </ButtonSaveDate>
+              )}
               <CopyToClipboard
                 text={`${chaveCopiaCola}`}
                 onCopy={handleCopy}
