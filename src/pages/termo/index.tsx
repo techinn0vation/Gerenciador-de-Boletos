@@ -62,7 +62,7 @@ export default function Termo() {
                 <PDFDownloadLink
                   style={{ textDecoration: 'none', color: 'white' }}
                   document={<Termos nomeAvalistaPix={nomeAvalista} />}
-                  fileName={`termos.pdf`}
+                  fileName={`termos de uso.pdf`}
                 >
                   {({ blob, url, loading, error }) =>
                     loading ? 'Carregando' : 'Baixar Termos'
