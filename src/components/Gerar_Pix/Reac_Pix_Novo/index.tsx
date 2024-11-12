@@ -12,8 +12,17 @@ import {
 import { useEffect, useState } from 'react'
 import { api } from '@/services/api'
 
-import moment from 'moment'
-moment.locale('pt-br');
+import moment from 'moment';
+moment.updateLocale('pt-br', {
+  months: [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  ],
+  weekdays: [
+    "Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira",
+    "Quinta-feira", "Sexta-feira", "Sábado"
+  ],
+});
 
 const styles = StyleSheet.create({
   page: {
@@ -283,7 +292,7 @@ export function PixNovo({
   const [imgB003Url, setImgB003Url] = useState('');
   const [imgB004Url, setImgB004Url] = useState('');
   const [data, setData] = useState('')
-
+  console.log(moment(dataVencimento)); // pt-br
   // Função para converter a imagem em URL de dados (data URL)
   const convertImageToDataUrl = async (imagePath: RequestInfo | URL) => {
     const response = await fetch(imagePath);
@@ -320,7 +329,7 @@ export function PixNovo({
           <Image style={styles.img} src={imgB002Url} />
           {/* <View style={styles.header2}> */}
           {/* <Image style={styles.img3} src={imgB004Url} /> */}
-          <Text style={{ color: "white", fontWeight: "bold", fontSize: 12 }}>Emitido em {moment(dataVencimento).locale("pt-br").format('DD [de] MMMM [de] YYYY')}</Text>
+          <Text style={{ color: "white", fontWeight: "bold", fontSize: 12 }}>Emitido em {moment(dataVencimento, 'DD/MM/YYYY').locale("pt-br").format('DD [de] MMMM [de] YYYY')}</Text>
           {/* <Image style={styles.img2} src={imgB003Url} /> */}
           {/* </View> */}
         </View>
@@ -466,7 +475,7 @@ export function PixNovo({
             <Image style={styles.img} src={imgB002Url} />
             {/* <View style={styles.header2}> */}
             {/* <Image style={styles.img3} src={imgB004Url} /> */}
-            <Text style={{ color: "white", fontWeight: "bold", fontSize: 12 }}>Emitido em {moment(dataVencimento).format('DD [de] MMMM [de] YYYY')}</Text>
+            <Text style={{ color: "white", fontWeight: "bold", fontSize: 12 }}>Emitido em {moment(dataVencimento, 'DD/MM/YYYY').format('DD [de] MMMM [de] YYYY')}</Text>
             {/* <Image style={styles.img2} src={imgB003Url} /> */}
             {/* </View> */}
           </View>

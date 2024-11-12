@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { PDFViewer } from '@react-pdf/renderer'
 import { Pix } from '@/components/Gerar_Pix/Reac_Pix'
 import moment from 'moment'
+import { PixNovo } from '@/components/Gerar_Pix/Reac_Pix_Novo'
 
 export default function Boleto() {
   const [isClient, setIsClient] = useState(false)
@@ -21,13 +22,13 @@ export default function Boleto() {
     <div style={{ display: 'flex', height: '100vh' }}>
       {isClient && (
         <PDFViewer style={{ display: 'flex' }} width={'100%'} height={'100%'}>
-          <Pix
+          <PixNovo
             cidade={'São Paulo'}
             nomeCliente={'Testando Silva'}
             codigoCliente={Math.floor(Date.now() * Math.random()).toString()}
             valor={'25.50'}
             nomeAvalistaPix={'nomeAvalista'}
-            dataVencimento={moment().format('DD/MM/YYYY')}
+            dataVencimento={"12/11/2024"}
             pix={'chavePix'}
             cpfCnpj={'100.100.100-00'}
             descricao={'descricao'}
