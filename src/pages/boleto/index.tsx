@@ -28,7 +28,7 @@ export default function Boleto() {
             codigoCliente={Math.floor(Date.now() * Math.random()).toString()}
             valor={'25.50'}
             nomeAvalistaPix={'nomeAvalista'}
-            dataVencimento={"12/11/2024"}
+            dataVencimento={'12/11/2024'}
             pix={'chavePix'}
             cpfCnpj={'100.100.100-00'}
             descricao={'descricao'}
