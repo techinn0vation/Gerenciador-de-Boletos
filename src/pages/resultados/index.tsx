@@ -30,6 +30,8 @@ interface SectionData {
   SCPC?: string[][];
   PROTESTOS?: string[][];
   'REFIN/PEFIN'?: string[][];
+  PROTESTO?: string[][];
+  'Pendências REFIN/PEFIN'?: string[][]
 }
 
 export default function Resultados() {
@@ -94,31 +96,33 @@ export default function Resultados() {
 
   function parseData() {
     const lines = text.split('\n').filter(Boolean) // Divide em linhas e remove linhas vazias
+    console.log(lines)
     const result: SectionData = {}
     // eslint-disable-next-line prettier/prettier
     let currentSection: keyof SectionData | '' = '' // Armazena a seção atual
 
-    const sectionTitles: Array<keyof SectionData> = ['CADIN', 'SCPC', 'PROTESTOS', 'REFIN/PEFIN'] // Seções que queremos identificar
+    const sectionTitles: Array<keyof SectionData> = ['CADIN', 'SCPC', 'PROTESTOS', 'REFIN/PEFIN', 'PROTESTO', 'Pendências REFIN/PEFIN'] // Seções que queremos identificar
 
     lines.forEach(line => {
       const trimmedLine = line.trim()
 
       // Verifica se a linha é um título de seção
-      const sectionFound = sectionTitles.find(title => trimmedLine === title)
+      const sectionFound = sectionTitles.find(title => trimmedLine.toLowerCase() === title.toLowerCase())
 
       if (sectionFound && sectionFound.length < 12) {
         currentSection = sectionFound
         result[currentSection] = [] // Inicia um array para a nova seção
       } else if (currentSection) {
         // Adiciona os dados à seção atual
-        const columns = line.split(/\s{2,}/) // Divide por espaços duplos ou mais
+        const columns = line.split(/\s{1,}/) // Divide por espaços duplos ou mais
         result[currentSection]?.push(columns)
       }
     })
+    console.log(result)
 
     const SCPC = result.SCPC
-    const Protestos = result.PROTESTOS
-    const RefinPefin = result['REFIN/PEFIN']
+    const Protestos = result.PROTESTOS ? result.PROTESTOS : result.PROTESTO
+    const RefinPefin = result['REFIN/PEFIN'] ? result['REFIN/PEFIN'] : result['Pendências REFIN/PEFIN']
     const CADIN = result['CADIN']
 
     const dadosFormatadosSCPC: Array<{
@@ -146,11 +150,9 @@ export default function Resultados() {
     }> = []
 
     if (CADIN) {
-      for (let i = 2; i < CADIN.length; i++) {
-        const item = CADIN[i][1]
-          .split(' ')
-          .filter(element => element !== '' && element !== '-')
-
+      for (let i = 1; i < CADIN.length; i++) {
+        const item = CADIN[i]
+        console.log(item)
         const contrato = Math.floor(Date.now() * Math.random()).toString()
 
         const nome = item.slice(0, item.indexOf('R$')).join(' ')
@@ -166,10 +168,9 @@ export default function Resultados() {
     }
 
     if (RefinPefin) {
-      for (let i = 2; i < RefinPefin.length; i++) {
-        const item = RefinPefin[i][1]
-          .split(' ')
-          .filter(element => element !== '' && element !== '-')
+      for (let i = 1; i < RefinPefin.length; i++) {
+        const item = RefinPefin[i]
+
         const contrato = item[6]
 
         const nome = item.slice(8).join(' ').trim()
@@ -185,10 +186,8 @@ export default function Resultados() {
     }
 
     if (Protestos) {
-      for (let i = 2; i < Protestos.length; i++) {
-        const item = Protestos[i][1]
-          .split(' ')
-          .filter(element => element !== '')
+      for (let i = 1; i < Protestos.length; i++) {
+        const item = Protestos[i]
         const data = item[0]
 
         const valor = item[2]
@@ -204,8 +203,8 @@ export default function Resultados() {
     }
 
     if (SCPC) {
-      for (let i = 2; i < SCPC.length; i++) {
-        const item = SCPC[i][1].split(' ').filter(element => element !== '')
+      for (let i = 1; i < SCPC.length; i++) {
+        const item = SCPC[i]
         const contrato = Math.floor(Date.now() * Math.random()).toString()
 
         // 2. Juntar as strings que estão depois da data até o "R$"
@@ -233,16 +232,27 @@ export default function Resultados() {
         index === self.findIndex(obj => obj.valor === item.valor)
     )
 
+    console.log(validos)
+
+    function parseDebtValue(value: string): number {
+      return parseFloat(value.replace('R$', '').replace('.', '').replace(',', '.'));
+    }
+
     const soma = unicos.reduce((acumulador, item) => {
       // Substituir vírgula por ponto e converter para número
-      const valorNumerico = parseFloat(item.valor.replace(',', '.'))
-      return acumulador + valorNumerico
+      return acumulador + parseDebtValue(item.valor);
     }, 0)
+
+    const somaDebitos = dadosFormatadosProtestos.reduce((acumulador, item) => {
+      return acumulador + parseDebtValue(item.valor);
+    }, 0)
+
+    const somaTotal = soma + somaDebitos
 
     // Exibir os resultados
     setDebitos(unicos)
     setProtestos(dadosFormatadosProtestos)
-    setTotalDebt(soma.toFixed(2))
+    setTotalDebt(somaTotal.toFixed(2))
   }
 
   return (
