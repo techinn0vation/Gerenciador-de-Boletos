@@ -205,8 +205,15 @@ export default function Resultados() {
         const item = SCPC[i]
         const contrato = Math.floor(Date.now() * Math.random()).toString()
 
+        let nome = ''
         // 2. Juntar as strings que estão depois da data até o "R$"
-        const nome = item.slice(2, item.indexOf('R$')).join(' ')
+        nome = item.slice(2, item.indexOf('R$')).join(' ')
+
+        if (nome === '') {
+          nome = item.slice(1, item.indexOf('R$')).join(' ')
+        }
+
+
 
         // 3. Pegar o valor depois de "R$"
         const valor = item[item.indexOf('R$') + 1]
