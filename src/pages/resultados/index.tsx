@@ -80,7 +80,7 @@ export default function Resultados() {
       announcementText += `Valor: R$ ${protest.valor}\n\n`
     })
 
-    announcementText += `Soma total dos seus débitos: R$ ${totalDebt}\n\n`
+    announcementText += `Soma total dos seus débitos: ${totalDebt}\n\n`
     announcementText += `🎯 Aproveite o Feirão Limpa Nome e mude sua vida financeira!\n\n`
     announcementText += `Essa é a sua chance de negociar suas dívidas com descontos incríveis de até 99% e condições especiais. Regularize sua situação hoje mesmo e recupere sua tranquilidade financeira!\n\n`
     announcementText += `⏳ Não perca tempo! Propostas válidas por tempo limitado.\n`
@@ -249,10 +249,15 @@ export default function Resultados() {
 
     const somaTotal = soma + somaDebitos
 
+    const totalFormatado = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(somaTotal);
+
     // Exibir os resultados
     setDebitos(unicos)
     setProtestos(dadosFormatadosProtestos)
-    setTotalDebt(somaTotal.toFixed(2))
+    setTotalDebt(totalFormatado)
   }
 
   return (
