@@ -94,7 +94,7 @@ export default function SideBar() {
             <DisplayIcon>
               <FaBook />
             </DisplayIcon>
-            <DisplayTypography DisplayTypography="Resultados" />
+            <DisplayTypography DisplayTypography="Extrato/Dividas" />
           </DisplayLink>
           <DisplayLink href="/conexao">
             <DisplayIcon>

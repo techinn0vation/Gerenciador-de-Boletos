@@ -62,26 +62,29 @@ export default function Resultados() {
   }
 
   const copyAnnouncementText = () => {
-    let announcementText = `📋 Abaixo estão os seus débitos disponíveis para negociação:\n\n`
+    let announcementText = `*📋 Abaixo estão os seus débitos disponíveis para negociação:*\n\n`
     announcementText += `Aproveite o Feirão Limpa Nome para quitar suas dívidas com condições imperdíveis e ficar no azul ainda hoje!\n\n`
     announcementText += `Serasa Experian/SPC/Protesto\n\n`
 
     debitos.forEach((debt, index) => {
-      announcementText += `Dívida ${index + 1}\n`
+      announcementText += `*Dívida ${index + 1}*\n`
       announcementText += `Nome: ${debt.nome || ''}\n`
       announcementText += `Valor: R$ ${debt.valor}\n`
       announcementText += `Contrato: ${debt.contrato}\n\n`
     })
 
-    announcementText += `Protesto\n`
-    protestos.forEach(protest => {
-      announcementText += `Cidade: ${protest.cidade || ''}\n`
-      announcementText += `Data: ${protest.data}\n`
-      announcementText += `Valor: R$ ${protest.valor}\n\n`
-    })
+    if (protestos.length > 0) {
+      console.log(protestos)
+      announcementText += `Protesto\n`
+      protestos.forEach(protest => {
+        announcementText += `Cidade: ${protest.cidade || ''}\n`
+        announcementText += `Data: ${protest.data}\n`
+        announcementText += `Valor: R$ ${protest.valor}\n\n`
+      })
+    }
 
-    announcementText += `Soma total dos seus débitos: ${totalDebt}\n\n`
-    announcementText += `🎯 Aproveite o Feirão Limpa Nome e mude sua vida financeira!\n\n`
+    announcementText += `*Soma total dos seus débitos: ${totalDebt}*\n\n`
+    announcementText += `*🎯 Aproveite o Feirão Limpa Nome e mude sua vida financeira!*\n\n`
     announcementText += `Essa é a sua chance de negociar suas dívidas com descontos incríveis de até 99% e condições especiais. Regularize sua situação hoje mesmo e recupere sua tranquilidade financeira!\n\n`
     announcementText += `⏳ Não perca tempo! Propostas válidas por tempo limitado.\n`
     announcementText += `💬 Fique no azul e aproveite essa oportunidade única!`
@@ -255,6 +258,7 @@ export default function Resultados() {
     }).format(somaTotal);
 
     // Exibir os resultados
+    console.log(dadosFormatadosProtestos, 'aqui')
     setDebitos(unicos)
     setProtestos(dadosFormatadosProtestos)
     setTotalDebt(totalFormatado)
@@ -287,6 +291,14 @@ export default function Resultados() {
 
             <ButtonConsult onClick={copyAnnouncementText}>
               Copiar Texto
+            </ButtonConsult>
+            <ButtonConsult onClick={() => {
+              setDebitos([])
+              setProtestos([])
+              setTotalDebt('')
+              setText('')
+            }}>
+              Apagar tudo
             </ButtonConsult>
 
             {showAnnouncement && (
