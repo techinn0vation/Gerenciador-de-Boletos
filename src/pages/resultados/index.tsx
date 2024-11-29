@@ -49,18 +49,6 @@ export default function Resultados() {
   >([])
   const [totalDebt, setTotalDebt] = useState('')
 
-  const copyText = () => {
-    const copyText =
-      `Total Somado: ${totalSum}\n` +
-      `Faixa de Preço: ${priceResult}\n` +
-      `Percentual de Desconto: ${obtainedPercentage}`
-
-    navigator.clipboard
-      .writeText(copyText)
-      .then(() => alert('Texto copiado para a área de transferência!'))
-      .catch(() => alert('Erro ao copiar o texto.'))
-  }
-
   const copyAnnouncementText = () => {
     let announcementText = `*📋 Abaixo estão os seus débitos disponíveis para negociação:*\n\n`
     announcementText += `Aproveite o Feirão Limpa Nome para quitar suas dívidas com condições imperdíveis e ficar no azul ainda hoje!\n\n`
@@ -177,7 +165,13 @@ export default function Resultados() {
 
         const contrato = item[6]
 
-        const nome = item.slice(8).join(' ').trim()
+        let nome = ''
+
+        nome = item.slice(8).join(' ').trim()
+
+        if (nome === '') {
+          nome = item.slice(1, item.indexOf('R$')).join(' ')
+        }
 
         const valor = item[item.indexOf('R$') + 1]
 
