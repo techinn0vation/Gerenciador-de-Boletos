@@ -64,7 +64,7 @@ export default function Resultados() {
   const copyAnnouncementText = () => {
     let announcementText = `*📋 Abaixo estão os seus débitos disponíveis para negociação:*\n\n`
     announcementText += `Aproveite o Feirão Limpa Nome para quitar suas dívidas com condições imperdíveis e ficar no azul ainda hoje!\n\n`
-    announcementText += `Serasa Experian/SPC/Protesto\n\n`
+    announcementText += `*Serasa Experian/SPC/Protesto*\n\n`
 
     debitos.forEach((debt, index) => {
       announcementText += `*Dívida ${index + 1}*\n`
@@ -112,7 +112,7 @@ export default function Resultados() {
       // Verifica se a linha é um título de seção
       const sectionFound = sectionTitles.find(title => trimmedLine.toLowerCase() === title.toLowerCase())
 
-      if (sectionFound && sectionFound.length < 12) {
+      if (sectionFound) {
         currentSection = sectionFound
         result[currentSection] = [] // Inicia um array para a nova seção
       } else if (currentSection) {
@@ -171,6 +171,7 @@ export default function Resultados() {
     }
 
     if (RefinPefin) {
+      console.log(RefinPefin)
       for (let i = 1; i < RefinPefin.length; i++) {
         const item = RefinPefin[i]
 
@@ -258,7 +259,7 @@ export default function Resultados() {
     }).format(somaTotal);
 
     // Exibir os resultados
-    console.log(dadosFormatadosProtestos, 'aqui')
+    console.log(dadosFormatadosRefinPefin, 'aqui')
     setDebitos(unicos)
     setProtestos(dadosFormatadosProtestos)
     setTotalDebt(totalFormatado)
