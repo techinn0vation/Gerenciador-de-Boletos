@@ -10,7 +10,8 @@ import {
   FaServer,
   FaBook,
   FaLink,
-  FaSearch
+  FaSearch,
+  FaCalculator
 } from 'react-icons/fa'
 import { MdPrecisionManufacturing } from 'react-icons/md'
 import { GiNotebook } from 'react-icons/gi'
@@ -93,6 +94,12 @@ export default function SideBar() {
           <DisplayLink href="/resultados">
             <DisplayIcon>
               <FaBook />
+            </DisplayIcon>
+            <DisplayTypography DisplayTypography="Extrato/Dividas" />
+          </DisplayLink>
+          <DisplayLink href="/calculadora">
+            <DisplayIcon>
+              <FaCalculator />
             </DisplayIcon>
             <DisplayTypography DisplayTypography="Extrato/Dividas" />
           </DisplayLink>
