@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useEffect, useState } from 'react'
 import { DisplayTypography } from '@/components/GeralComponents'
-
+import { FaPix } from 'react-icons/fa6'
 import { AiFillHome, AiFillSetting } from 'react-icons/ai'
 import {
   FaUsers,
@@ -101,7 +101,13 @@ export default function SideBar() {
             <DisplayIcon>
               <FaCalculator />
             </DisplayIcon>
-            <DisplayTypography DisplayTypography="Extrato/Dividas" />
+            <DisplayTypography DisplayTypography="Calculadora" />
+          </DisplayLink>
+          <DisplayLink href="/gerenciamentoPix">
+            <DisplayIcon>
+              <FaPix />
+            </DisplayIcon>
+            <DisplayTypography DisplayTypography="Gerenciamento pix" />
           </DisplayLink>
           <DisplayLink href="/conexao">
             <DisplayIcon>
