@@ -242,14 +242,14 @@ export default function GerenciamentoPix() {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
   }
 
-  const copyGeneratedText = (id: string) => {
-    if (!id) {
+  const copyGeneratedText = (nome: string) => {
+    if (!nome) {
       alert('Nada para copiar! Por favor, gere um texto primeiro.')
       return
     }
 
     navigator.clipboard
-      .writeText(`https://acordofeirao.com.br/pay?nome=${id}`)
+      .writeText(`https://acordofeirao.com.br/pay?nome=${nome}`)
       .then(() => {
         alert('Texto copiado com sucesso!')
       })
@@ -355,7 +355,7 @@ export default function GerenciamentoPix() {
                           marginBottom: 20
                         }}
                         onClick={() => {
-                          copyGeneratedText(boleto.codigoCliente)
+                          copyGeneratedText(boleto.nomeCliente)
                         }}
                       >
                         <FaShareAlt />
