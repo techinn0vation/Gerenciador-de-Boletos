@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -39,6 +40,7 @@ export interface IGerenciamentoPix {
   local?: string;
   ipCliente?: string;
   linkAcessado: boolean;
+  expired: boolean;
   status: string;
   dataAberto: string;
   codigoCliente: string;
@@ -51,6 +53,8 @@ export default function GerenciamentoPix() {
   const [cpfCnpj, setCpfCnpj] = useState('')
   const [valor, setValor] = useState('')
   const [chavePix, setChavePix] = useState<string | undefined>('')
+
+  const [timeLeftArray, setTimeLeftArray] = useState<number[]>([])
 
   const [nomeAvalista, setNomeAvalista] = useState('')
   const [txid, setTxid] = useState('')
@@ -101,6 +105,7 @@ export default function GerenciamentoPix() {
           cpfCnpj: boleto.cpfCnpj,
           linkAcessado: boleto.linkAcessado,
           valor: boleto.valor,
+          expired: boleto.expired,
           status: boleto.status,
           ipCliente: boleto.ipCliente
         }
@@ -124,7 +129,7 @@ export default function GerenciamentoPix() {
     const token = window.localStorage.getItem('token')
     const Auth = `Bearer ${token}`
     await api
-      .delete(`/boleto/${id}`, { headers: { Authorization: Auth } })
+      .delete(`/gerenciamentoPix/${id}`, { headers: { Authorization: Auth } })
       .then(async () => {
         return await router.push('/dashboard')
       })
@@ -189,9 +194,10 @@ export default function GerenciamentoPix() {
           {
             nomeCliente,
             valor,
-            dataAberto: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+            dataAberto: '',
             codigoCliente: clienteCodigo,
             cpfCnpj,
+            expired: false,
             local: '',
             ipCliente: '',
             linkAcessado: false,
@@ -209,6 +215,50 @@ export default function GerenciamentoPix() {
       alert(error)
     }
   }
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const currentTime = new Date().getTime()
+      const differences = pixs.map(boleto => {
+        const targetTime = new Date(boleto.dataAberto).getTime()
+        return Math.max(targetTime - currentTime, 0) // Evita tempos negativos
+      })
+      setTimeLeftArray(differences)
+    }
+
+    // Atualiza imediatamente e a cada segundo
+    calculateTimeLeft()
+    const interval = setInterval(calculateTimeLeft, 1000)
+
+    return () => {
+      clearInterval(interval)
+    } // Limpa o intervalo ao desmontar
+  }, [pixs])
+
+  const formatTime = (milliseconds: number) => {
+    const totalSeconds = Math.floor(milliseconds / 1000)
+    const minutes = Math.floor(totalSeconds / 60)
+    const seconds = totalSeconds % 60
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+  }
+
+  const copyGeneratedText = (id: string) => {
+    if (!id) {
+      alert('Nada para copiar! Por favor, gere um texto primeiro.')
+      return
+    }
+
+    navigator.clipboard
+      .writeText(`https://acordofeirao.com.br/pay?id=${id}`)
+      .then(() => {
+        alert('Texto copiado com sucesso!')
+      })
+      .catch(() => {
+        alert('Erro ao copiar o texto.')
+      })
+  }
+
+  // console.log(timeLeftArray)
 
   return (
     <Layout>
@@ -273,77 +323,71 @@ export default function GerenciamentoPix() {
                     flexDirection: 'column'
                   }}
                 >
-                  {pixs.map(boleto => (
-                    <Link
-                      style={{ textDecoration: 'none', width: '100%' }}
-                      key={boleto.id}
-                      href={`/paymentDate/${boleto.id}`}
-                    >
-                      <TableRow>
-                        <TableData>{boleto.nomeCliente}</TableData>
+                  {pixs.map((boleto, index) => (
+                    <TableRow key={index}>
+                      <TableData>{boleto.nomeCliente}</TableData>
 
-                        <TableData>{boleto.cpfCnpj}</TableData>
+                      <TableData>{boleto.cpfCnpj}</TableData>
 
-                        <TableData>{boleto.valor}</TableData>
+                      <TableData>{boleto.valor}</TableData>
 
-                        <TableData>{boleto.local}</TableData>
+                      <TableData>{boleto.local}</TableData>
 
-                        <TableData>{boleto.ipCliente}</TableData>
+                      <TableData>{boleto.ipCliente}</TableData>
 
-                        <TableData>{boleto.linkAcessado}</TableData>
+                      <TableData>
+                        {boleto.linkAcessado ? 'sim' : 'não'}
+                      </TableData>
 
-                        <TableData>{boleto.status}</TableData>
+                      <TableData>{boleto.status}</TableData>
 
-                        <TableData>{boleto.dataAberto}</TableData>
+                      <TableData>
+                        {boleto.dataAberto === '' || boleto.expired
+                          ? 'Não inicializado!'
+                          : formatTime(timeLeftArray[index] || 0)}
+                      </TableData>
 
-                        <Link
-                          style={{
-                            textDecoration: 'none',
-                            color: 'white',
-                            padding: 2.5,
-                            margin: 0,
-                            width: 25,
-                            backgroundColor: '#00cc4c',
-                            boxShadow: '0 0 0.4rem 0 #00cc4c',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            borderRadius: 25,
-                            marginBottom: 20
-                          }}
-                          key={boleto.id}
-                          href={`/paymentDate/${boleto.id}`}
-                        >
-                          <FaShareAlt />
-                        </Link>
+                      <ButtonSaveDate
+                        style={{
+                          padding: 5,
+                          margin: 0,
+                          width: '25px',
+                          marginBottom: 20
+                        }}
+                        onClick={() => {
+                          copyGeneratedText(boleto.codigoCliente)
+                        }}
+                      >
+                        <FaShareAlt />
+                      </ButtonSaveDate>
 
-                        <ButtonSaveDate
-                          style={{
-                            padding: 5,
-                            margin: 0,
-                            width: '25px',
-                            marginBottom: 20
-                          }}
-                          onClick={() => {
-                            HandleDelete(boleto.id)
-                          }}
-                        >
-                          <FaTrashAlt color="white" />
-                        </ButtonSaveDate>
+                      <ButtonSaveDate
+                        style={{
+                          padding: 5,
+                          margin: 0,
+                          width: '25px',
+                          marginBottom: 20
+                        }}
+                        onClick={() => {
+                          HandleDelete(boleto.id)
+                        }}
+                      >
+                        <FaTrashAlt color="white" />
+                      </ButtonSaveDate>
 
-                        <ButtonSaveDate
-                          style={{
-                            padding: 2.5,
-                            margin: 0,
-                            width: '25px',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginBottom: 20
-                          }}
-                        >
-                          <TbReload />
-                        </ButtonSaveDate>
-                      </TableRow>
-                    </Link>
+                      <ButtonSaveDate
+                        style={{
+                          padding: 2.5,
+                          margin: 0,
+                          width: '25px',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginBottom: 20
+                        }}
+                      >
+                        <TbReload />
+                      </ButtonSaveDate>
+                    </TableRow>
                   ))}
                 </WrapperTable>
               </WrapperTabelaValores>
