@@ -249,7 +249,7 @@ export default function GerenciamentoPix() {
     }
 
     navigator.clipboard
-      .writeText(`https://acordofeirao.com.br/pay?id=${id}`)
+      .writeText(`https://acordofeirao.com.br/pay?nome=${id}`)
       .then(() => {
         alert('Texto copiado com sucesso!')
       })
