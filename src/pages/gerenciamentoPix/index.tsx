@@ -131,7 +131,7 @@ export default function GerenciamentoPix() {
     await api
       .delete(`/gerenciamentoPix/${id}`, { headers: { Authorization: Auth } })
       .then(async () => {
-        return await router.push('/dashboard')
+        router.reload()
       })
   }
 
@@ -249,7 +249,7 @@ export default function GerenciamentoPix() {
     }
 
     navigator.clipboard
-      .writeText(`https://acordofeirao.com.br/pay?nome=${nome}`)
+      .writeText(`https://acordofeirao.netlify.app/pay?nome=${nome}`)
       .then(() => {
         alert('Texto copiado com sucesso!')
       })
@@ -258,7 +258,17 @@ export default function GerenciamentoPix() {
       })
   }
 
-  // console.log(timeLeftArray)
+  async function handleReset(nome: string) {
+    await api
+      .put(`/gerenciamentoPix/${nome}`, {
+        dataAberto: '',
+        expired: false,
+        status: 'aguardando'
+      })
+      .then(async () => {
+        router.reload()
+      })
+  }
 
   return (
     <Layout>
@@ -383,6 +393,9 @@ export default function GerenciamentoPix() {
                           justifyContent: 'center',
                           alignItems: 'center',
                           marginBottom: 20
+                        }}
+                        onClick={() => {
+                          handleReset(boleto.nomeCliente)
                         }}
                       >
                         <TbReload />
