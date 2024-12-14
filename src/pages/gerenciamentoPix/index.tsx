@@ -249,7 +249,7 @@ export default function GerenciamentoPix() {
     }
 
     navigator.clipboard
-      .writeText(`https://acordofeirao.netlify.app/pay?nome=${nome}`)
+      .writeText(`https://acordospayments-hj6aec9h.b4a.run/pay?nome=${nome}`)
       .then(() => {
         alert('Texto copiado com sucesso!')
       })
