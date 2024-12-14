@@ -192,7 +192,7 @@ export default function GerenciamentoPix() {
         .post(
           'gerenciamentoPix',
           {
-            nomeCliente,
+            nomeCliente: nomeCliente.trim(),
             valor,
             dataAberto: '',
             codigoCliente: clienteCodigo,
