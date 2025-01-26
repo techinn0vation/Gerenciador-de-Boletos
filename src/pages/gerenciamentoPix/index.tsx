@@ -248,8 +248,12 @@ export default function GerenciamentoPix() {
       return
     }
 
+    const formattedName = encodeURIComponent(nome)
+
     navigator.clipboard
-      .writeText(`https://acordospayments-hj6aec9h.b4a.run/pay?nome=${nome}`)
+      .writeText(
+        `https://acordospayments-hj6aec9h.b4a.run/pay?nome=${formattedName}`
+      )
       .then(() => {
         alert('Texto copiado com sucesso!')
       })

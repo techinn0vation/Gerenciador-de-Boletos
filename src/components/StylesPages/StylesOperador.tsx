@@ -12,6 +12,9 @@ export const WrapperOperador = styled.section`
     flex-direction: row;
     align-items: flex-start;
     padding: 1rem;
+    z-index: 999;
+    position: absolute;
+    width: 100vw;
   }
 `
 export const ContentOperador = styled.div`
@@ -22,7 +25,6 @@ export const ContentOperador = styled.div`
   align-items: flex-start;
   gap: 2rem;
   overflow-y: scroll;
-
   &::-webkit-scrollbar {
     width: 0;
     height: 0;
@@ -41,6 +43,7 @@ export const ContentOperador = styled.div`
     border-radius: 1.6rem;
     padding: 1.6rem;
     overflow-y: scroll;
+    width: 60%;
   }
 `
 export const BlockOperador = styled.div`
