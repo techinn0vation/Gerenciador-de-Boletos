@@ -41,6 +41,53 @@ import {
 } from '@/components/Gerar_Consulta'
 import { debug } from 'console'
 
+interface Ocorrencia {
+  sistema?: string
+  ocorrencia?: string
+  data_pesquisa?: string
+  validade?: string
+  descricao?: string
+}
+
+interface DetalheDescricao {
+  tipo: string
+  campos: Record<string, string>
+}
+
+interface GrupoOcorrencia {
+  sistema: string
+  ocorrencia: string
+  data_pesquisa: string
+  validade: string
+  descricoes: DetalheDescricao[]
+}
+
+interface ProcessedData {
+  IDENTIFICAÇÃO: {
+    Nome: string
+    CPF: string
+  }
+  SISTEMAS: GrupoOcorrencia[]
+}
+
+interface Debito {
+  'Ocorrência': string;
+  'Disponibilizado': string;
+  'Valor(R$)': string;
+  'Informante': string;
+  'Contrato': string;
+  'Cidade': string;
+  'UF': string;
+}
+
+interface Protesto {
+  "Data do protesto": string;
+  "Valor(R$)": string;
+  "Cartório": string;
+  "Cidade": string;
+  "UF": string;
+}
+
 export default function Consulta() {
   const contentRef = useRef<HTMLDivElement>(null)
   const [identificacao, setIdentificacao] = useState<IIdentificacao>({
@@ -56,13 +103,12 @@ export default function Consulta() {
     'Valor total (R$):': ''
   })
 
-  const [protestos, setProtestos] = useState<IProtestosItem[]>([])
-
-  const [debitos, setDebitos] = useState<IRegistrosDebitosItem[]>([])
+  const [debitos, setDebitos] = useState<Debito[]>([]);
+  const [protestos, setProtestos] = useState<Protesto[]>([]);
 
   const [erro, setErro] = useState('')
 
-  const [query, setQuery] = useState(null)
+  const [query, setQuery] = useState<QueryResponse | ProcessedData | null>(null)
 
   const [resultado, setResultado] = useState('')
 
@@ -71,115 +117,155 @@ export default function Consulta() {
   const [cpf, setCpf] = useState('')
   const [copied, setCopied] = useState(false)
 
+  function parseDescricao(descricao: string): DetalheDescricao {
+    const partes = descricao.split(' - ').filter(p => p.trim() !== '')
+
+    // Primeira parte é sempre o tipo
+    const tipo = partes[0].split(':')[0].trim()
+
+    const campos: Record<string, string> = {}
+
+    for (const parte of partes.slice(1)) {
+      const [chaveBruta, ...valorParts] = parte.split(':')
+      const chave = formatarChave(chaveBruta.trim())
+      const valor = valorParts.join(':').trim()
+
+      if (chave && valor) {
+        campos[chave] = valor
+      }
+    }
+
+    return { tipo, campos }
+  }
+
+  function formatarChave(chaveBruta: string): string {
+    return chaveBruta
+      .toLowerCase()
+      .replace(/[^a-z0-9áéíóúâêîôûãõç\s]/gi, '') // Remove caracteres especiais
+      .trim()
+      .replace(/\s+/g, ' ') // Normaliza espaços
+      .replace(/(?:^\w|[A-Z]|\b\w)/g, (match, index) =>
+        index === 0 ? match.toLowerCase() : match.toUpperCase()
+      ) // camelCase
+      .replace(/\s+/g, '')
+  }
+
+  function processarDados(json: {
+    informacoes: any
+    ocorrencias: Ocorrencia[]
+  }): ProcessedData {
+    const result: ProcessedData = {
+      IDENTIFICAÇÃO: {
+        Nome: json.informacoes.nome,
+        CPF: json.ocorrencias[0].ocorrencia || ''
+      },
+      SISTEMAS: []
+    }
+
+    let currentSystem: GrupoOcorrencia | null = null
+
+    json.ocorrencias.slice(1).forEach(item => {
+      if (item.sistema && item.ocorrencia) {
+        currentSystem = {
+          sistema: item.sistema,
+          ocorrencia: item.ocorrencia,
+          data_pesquisa: item.data_pesquisa || '',
+          validade: item.validade || '',
+          descricoes: []
+        }
+        result.SISTEMAS.push(currentSystem)
+      } else if (item.descricao && currentSystem) {
+        currentSystem.descricoes.push(parseDescricao(item.descricao))
+      }
+    })
+
+    return result
+  }
+
   async function onConsulta() {
-    if (identificacao.Nome !== '') {
+    // Resetar estados
+    setIdentificacao({
+      'Data de Nascimento': '',
+      CPF: '',
+      Nome: ''
+    });
+    setRegistroDebitos({ 'Valor total (R$):': '' });
+    setRegistroProtestos({ 'Valor total (R$):': '' });
+    setDebitos([]);
+    setProtestos([]);
+    setQuery(null);
+    setCpf('');
+    setErro('');
+    setLoading(true);
+
+    try {
+      if (cpf.length < 11) {
+        throw new Error('CPF inválido');
+      }
+
+      const response = await fetch(`/api/consulta?cpfCnpj=${cpf}`);
+      const data = await response.json();
+
+      // Processar os dados com a nova função
+      const processedData = processarDados(data);
+
+      setQuery(processedData);
+
+      // Atualizar identificação
       setIdentificacao({
-        'Data de Nascimento': '',
-        CPF: '',
-        Nome: ''
-      })
-      setRegistroDebitos({
-        'Valor total (R$):': ''
-      })
-      setRegistroProtestos({
-        'Valor total (R$):': ''
-      })
-      setDebitos([])
-      setProtestos([])
-      setQuery(null)
-      setCpf('')
-    }
-    setLoading(true)
-    if (cpf.length < 11) {
-      alert('CPF inválido')
-      setLoading(false)
-    }
+        'Data de Nascimento': '', // Adicione campo se existir nos dados
+        Nome: processedData.IDENTIFICAÇÃO.Nome,
+        CPF: processedData.IDENTIFICAÇÃO.CPF
+      });
 
-    await fetch(`/api/consulta?cpfCnpj=${cpf}`)
-      .then(async result => {
-        const response = await result.json()
-        console.log(response, 'data1')
-        return response
-      })
-      .then(data => {
-        setQuery(data)
+      // Processar sistemas e ocorrências
+      let totalDebitos = 0;
+      let totalProtestos = 0;
+      const novosDebitos: any[] = [];
+      const novosProtestos: any[] = [];
 
-        if (data.retorno === 'ERROR') {
-          setErro(data.msg)
-          setLoading(false)
-          return alert(data.msg)
-        }
-
-        setIdentificacao({
-          'Data de Nascimento': data.msg['IDENTIFICAÇÃO']['Data de Nascimento'],
-          Nome: data.msg['IDENTIFICAÇÃO'].Nome,
-          CPF: data.msg['IDENTIFICAÇÃO'].CPF
-        })
-
-        const qntDebitos = Number(data.msg['PAINEL DE CONTROLE'][0].Quantidade)
-        const qntProtestos = Number(
-          data.msg['PAINEL DE CONTROLE'][6].Quantidade
-        )
-
-        if (qntProtestos > 0) {
-          setRegistroProtestos({
-            'Valor total (R$):': data.msg['PROTESTOS']['Valor total (R$):']
-          })
-          for (let i = 0; i < qntProtestos; i++) {
-            setProtestos(prevList => [
-              ...prevList,
-              {
-                // eslint-disable-next-line prettier/prettier
-                "Data do protesto": data.msg['PROTESTOS'][`${i}`]['Data do protesto'],
-                // eslint-disable-next-line prettier/prettier
-                "Valor(R$)": data.msg['PROTESTOS'][`${i}`]['Valor(R$)'],
-                Cartório: data.msg['PROTESTOS'][`${i}`]['Cartório'],
-                Cidade: data.msg['PROTESTOS'][`${i}`]['Cidade'],
-                UF: data.msg['PROTESTOS'][`${i}`]['UF']
-              }
-            ])
+      processedData.SISTEMAS.forEach(sistema => {
+        sistema.descricoes.forEach(descricao => {
+          // Classificar por tipo de ocorrência
+          if (descricao.tipo.includes('Protesto') || descricao.tipo.includes('Pendencia')) {
+            totalProtestos += parseFloat(descricao.campos.valor?.replace('R$ ', '') || '0');
+            novosProtestos.push({
+              "Data do protesto": descricao.campos.data,
+              "Valor(R$)": descricao.campos.valor,
+              "Cartório": descricao.campos.codigoIdentificacao,
+              "Cidade": descricao.campos.cidade,
+              "UF": descricao.campos.uf
+            });
+          } else {
+            totalDebitos += parseFloat(descricao.campos.valor?.replace('R$ ', '') || '0');
+            novosDebitos.push({
+              'Ocorrência': sistema.ocorrencia,
+              'Disponibilizado': descricao.campos.data,
+              'Valor(R$)': descricao.campos.valor,
+              'Informante': descricao.campos.nomeCredor,
+              'Contrato': descricao.campos.numeroContrato,
+              'Cidade': descricao.campos.cidade,
+              'UF': descricao.campos.uf
+            });
           }
-        }
+        });
+      });
 
-        if (qntDebitos > 0) {
-          setRegistroDebitos({
-            'Valor total (R$):':
-              data.msg['REGISTROS DE DÉBITOS']['Valor total (R$):']
-          })
+      // Atualizar estados
+      setRegistroProtestos({ 'Valor total (R$):': `R$ ${totalProtestos.toFixed(2)}` });
+      setProtestos(novosProtestos);
 
-          for (let i = 0; i < qntDebitos; i++) {
-            setDebitos(prevList => [
-              ...prevList,
-              {
-                // eslint-disable-next-line prettier/prettier
-                'Ocorrência':
-                  data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Ocorrência'],
-                Disponibilizado:
-                  data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Disponibilizado'],
-                Informante:
-                  data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Informante'],
-                Segmento: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Segmento'],
-                Tipo: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Tipo'],
-                Contrato: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Contrato'],
-                Cidade: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Cidade'],
-                UF: data.msg['REGISTROS DE DÉBITOS'][`${i}`]['UF'],
-                // eslint-disable-next-line prettier/prettier
-                'Situação': data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Situação'],
-                'Valor(R$)':
-                  data.msg['REGISTROS DE DÉBITOS'][`${i}`]['Valor(R$)']
-              }
-            ])
-          }
-        }
+      setRegistroDebitos({ 'Valor total (R$):': `R$ ${totalDebitos.toFixed(2)}` });
+      setDebitos(novosDebitos);
 
-        setLoading(false)
-      })
-      .catch(err => {
-        console.log(err)
-        setLoading(false)
-      })
-
-    setCpf('')
+    } catch (err) {
+      console.error(err);
+      setErro(err instanceof Error ? err.message : 'Erro na consulta');
+      alert(err instanceof Error ? err.message : 'Erro na consulta');
+    } finally {
+      setLoading(false);
+      setCpf('');
+    }
   }
 
   function formatCPF(event: any) {
@@ -241,8 +327,6 @@ export default function Consulta() {
         resultado += ` Débito ${index + 1}:\n`
         resultado += ` Ocorrência ${ocorrencia.Ocorrência}:\n`
         resultado += `  Disponibilizado: ${ocorrencia.Disponibilizado}\n`
-        resultado += `  Segmento: ${ocorrencia.Segmento}\n`
-        resultado += `  Tipo: ${ocorrencia.Tipo}\n`
         resultado += `  Contrato: ${ocorrencia.Contrato}\n`
         resultado += `  Cidade: ${ocorrencia.Cidade}\n`
         resultado += `  UF: ${ocorrencia.UF}\n`
@@ -303,7 +387,7 @@ export default function Consulta() {
 
   const TextClipboard = () => {
     if (query) {
-      const texto = responseToText(query)
+      const texto = responseToText(query as QueryResponse)
 
       navigator.clipboard.writeText(texto)
       handleCopy()
@@ -490,7 +574,7 @@ export default function Consulta() {
                         >
                           Informante
                         </p>
-                        <p
+                        {/* <p
                           style={{
                             width: '30%',
                             fontFamily: 'Helvetica-Bold'
@@ -505,7 +589,7 @@ export default function Consulta() {
                           }}
                         >
                           Tipo
-                        </p>
+                        </p> */}
                         <p
                           style={{
                             width: '30%',
@@ -575,8 +659,8 @@ export default function Consulta() {
                               {item.Disponibilizado}
                             </p>
                             <p style={{ width: '30%' }}>{item.Informante}</p>
-                            <p style={{ width: '30%' }}>{item.Segmento}</p>
-                            <p style={{ width: '8%' }}>{item.Tipo}</p>
+                            {/* <p style={{ width: '30%' }}>{item.Segmento}</p>
+                            <p style={{ width: '8%' }}>{item.Tipo}</p> */}
                             <p style={{ width: '30%' }}>{item.Contrato}</p>
                             <p style={{ width: '25%' }}>{item.Cidade}</p>
                             <p style={{ width: '8%' }}>{item.UF}</p>

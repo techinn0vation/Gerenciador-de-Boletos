@@ -208,14 +208,30 @@ export interface IProtestos {
   "Valor total (R$):": string
 }
 
+interface Debito {
+  'Ocorrência': string;
+  'Disponibilizado': string;
+  'Valor(R$)': string;
+  'Informante': string;
+  'Contrato': string;
+  'Cidade': string;
+  'UF': string;
+}
 
+interface Protesto {
+  "Data do protesto": string;
+  "Valor(R$)": string;
+  "Cartório": string;
+  "Cidade": string;
+  "UF": string;
+}
 
 export interface IConsultaProps {
   identificacao: IIdentificacao
   registroDebitos: IRegistrosDebitos
   registroProtestos: IProtestos
-  protestos: IProtestosItem[]
-  debitos: IRegistrosDebitosItem[]
+  protestos: Protesto[]
+  debitos: Debito[]
 }
 
 export default function ConsultaDocument({
@@ -338,12 +354,12 @@ export default function ConsultaDocument({
               <Text style={{ width: '30%', fontFamily: 'Helvetica-Bold' }}>
                 Informante
               </Text>
-              <Text style={{ width: '30%', fontFamily: 'Helvetica-Bold' }}>
+              {/* <Text style={{ width: '30%', fontFamily: 'Helvetica-Bold' }}>
                 Segmento
               </Text>
               <Text style={{ width: '8%', fontFamily: 'Helvetica-Bold' }}>
                 Tipo
-              </Text>
+              </Text> */}
               <Text style={{ width: '30%', fontFamily: 'Helvetica-Bold' }}>
                 Contrato
               </Text>
@@ -380,8 +396,8 @@ export default function ConsultaDocument({
                   <Text style={{ width: '30%' }}>{item.Ocorrência}</Text>
                   <Text style={{ width: '30%' }}>{item.Disponibilizado}</Text>
                   <Text style={{ width: '30%' }}>{item.Informante}</Text>
-                  <Text style={{ width: '30%' }}>{item.Segmento}</Text>
-                  <Text style={{ width: '30%' }}>{item.Tipo}</Text>
+                  {/* <Text style={{ width: '30%' }}>{item.Segmento}</Text>
+                  <Text style={{ width: '30%' }}>{item.Tipo}</Text> */}
                   <Text style={{ width: '30%' }}>{item.Contrato}</Text>
                   <Text style={{ width: '30%' }}>{item.UF}</Text>
                   <Text style={{ width: '30%' }}>{item['Valor(R$)']}</Text>
