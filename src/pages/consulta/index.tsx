@@ -5,6 +5,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing, @typescript-eslint/no-explicit-any, prettier/prettier */
+
 
 import {
   WrapperConsult,
