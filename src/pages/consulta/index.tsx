@@ -460,8 +460,20 @@ export default function Consulta() {
                   id="copy"
                 >
                   <div style={(styles.containerText, { width: '100%' })}>
-                    <div style={styles.contentBlock}>
-                      <div style={styles.contentText}>
+                    <div style={{
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'stretch'
+                    }}>
+                      <div style={{
+                        width: '70%',
+                        flexDirection: 'column',
+                        fontStyle: 'normal',
+                        textAlign: 'left',
+                        fontSize: 8
+                      }}>
                         <div
                           style={
                             (styles.rowView,
